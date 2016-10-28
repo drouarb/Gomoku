@@ -1,4 +1,5 @@
 #include "Referee.hh"
+using namespace Core;
 
 Core::Referee::Referee()
 {
@@ -12,27 +13,31 @@ GameBoard_t	getBoardCopy()
 {
 }
 
-const GameBoard_t&	Core::referee::getBoardRef()
+const GameBoard_t&	Core::Referee::getBoardRef()
 {
 
 }
 
-void		Core::referee::setPlayer(TEAM player)
+void		Core::Referee::setPlayer(Team player)
 {
   
 }
 
-bool		Core::referee::tryPlay(uint8_t x, uint8_t y)
+bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
 
 }
 
-bool		Core::referee::tryPlay(uint8_t x, uint8_t y)
+bool Referee::tryPlay(uint8_t x, uint8_t y, const GameBoard_t &)
 {
-
+    return false;
 }
 
-const BoardOperator&	Core::referee::getBoardOperator()
+const BoardOperator &Referee::getBoardOperator()
 {
+}
 
+GameBoard_t Referee::getBoardCopy()
+{
+    return nullptr;
 }

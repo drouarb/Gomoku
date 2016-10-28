@@ -8,10 +8,10 @@ namespace Players
     class IHumain : public IPlayers
     {
     public:
-        virtual IHumain(){};
+        virtual ~IHumain(){};
         virtual const std::string &getName() const  = 0;
         virtual bool play() = 0;
-        virtual bool init(Core::IReferee) = 0;
+        virtual bool init(Core::IReferee &referee) = 0;
         virtual bool tryPlay(uint8_t x, uint8_t y) = 0;
     };
 }

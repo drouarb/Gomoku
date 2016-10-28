@@ -19,7 +19,7 @@ namespace Core
         BLACK
     };
 
-    typedef char GameBoard_t[19 * 19];
+    typedef char* GameBoard_t;
 }
 
 #endif

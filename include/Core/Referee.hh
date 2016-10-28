@@ -5,19 +5,25 @@
 
 namespace Core
 {
-  class Referee : public IReferee
-  {
-  public:
-    Referee();
-    ~Referee();
+    class Referee : public IReferee
+    {
+    public:
+        Referee();
 
-    virtual GameBoard_t			getBoardCopy();
-    virtual const GameBoard_t&		getBoardRef();
-    virtual void			setPlayer(TEAM player);
-    virtual bool			tryplay(uint8_t x, uint8_t y);
-    virtual bool			tryplay(uint8_t x, uint8_t y, const GameBoard &);
-    virtual const BoardOperator&	getBoardOperator();
-  }
+        virtual ~Referee();
+
+        virtual GameBoard_t getBoardCopy();
+
+        virtual const GameBoard_t &getBoardRef();
+
+        virtual void setPlayer(Team player);
+
+        virtual bool tryPlay(uint8_t x, uint8_t y);
+
+        virtual bool tryPlay(uint8_t x, uint8_t y, const GameBoard_t &);
+
+        virtual const BoardOperator &getBoardOperator();
+    };
 }
 
 #endif
