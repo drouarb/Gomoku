@@ -12,7 +12,7 @@ FILE(
 )
 
 include_directories(include)
-include(include/Core)
-include(include/Players)
-include(include/Gui)
+include_directories(include/Core)
+include_directories(include/Players)
+include_directories(include/Gui)
 add_executable(Gomoku ${GOMOKU})
