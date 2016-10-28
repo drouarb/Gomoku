@@ -5,6 +5,7 @@
 #include "Core.hh"
 //#include "GUImas.hh"
 #include "Referee.hh"
+#include <iostream>
 
 Core::Core::Core()
 {
@@ -41,6 +42,8 @@ void Core::Core::playGame(::Core::GamePlayers player_config)
 {
     mutex.lock();
 
+    //TO DO
+
     mutex.unlock();
 }
 
@@ -61,26 +64,29 @@ void Core::Core::setRule(const std::string &rule, bool on)
     for (std::list<std::list<std::string > >::iterator list_it = uniqueRules.begin();
          list_it != uniqueRules.end(); ++list_it)
     {
-        for (std::list<std::pair<std::string, bool> >::iterator rule_it = rules.begin();
-             rule_it != rules.end(); ++rule_it)
+        for (std::list<std::string >::iterator elem_it = list_it->begin();
+             elem_it != list_it->end(); ++elem_it)
         {
-            if (list_it->back() == rule_it->first && rule_it->first != rule)
+            for (std::list<std::pair<std::string, bool> >::iterator rule_it = rules.begin();
+                 rule_it != rules.end(); ++rule_it)
             {
-                rule_it->second = false;
+                if (*elem_it == rule_it->first && rule_it->first != rule)
+                {
+                    rule_it->second = false;
+                }
             }
         }
     }
 
-    sendRules();
+    //gui->feedRules(rules);
 
-    mutex.unlock();
-}
-
-void Core::Core::sendRules()
-{
-    for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
+    //test
+    /*for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
          it != rules.end(); ++it)
     {
-        //gui->feedRules(rules);
+        std::cout << it->first << " " << it->second << std::endl;
     }
+    std::cout << std::endl;*/
+
+    mutex.unlock();
 }

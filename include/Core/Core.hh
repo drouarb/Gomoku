@@ -33,8 +33,6 @@ namespace Core
         std::list<std::list<std::string> > uniqueRules;
         IReferee * referee;
         Players::IPlayer * players[2];
-
-        void sendRules();
     };
 }
 
