@@ -2,6 +2,7 @@
 #define CORE_DEFINITIONS_HH_
 
 #include <stddef.h>
+#include <iostream>
 
 namespace Core
 {
