@@ -7,6 +7,7 @@ namespace Core
 {
   class IReferee
   {
+  public:
     virtual GameBoard_t			getBoardCopy() = 0;
     virtual const GameBoard_t&		getBoardRef() = 0;
     virtual void			setPlayer(TEAM player) = 0;
