@@ -9,6 +9,7 @@ FILE(
         src/Core/*.cpp
         src/Gui/*.cpp
         src/Players/*.cpp
+        include/*.hh
 )
 
 include_directories(include)
