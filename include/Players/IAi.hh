@@ -5,7 +5,7 @@
 
 namespace Players
 {
-    class IAi : public IPlayers
+    class IAi : public IPlayer
     {
     public:
         virtual ~IAi(){};

@@ -5,7 +5,7 @@
 
 namespace Players
 {
-    class IHumain : public IPlayers
+    class IHumain : public IPlayer
     {
     public:
         virtual ~IHumain(){};
