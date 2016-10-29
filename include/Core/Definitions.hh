@@ -18,8 +18,9 @@ namespace Core
 
     enum Team : uint8_t
     {
-        WHITE,
-        BLACK
+      NOPLAYER = 0x00,
+      WHITE = 0x01,
+      BLACK = 0x02
     };
 
     typedef char* GameBoard_t;
