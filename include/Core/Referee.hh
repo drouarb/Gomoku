@@ -1,17 +1,29 @@
 #ifndef REFEREE_HH_
 # define REFEREE_HH_
 
+#include <vector>
+#include <tuple>
 #include "IReferee.hh"
 #include "IBoardOperator.hh"
 #include "BoardOperator.hh"
 
+#define EATWIN 10
+
 namespace Core
 {
+
+  struct	statPlayer
+  {
+    Team	team;
+    uint8_t	eaten;
+  };
+  
     class Referee : public IReferee
     {
     private:
       IBoardOperator				*boardOp;
       GameBoard_t				board;
+      std::vector<statPlayer>			stats;
       Team					player;
 
       Team					winner;
