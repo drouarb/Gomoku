@@ -3,6 +3,8 @@ using namespace Core;
 
 Core::Referee::Referee()
 {
+  int		i;
+  board[i] = 0;
 }
 
 Core::Referee::~Referee()
@@ -11,6 +13,12 @@ Core::Referee::~Referee()
 
 GameBoard_t	getBoardCopy()
 {
+  int		i;
+  GameBoard_t	newBoard;
+
+  while (i < BOARDSIZE)
+    newBoard[i] = board[i++];
+  return (newBoard);
 }
 
 const GameBoard_t&	Core::Referee::getBoardRef()

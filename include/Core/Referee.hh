@@ -7,6 +7,9 @@ namespace Core
 {
     class Referee : public IReferee
     {
+    private:
+      BoardOperator				boardOp;
+      GameBoard_t				board;
     public:
         Referee();
 
