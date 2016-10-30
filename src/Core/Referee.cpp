@@ -2,11 +2,13 @@
 
 Core::Referee::Referee()
 {
+  board = new char[BOARDSIZE];
   initialize();
 }
 
 Core::Referee::~Referee()
 {
+  delete board;
 }
 
 void		Core::Referee::initialize()
@@ -14,27 +16,27 @@ void		Core::Referee::initialize()
   int		i;
 
   i = 0;
-  player = Core::Team::NOPLAYER;
-  winner = Core::Team::NOPLAYER;
+  player = NOPLAYER;
+  winner = NOPLAYER;
   boardOp = new BoardOperator;
   while (i < BOARDSIZE)
     {
-      board[i] = 0;
+      board[i] = 0; //0 ? Zero ?? ZERO ?!? COMME LE NOMBRE ?!?! PAS LA MACCRO !?!?!
       ++i;
     }
 }
 
-Core::GameBoard_t	Core::Referee::getBoardCopy()
+GameBoard_t	Core::Referee::getBoardCopy()
 {
   int		i;
-  Core::GameBoard_t	newBoard;
+  GameBoard_t	newBoard;
 
   while (i < BOARDSIZE)
     newBoard[i] = board[i++];
   return (newBoard);
 }
 
-const Core::GameBoard_t&	Core::Referee::getBoardRef()
+const GameBoard_t&	Core::Referee::getBoardRef()
 {
   return (board);
 }
@@ -47,9 +49,9 @@ void		Core::Referee::setPlayer(Team nplayer)
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
   boardOp->feed(&board);
-  if (winner != Core::Team::NOPLAYER)
+  if (winner != NOPLAYER)
     return (false);
-  if (boardOp->checkPos(x, y) != Core::Team::NOPLAYER)
+  if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
   if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
@@ -60,12 +62,12 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   return (false);
 }
 
-bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, Core::GameBoard_t *nboard)
+bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, GameBoard_t *nboard)
 {
   boardOp->feed(nboard);
-  if (winner != Core::Team::NOPLAYER)
+  if (winner != NOPLAYER)
     return (false);
-  if (boardOp->checkPos(x, y) != Core::Team::NOPLAYER)
+  if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
   if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
@@ -81,7 +83,7 @@ const Core::IBoardOperator *Core::Referee::getBoardOperator()
   return (boardOp);
 }
 
-Core::Team	Core::Referee::getWinner() const
+Team	Core::Referee::getWinner() const
 {
   return (winner);
 }

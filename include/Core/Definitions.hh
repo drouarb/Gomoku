@@ -4,26 +4,26 @@
 #include <stddef.h>
 #include <iostream>
 
-#define BOARDSIZE 19*19
 #define XBOARD 19
+#define BOARDSIZE (XBOARD * XBOARD)
 
-namespace Core
+#define TEAMOF(i)(i == 0 ? WHITE : BLACK)
+#define TEAMNAME(team)(team == WHITE ? "White stones" : "Black stones")
+
+enum GamePlayers : uint8_t
 {
-    enum GamePlayers : uint8_t
-    {
-        ONEPLAYER,
-        TWOPLAYERS,
-        TWOAIS
-    };
+    ONEPLAYER,
+    TWOPLAYERS,
+    TWOAIS
+};
 
-    enum Team : uint8_t
-    {
-      NOPLAYER = 0x00,
-      WHITE = 0x01,
-      BLACK = 0x02
-    };
+enum Team : uint8_t
+{
+    NOPLAYER  = 0x00,
+    WHITE     = 0x01,
+    BLACK     = 0x02
+};
 
-    typedef char* GameBoard_t;
-}
+typedef char* GameBoard_t;
 
 #endif
