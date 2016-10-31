@@ -2,6 +2,7 @@
 #define GOMOKU_HUMAN_HH
 
 #include "IHuman.hh"
+
 namespace Players
 {
     class Humain : public IHumain

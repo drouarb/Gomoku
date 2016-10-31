@@ -8,7 +8,7 @@
 #define BOARDSIZE (XBOARD * XBOARD)
 
 #define TEAMOF(i)(i == 0 ? WHITE : BLACK)
-#define TEAMNAME(team)(team == WHITE ? "White stones" : "Black stones")
+#define TEAMNAME(team)(team == WHITE ? "White" : "Black")
 
 enum GamePlayers : uint8_t
 {

@@ -3,8 +3,12 @@
 
 using namespace Players;
 
-const std::string &Ai::getName()
+Ai::Ai(std::string &name) : name(name)
+{ }
+
+const std::string &Ai::getName() const
 {
+    return (name);
 }
 
 bool Ai::play()

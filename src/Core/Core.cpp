@@ -5,6 +5,9 @@
 #include "Core.hh"
 #include "GUImas.hh"
 #include "Referee.hh"
+#include "CoreOberser.hh"
+#include "Human.hh"
+#include "Ai.hh"
 
 Core::Core::Core()
 {
@@ -27,12 +30,9 @@ Core::Core::Core()
     players[1] = NULL;
 
     // gui
-    //TO DO: observer
     gui = new GUI::GUImas();
-    //TO DO: init
     gui->feedRules(rules);
-    gui->feedBoard(referee->getBoardRef());
-    //gui thread
+    gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }
 
 Core::Core::~Core()
@@ -56,7 +56,7 @@ void Core::Core::playGame(GamePlayers player_config)
     int player_index = 0;
     while (referee->getWinner() == NOPLAYER)
     {
-        players[player_index]->play();
+        letPlayerPlay(player_index);
         player_index = !player_index;
     }
 
@@ -109,16 +109,18 @@ void Core::Core::destroyPlayer(int index)
 void Core::Core::createPlayerHuman(int index)
 {
     destroyPlayer(index);
-    //TO DO
-    //create
-    //register
+    std::string name = TEAMNAME(TEAMOF(index));
+    name += " player";
+    players[index] = new Players::Humain(name);
+    gui->registerPlayer(players[index]);
 }
 
 void Core::Core::createPlayerAI(int index)
 {
     destroyPlayer(index);
-    //TO DO
-    //create
+    std::string name = TEAMNAME(TEAMOF(index));
+    name += " A.I.";
+    players[index] = new Players::Ai(name);
 }
 
 void Core::Core::letPlayerPlay(int index)

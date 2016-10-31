@@ -11,8 +11,8 @@ namespace GUI
     public:
         ~ICoreObserver() { }
 
-        virtual void playGame(GamePlayers playerConfiguration);
-        virtual void setRule(const std::string & rule, bool on);
+        virtual void playGame(GamePlayers playerConfiguration) = 0;
+        virtual void setRule(const std::string & rule, bool on) = 0;
     };
 }
 
