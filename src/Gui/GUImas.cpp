@@ -48,3 +48,13 @@ void GUImas::startGame()
 
 void GUImas::endGame(const std::string &winner_name)
 { }
+
+void GUImas::showErrror(std::string)
+{
+
+}
+
+void GUImas::prompt(Players::IPlayer *)
+{
+
+}

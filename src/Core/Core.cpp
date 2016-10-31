@@ -111,7 +111,7 @@ void Core::Core::createPlayerHuman(int index)
     destroyPlayer(index);
     std::string name = TEAMNAME(TEAMOF(index));
     name += " player";
-    players[index] = new Players::Humain(name);
+    players[index] = new Players::Humain(name, dynamic_cast<GUI::IUIHandle*>(this->gui));
     gui->registerPlayer(players[index]);
 }
 
