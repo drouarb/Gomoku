@@ -3,7 +3,7 @@
 //
 
 #include "Core.hh"
-#include "GUImas.hh"
+#include "Graph.hpp"
 #include "Referee.hh"
 #include "CoreOberser.hh"
 #include "Human.hh"
@@ -30,7 +30,7 @@ Core::Core::Core()
     players[1] = NULL;
 
     // gui
-    gui = new GUI::GUImas();
+    gui = new GUI::Graph();
     feedRules();
     gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }

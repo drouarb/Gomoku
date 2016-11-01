@@ -14,7 +14,7 @@ namespace GUI
     class IGUI
     {
     public:
-        ~IGUI() { }
+        virtual ~IGUI() { }
         
         virtual void init(ICoreObserver *) = 0;
         virtual void registerPlayer(Players::IPlayer *) = 0;
