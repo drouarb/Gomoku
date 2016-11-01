@@ -12,15 +12,15 @@
 Core::Core::Core()
 {
     // rules
-    uniqueRules.push_back(std::list<std::string>());
-    rules.push_back(std::pair<std::string, bool>("Double three", false));
-    rules.push_back(std::pair<std::string, bool>("Breakable five", false));
-    rules.push_back(std::pair<std::string, bool>("Timed AI: 10 ms", false));
-    uniqueRules.back().push_back(rules.back().first);
-    rules.push_back(std::pair<std::string, bool>("Timed AI: 20 ms", false));
-    uniqueRules.back().push_back(rules.back().first);
-    rules.push_back(std::pair<std::string, bool>("Timed AI: 50 ms", false));
-    uniqueRules.back().push_back(rules.back().first);
+    uniqueRules.push_back(std::list<RuleID>());
+    uniqueRules.back().push_back(TIME_10MS);
+    uniqueRules.back().push_back(TIME_20MS);
+    uniqueRules.back().push_back(TIME_50MS);
+    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule("Double three", false)));
+    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule("Breakable five", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule("Timed AI: 10 ms", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule("Timed AI: 20 ms", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule("Timed AI: 50 ms", false)));
 
     // referee
     referee = new Referee();
@@ -31,7 +31,7 @@ Core::Core::Core()
 
     // gui
     gui = new GUI::GUImas();
-    gui->feedRules(rules);
+    feedRules();
     gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }
 
@@ -63,36 +63,32 @@ void Core::Core::playGame(GamePlayers player_config)
     gui->endGame(TEAMNAME(referee->getWinner()));
 }
 
-void Core::Core::setRule(const std::string &rule, bool on)
+void Core::Core::setRule(const std::string &rulename, bool on)
 {
-    for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
-         it != rules.end(); ++it)
+    for (auto& rule : rules)
     {
-        if (it->first == rule)
+        if (rule.second.name == rulename)
         {
-            it->second = on;
+            rule.second.on = on;
             break;
         }
     }
 
-    for (std::list<std::list<std::string > >::iterator list_it = uniqueRules.begin();
-         list_it != uniqueRules.end(); ++list_it)
+    for (auto& uniqueList : uniqueRules)
     {
-        for (std::list<std::string >::iterator elem_it = list_it->begin();
-             elem_it != list_it->end(); ++elem_it)
+        for (auto& uniqueRule : uniqueList)
         {
-            for (std::list<std::pair<std::string, bool> >::iterator rule_it = rules.begin();
-                 rule_it != rules.end(); ++rule_it)
+            for (auto& rule : rules)
             {
-                if (*elem_it == rule_it->first && rule_it->first != rule)
+                if (uniqueRule == rule.first && rule.second.name != rulename)
                 {
-                    rule_it->second = false;
+                    rule.second.on = false;
                 }
             }
         }
     }
 
-    gui->feedRules(rules);
+    feedRules();
 }
 
 void Core::Core::destroyPlayer(int index)
@@ -112,6 +108,7 @@ void Core::Core::createPlayerHuman(int index)
     std::string name = TEAMNAME(TEAMOF(index));
     name += " player";
     players[index] = new Players::Humain(name, dynamic_cast<GUI::IUIHandle*>(this->gui));
+    players[index]->init(referee);
     gui->registerPlayer(players[index]);
 }
 
@@ -121,12 +118,24 @@ void Core::Core::createPlayerAI(int index)
     std::string name = TEAMNAME(TEAMOF(index));
     name += " A.I.";
     players[index] = new Players::Ai(name);
+    players[index]->init(referee);
 }
 
 void Core::Core::letPlayerPlay(int index)
 {
-    gui->setCurrentPlayer(players[index]->getName());
+    gui->setCurrentPlayer(players[index]);
     referee->setPlayer(TEAMOF(index));
     players[index]->play();
     gui->feedBoard(referee->getBoardRef());
+}
+
+void Core::Core::feedRules()
+{
+    std::list<std::pair<std::string, bool> > list;
+
+    for (auto& rule : rules)
+    {
+        list.push_back(std::pair<std::string, bool>(rule.second.name, rule.second.on));
+    }
+    gui->feedRules(list);
 }

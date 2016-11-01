@@ -24,6 +24,15 @@ enum Team : uint8_t
     BLACK     = 0x02
 };
 
+enum RuleID : uint8_t
+{
+    DOUBLE_THREE,
+    BREAKABLE_FIVE,
+    TIME_10MS,
+    TIME_20MS,
+    TIME_50MS
+};
+
 typedef char* GameBoard_t;
 
 #endif

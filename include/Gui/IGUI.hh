@@ -21,7 +21,7 @@ namespace GUI
         virtual void unregisterPlayer(Players::IPlayer *) = 0;
         virtual void feedBoard(const GameBoard_t &) = 0;
         virtual void feedRules(std::list<std::pair<std::string, bool>> rules) = 0;
-        virtual void setCurrentPlayer(const std::string & name) = 0;
+        virtual void setCurrentPlayer(Players::IPlayer *) = 0;
         virtual void startGame() = 0;
         virtual void endGame(const std::string & winner_name) = 0;
     };

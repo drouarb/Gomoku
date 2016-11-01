@@ -10,9 +10,10 @@
 #include "IPlayer.hh"
 #include "IReferee.hh"
 #include "IPlayer.hh"
+#include "Rule.hh"
 #include <string>
-#include <list>
 #include <map>
+#include <list>
 
 namespace Core
 {
@@ -27,8 +28,8 @@ namespace Core
 
     private:
         GUI::IGUI * gui;
-        std::list<std::pair<std::string, bool> > rules;
-        std::list<std::list<std::string> > uniqueRules;
+        std::map<RuleID, Rule> rules;
+        std::list<std::list<RuleID> > uniqueRules;
         IReferee * referee;
         Players::IPlayer * players[2]; //human first
 
@@ -36,6 +37,7 @@ namespace Core
         void createPlayerHuman(int index);
         void createPlayerAI(int index);
         void letPlayerPlay(int index);
+        void feedRules();
     };
 }
 

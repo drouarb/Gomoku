@@ -59,7 +59,7 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   if (boardOp->checkfiveWin(player) == true)
     winner = player;
   boardOp->ForceupdateBoard(player, x, y);
-  return (false);
+  return (true);
 }
 
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, GameBoard_t *nboard)

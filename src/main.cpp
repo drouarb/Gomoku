@@ -8,6 +8,5 @@ int main(int ac, char **av)
 {
     Core::Core core;
 
-    core.playGame(ONEPLAYER);
     return (0);
 }

@@ -13,7 +13,7 @@ namespace GUI
     public:
         virtual ~IUIHandle(){};
         virtual void showErrror(std::string) = 0;
-        virtual void prompt(Players::IPlayer *) = 0;
+        virtual void prompt() = 0;
     };
 }
 #endif //GOMOKU_IUIHANDLE_HH

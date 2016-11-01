@@ -11,7 +11,7 @@ const std::string &Humain::getName() const
 
 bool Humain::play()
 {
-    this->handle->prompt(dynamic_cast<IPlayer*>(this));
+    this->handle->prompt();
     return true;
 }
 
@@ -28,7 +28,7 @@ bool Humain::tryPlay(uint8_t x, uint8_t y)
     else
     {
         this->handle->showErrror(std::string("cannot play"));
-        this->handle->prompt(dynamic_cast<IPlayer*>(this));
+        this->handle->prompt();
         return false;
     }
 }
