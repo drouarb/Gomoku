@@ -8,6 +8,7 @@
 
 using namespace GUI;
 
+
 void GUI::MenuGame::loadAsset()
 {
     gui->loadImage("./ressource/rules.png", "Rules");
@@ -38,6 +39,7 @@ void GUI::MenuGame::loadAsset()
     this->height = 1020;
     this->witdh = 1920;
 }
+
 
 void GUI::MenuGame::loadButton()
 {
@@ -151,7 +153,6 @@ void MenuGame::loadLayer()
     buff = gui->getSizePicture("Player1");
     ILayer *Player1 = new Layer(0, 0, buff.dimx, buff.dimy, "Player1");
     ILayer *Player2 = new Layer(this->witdh - buff.dimx, 0, buff.dimx, buff.dimy, "Player2");
-   addLayer(new Layer(700,400, buff.dimx, buff.dimy, "WhiteStones"));
     addLayer(Player1);
     addLayer(Player2);
     addLayer(Rules);

@@ -7,6 +7,8 @@
 
 #include "Menu.hpp"
 #include "IGUI.hh"
+#define calcx(x) (460 + 31 + x * 54 - 20 - (x))
+#define calcy(x) (8 +  31 + x * 54 - 22 - (x))
 using namespace GUI;
 namespace GUI
 {
