@@ -13,6 +13,7 @@ namespace GUI
         ~IPlayerObserver() { }
 
         virtual void setPlayer(Players::IHumain * player) = 0;
+        virtual Players::IPlayer * getPlayer() const = 0;
         virtual void sendPlay(uint8_t x, uint8_t y) = 0;
     };
 }

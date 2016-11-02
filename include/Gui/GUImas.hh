@@ -2,10 +2,11 @@
 #define GUIMAS_HH_
 
 #include "IGUI.hh"
+#include "IUIHandle.hh"
 
 namespace GUI
 {
-    class GUImas : public IGUI
+    class GUImas : public IGUI , public IUIHandle
     {
     public:
         GUImas();
@@ -16,9 +17,16 @@ namespace GUI
         void unregisterPlayer(Players::IPlayer *); //destroy observer
         void feedBoard(const GameBoard_t &);
         void feedRules(std::list<std::pair<std::string, bool>> rules);
-        void setCurrentPlayer(const std::string & name);
+        void setCurrentPlayer(Players::IPlayer *);
         void startGame();
         void endGame(const std::string & winner_name);
+        void showErrror(std::string);
+        void prompt();
+
+    private:
+        ICoreObserver * coreObserver;
+        IPlayerObserver * players[2];
+        Players::IPlayer * current;
     };
 }
 

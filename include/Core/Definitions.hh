@@ -8,7 +8,7 @@
 #define BOARDSIZE (XBOARD * XBOARD)
 
 #define TEAMOF(i)(i == 0 ? WHITE : BLACK)
-#define TEAMNAME(team)(team == WHITE ? "White stones" : "Black stones")
+#define TEAMNAME(team)(team == WHITE ? "White" : "Black")
 
 enum GamePlayers : uint8_t
 {
@@ -22,6 +22,15 @@ enum Team : uint8_t
     NOPLAYER  = 0x00,
     WHITE     = 0x01,
     BLACK     = 0x02
+};
+
+enum RuleID : uint8_t
+{
+    DOUBLE_THREE,
+    BREAKABLE_FIVE,
+    TIME_10MS,
+    TIME_20MS,
+    TIME_50MS
 };
 
 typedef char* GameBoard_t;

@@ -2,11 +2,7 @@
 #include "Human.hh"
 
 using namespace Players;
-
-Humain::Humain(std::string & Name)
-{
-this->name = Name;
-}
+using namespace GUI;
 
 const std::string &Humain::getName() const
 {
@@ -15,21 +11,35 @@ const std::string &Humain::getName() const
 
 bool Humain::play()
 {
-    return false;
+    this->handle->prompt();
+    return true;
 }
 
-bool Humain::init(Core::IReferee & referee1)
+bool Humain::init(Core::IReferee * referee1)
 {
-    this->referee = &referee1;
+    this->referee = referee1;
     return true;
 }
 
 bool Humain::tryPlay(uint8_t x, uint8_t y)
 {
-    return false;
+    if (referee->tryPlay(x, y) == true)
+    return true;
+    else
+    {
+        this->handle->showErrror(std::string("cannot play"));
+        this->handle->prompt();
+        return false;
+    }
 }
 
 Humain::~Humain()
 {
 
+}
+
+Humain::Humain(std::string &Name, GUI::IUIHandle *iuiHandle)
+{
+    this->name = Name;
+    this->handle = iuiHandle;
 }
