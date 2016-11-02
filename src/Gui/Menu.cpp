@@ -11,6 +11,10 @@ void Menu::addButtons(IButton *button)
 {
    this->listButton.push_back(button);
 }
+void Menu::addLayer(ILayer *button)
+{
+    this->listLayer.push_back(button);
+}
 
 void Menu::delButton(IButton *button)
 {
@@ -30,15 +34,43 @@ void Menu::delButton(IButton *button)
     }
 }
 
+void Menu::delLayer(ILayer *button)
+{
+    std::vector<ILayer *>::iterator it = listLayer.begin();
+    if (listLayer.empty() == false)
+    {
+        while (it != listLayer.end())
+        {
+            if (*it == button)
+            {
+                listLayer.erase(it);
+                break;
+            }
+            it++;
+        }
+
+    }
+}
+
 void Menu::clearListButton()
 {
   this->listButton.clear();
+}
+
+void Menu::clearListLayer()
+{
+    this->listLayer.clear();
 }
 
 
 const std::vector<IButton *> &Menu::getListButton() const
 {
   return listButton;
+}
+
+const std::vector<ILayer *> &Menu::getListLayer() const
+{
+    return listLayer;
 }
 
 int Menu::getPosx()

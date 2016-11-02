@@ -20,7 +20,9 @@ namespace GUI
         void loadAsset();
         void loadButton();
         void aff();
+        void loadLayer();
         void setSomething(void *);
+        void affButtons() const;
     };
 }
 #endif //GOMOKU_MENUGAME_HH

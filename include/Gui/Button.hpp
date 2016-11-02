@@ -66,6 +66,10 @@ namespace GUI
     virtual typeButton getType() const {
       return this->type;
     }
+      virtual void setTypButton(typeButton l)
+      {
+        this->type = l;
+      };
     Button(int witdh, int height, int pos_x, int pos_y, std::string name)
     {
       this->startx = pos_x;
@@ -75,7 +79,7 @@ namespace GUI
       this->witdh = witdh;
       this->height = height;
       this->name = name;
-      this->stats = VISIBLE;
+      this->stats = NORMAL;
     }
 
     void *getObj() const

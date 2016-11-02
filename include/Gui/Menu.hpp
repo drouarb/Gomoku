@@ -19,11 +19,17 @@ namespace GUI
     int witdh;
     int height;
     const std::vector<IButton *> & getListButton() const;
+      const std::vector<ILayer *> &getListLayer() const;
    protected:
     std::vector<IButton *> listButton;
+      std::vector<ILayer *> listLayer;
    public:
     virtual void addButtons(IButton *button);
     virtual void delButton(IButton *button);
+      virtual void addLayer(ILayer *button);
+      virtual void clearListLayer();
+      virtual void delLayer(ILayer *button);
+      virtual void loadLayer() = 0;
     virtual void clearListButton();
     virtual void loadAsset() = 0;
     virtual void loadButton() = 0;

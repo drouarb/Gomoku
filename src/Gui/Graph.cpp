@@ -69,9 +69,9 @@ void Graph::loadImage(const std::string &path, const std::string &name)
   void *pSprite;
 
   pSprite = static_cast<void *>(IMG_Load(path.c_str()));
-    std::cout << path << std::endl;
   if (pSprite)
     {
+        std::cout << path << std::endl;
       this->images.insert(std::pair<std::string, void *>(name, pSprite));
     }
 }
