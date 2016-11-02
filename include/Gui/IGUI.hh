@@ -22,6 +22,7 @@ namespace GUI
         virtual ~IGUI()
         {}
 
+        virtual void show(const std::string &) = 0;
         virtual void init(ICoreObserver *) = 0;
 
         virtual void registerPlayer(Players::IPlayer *) = 0;
@@ -55,6 +56,8 @@ namespace GUI
         virtual void changeOpacity(const std::string &name, int r, int g, int b) = 0;
 
         virtual t_size getSizePicture(const std::string &name) = 0;
+
+        virtual void popupString() = 0;
     };
 }
 

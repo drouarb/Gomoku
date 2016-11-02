@@ -5,12 +5,16 @@
 #ifndef CPP_PLAZZA_GRAPH_HPP
 #define CPP_PLAZZA_GRAPH_HPP
 
+#define SHOWTIME 3
 #include <SDL2/SDL.h>
 #include <map>
 #include "SDL2/SDL_ttf.h"
 #include "IGUI.hh"
 #include "IUIHandle.hh"
-
+#include <chrono>
+#include <mutex>
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::high_resolution_clock::time_point TimePoint;
 namespace GUI {
 
     class Graph : public IGUI, public IUIHandle {
@@ -20,6 +24,7 @@ namespace GUI {
         SDL_Renderer *pRenderer;
         std::map<std::string, void *> images;
         TTF_Font *police;
+        std::map<std::string, TimePoint> listMessage;
     private:
         SDL_Color colorTexte;
         t_size sizebuff;
@@ -48,7 +53,7 @@ namespace GUI {
 
         void endGame(const std::string &winner_name);
 
-        void showErrror(std::string);
+        void show(const std::string&);
 
         void prompt();
 
@@ -69,6 +74,7 @@ namespace GUI {
         void changeOpacity(const std::string &name, int r, int g, int b);
 
         t_size getSizePicture(const std::string &name);
+    void popupString();
     };
 }
 #endif //CPP_PLAZZA_GRAPH_HPP
