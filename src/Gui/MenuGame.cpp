@@ -150,8 +150,8 @@ void MenuGame::loadLayer()
     ILayer *Lauch = new Layer(100, 500, buff.dimx, buff.dimy, "Launch");
     buff = gui->getSizePicture("Player1");
     ILayer *Player1 = new Layer(0, 0, buff.dimx, buff.dimy, "Player1");
-    ILayer *Player2 = new Layer(1920 - buff.dimx, 0, buff.dimx, buff.dimy, "Player2");
-   addLayer(new Layer(1920 - buff.dimx, 0, buff.dimx, buff.dimy, "BlackStones"));
+    ILayer *Player2 = new Layer(this->witdh - buff.dimx, 0, buff.dimx, buff.dimy, "Player2");
+   addLayer(new Layer(700,400, buff.dimx, buff.dimy, "WhiteStones"));
     addLayer(Player1);
     addLayer(Player2);
     addLayer(Rules);
