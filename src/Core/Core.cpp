@@ -3,15 +3,14 @@
 //
 
 #include "Core.hh"
-//#include "GUImas.hh"
+#include "GUImas.hh"
 #include "Referee.hh"
-#include <iostream>
 
 Core::Core::Core()
 {
     // rules
     uniqueRules.push_back(std::list<std::string>());
-    rules.push_back(std::pair<std::string, bool>("Triple three", false));
+    rules.push_back(std::pair<std::string, bool>("Double three", false));
     rules.push_back(std::pair<std::string, bool>("Breakable five", false));
     rules.push_back(std::pair<std::string, bool>("Timed AI: 10 ms", false));
     uniqueRules.back().push_back(rules.back().first);
@@ -29,28 +28,43 @@ Core::Core::Core()
 
     // gui
     //TO DO: observer
-    //gui = new GUI::GUImas();
+    gui = new GUI::GUImas();
     //TO DO: init
-    //gui->feedRules(rules);
-    //gui->feedBoard(referee->getBoardRef());
+    gui->feedRules(rules);
+    gui->feedBoard(referee->getBoardRef());
+    //gui thread
 }
 
 Core::Core::~Core()
 { }
 
-void Core::Core::playGame(::Core::GamePlayers player_config)
+void Core::Core::playGame(GamePlayers player_config)
 {
-    mutex.lock();
+    if (player_config != TWOAIS)
+        createPlayerHuman(0);
+    else
+        createPlayerAI(0);
+    if (player_config == TWOPLAYERS)
+        createPlayerHuman(1);
+    else
+        createPlayerAI(1);
 
-    //TO DO
+    referee->initialize();
+    gui->startGame();
+    gui->feedBoard(referee->getBoardRef());
 
-    mutex.unlock();
+    int player_index = 0;
+    while (referee->getWinner() == NOPLAYER)
+    {
+        players[player_index]->play();
+        player_index = !player_index;
+    }
+
+    gui->endGame(TEAMNAME(referee->getWinner()));
 }
 
 void Core::Core::setRule(const std::string &rule, bool on)
 {
-    mutex.lock();
-
     for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
          it != rules.end(); ++it)
     {
@@ -78,15 +92,39 @@ void Core::Core::setRule(const std::string &rule, bool on)
         }
     }
 
-    //gui->feedRules(rules);
+    gui->feedRules(rules);
+}
 
-    //test
-    /*for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
-         it != rules.end(); ++it)
+void Core::Core::destroyPlayer(int index)
+{
+    if (players[index] != NULL)
     {
-        std::cout << it->first << " " << it->second << std::endl;
+        if (dynamic_cast<Players::IHumain *>(players[index]) != NULL)
+            gui->unregisterPlayer(players[index]);
+        delete (players[index]);
+        players[index] = NULL;
     }
-    std::cout << std::endl;*/
+}
 
-    mutex.unlock();
+void Core::Core::createPlayerHuman(int index)
+{
+    destroyPlayer(index);
+    //TO DO
+    //create
+    //register
+}
+
+void Core::Core::createPlayerAI(int index)
+{
+    destroyPlayer(index);
+    //TO DO
+    //create
+}
+
+void Core::Core::letPlayerPlay(int index)
+{
+    gui->setCurrentPlayer(players[index]->getName());
+    referee->setPlayer(TEAMOF(index));
+    players[index]->play();
+    gui->feedBoard(referee->getBoardRef());
 }

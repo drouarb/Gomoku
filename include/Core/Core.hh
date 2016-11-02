@@ -6,14 +6,13 @@
 #define GOMOKU_CORE_HH
 
 #include "Definitions.hh"
-//#include "IGUI.hh"
+#include "IGUI.hh"
 #include "IPlayer.hh"
 #include "IReferee.hh"
 #include "IPlayer.hh"
 #include <string>
 #include <list>
 #include <map>
-#include <mutex>
 
 namespace Core
 {
@@ -27,12 +26,16 @@ namespace Core
         void setRule(const std::string & rule, bool on);
 
     private:
-        std::mutex mutex;
-        //IGUI * gui;
+        GUI::IGUI * gui;
         std::list<std::pair<std::string, bool> > rules;
         std::list<std::list<std::string> > uniqueRules;
         IReferee * referee;
-        Players::IPlayer * players[2];
+        Players::IPlayer * players[2]; //human first
+
+        void destroyPlayer(int index);
+        void createPlayerHuman(int index);
+        void createPlayerAI(int index);
+        void letPlayerPlay(int index);
     };
 }
 
