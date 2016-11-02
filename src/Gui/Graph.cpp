@@ -42,7 +42,7 @@ void Graph::addToScreen(const std::string &name, int x, int y)
 void Graph::loop()
 {
   SDL_Delay(1);
-  if (SDL_PollEvent(&this->event))
+   if (SDL_PollEvent(&this->event))
     {
       if (event.window.event == SDL_WINDOWEVENT_CLOSE)
 	{
@@ -69,7 +69,7 @@ void Graph::loadImage(const std::string &path, const std::string &name)
   void *pSprite;
 
   pSprite = static_cast<void *>(IMG_Load(path.c_str()));
-
+    std::cout << path << std::endl;
   if (pSprite)
     {
       this->images.insert(std::pair<std::string, void *>(name, pSprite));
@@ -150,22 +150,8 @@ void Graph::init(ICoreObserver * coreObserver)
     colorTexte.r = 0;
     colorTexte.g = 0;
     std::cout << "init" << std::endl;
-
     this->coreObserver = coreObserver;
-    std::string input;
-    std::cout << "> ";
-    while (std::cin >> input)
-    {
-        if (input == "play")
-        {
-            coreObserver->playGame(TWOPLAYERS);
-        }
-        else
-        {
-            std::cout << "Just enter \'play\', goddamit." << std::endl;
-        }
-        std::cout << "> ";
-    }
+
 }
 
 void  Graph::registerPlayer(Players::IPlayer * player)

@@ -12,10 +12,6 @@
 #include "IUIHandle.hh"
 
 namespace GUI {
-    struct t_size {
-        int dimx;
-        int dimy;
-    };
 
     class Graph : public IGUI, public IUIHandle {
     private:
