@@ -7,7 +7,7 @@
 #include "MenuGame.hh"
 #include "Button.hpp"
 #include "Layer.hh"
-
+#include "IPlayer.hh"
 using namespace GUI;
 
 
@@ -46,7 +46,7 @@ void GUI::MenuGame::loadAsset()
 void GUI::MenuGame::loadButton()
 {
     t_size buff = gui->getSizePicture("Board");
-    IButton *board = new Button<MenuGame>(buff.dimx, buff.dimy, 460, 0, "Board", this, &MenuGame::setSomething);
+    IButton *board = new Button<MenuGame>(buff.dimx, buff.dimy, 460, 0, "Board", this, &MenuGame::sendPlay);
     board->setTypButton(BOARD);
     buff = gui->getSizePicture("Checked");
 
@@ -102,10 +102,27 @@ void GUI::MenuGame::aff()
     affButtons();
     std::vector<ILayer *> f = getListLayer();
     std::vector<ILayer *>::iterator it = f.begin();
+     GameBoard_t board = dynamic_cast<GUI::Graph*>(this->gui)->board;
+     int x = 0;
+    int y = 0;
     while (it != f.end())
     {
         gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
         it++;
+    }
+    if (board != NULL)
+    for(int i = 0; i < BOARDSIZE ; i++)
+    {
+        if (board[i] == WHITE)
+            gui->addToScreen("WhiteStones", calcx(x), calcy(y));
+        if (board[i] == BLACK)
+            gui->addToScreen("BlackStones", calcx(x), calcy(y));
+        x++;
+        if (x == 19)
+        {
+          y++;
+            x = 0;
+        }
     }
     gui->popupString();
 }
@@ -130,6 +147,7 @@ void MenuGame::affButtons() const
                         (*it)->setStats(CHECKED);
                     if (it2->second == false && (*it)->getStats() != UNCHECKED)
                         (*it)->setStats(UNCHECKED);
+                    break;
                 }
             }
 
@@ -193,6 +211,7 @@ void MenuGame::sendRule(void *button)
 
 void MenuGame::playGameOnePlayers()
 {
+    std::cout << "kook" << std::endl;
     this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
 }
 
@@ -204,5 +223,19 @@ void MenuGame::playGameTwoPlayers()
 void MenuGame::playGameIa()
 {
     this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+}
+
+void MenuGame::sendPlay()
+{
+    t_size *last = (dynamic_cast<GUI::Graph*>(gui))->last;
+    Players::IPlayer *player = (dynamic_cast<GUI::Graph*>(gui))->current;
+    IPlayerObserver  *iob1 = (dynamic_cast<GUI::Graph*>(gui))->players[0];
+        uint8_t  x = invcalcx(last->dimx) ;
+    uint8_t  y = invcalcy(last->dimy);
+        if (iob1 != NULL && iob1->getPlayer() == player)
+            iob1->sendPlay(x, y);
+    iob1 = dynamic_cast<IPlayerObserver*>((dynamic_cast<GUI::Graph*>(gui))->players[1]);
+    if (iob1 != NULL && iob1->getPlayer() == player)
+        iob1->sendPlay(x, y);
 }
 

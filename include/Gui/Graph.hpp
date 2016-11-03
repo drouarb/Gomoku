@@ -24,6 +24,7 @@ namespace GUI {
         SDL_Window *fenetre;
         SDL_Renderer *pRenderer;
         std::map<std::string, void *> images;
+        std::map<std::string, void *> Textureimages;
         TTF_Font *police;
         ICoreObserver *coreObserver;
         Obs mainObs;
@@ -31,10 +32,10 @@ namespace GUI {
     private:
         SDL_Color colorTexte;
         t_size sizebuff;
+    public:
+        t_size *last;
         IPlayerObserver *players[2];
         Players::IPlayer *current;
-
-    public:
         Graph(ICoreObserver *coreObserver);
         std::list<std::pair<std::string, bool>> rules;
         ~Graph() {};
@@ -42,7 +43,7 @@ namespace GUI {
         Graph() {};
 
         void init(ICoreObserver *);
-
+        GameBoard_t  board;
         ICoreObserver *getICoreObserver();
 
         void registerPlayer(Players::IPlayer *); //create observer

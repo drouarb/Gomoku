@@ -26,16 +26,17 @@ void Obs::notify(int x, int y)
 		find = true;
 	    }
 	  itButons++;
-	}
-      if (find == true)
-	   break;
+        if (find == true)
+            break;
+    }
       it++;
+        if (find == true)
+            break;
     }
   it = listMenu.begin();
   while (it != listMenu.end())
   {
-      (*it)->loadButton();
-      (*it)->aff();
+       (*it)->aff();
     it++;
   }
 }

@@ -21,7 +21,7 @@ void		Core::Referee::initialize()
   boardOp = new BoardOperator;
   while (i < BOARDSIZE)
     {
-      board[i] = 0; //0 ? Zero ?? ZERO ?!? COMME LE NOMBRE ?!?! PAS LA MACCRO !?!?!
+      board[i] = NOPLAYER; //0 ? Zero ?? ZERO ?!? COMME LE NOMBRE ?!?! PAS LA MACCRO !?!?!
       ++i;
     }
 }
