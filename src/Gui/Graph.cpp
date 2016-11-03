@@ -46,9 +46,10 @@ void Graph::addToScreen(const std::string &name, int x, int y)
         }
     }
 
-bool Graph::loop()
+typeButton Graph::loop()
 {
     SDL_Delay(1);
+    typeButton  re;
     if (SDL_PollEvent(&this->event))
     {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
@@ -61,13 +62,13 @@ bool Graph::loop()
             {
                 last->dimy  = event.button.y;
                 last->dimx = event.button.x;
-                mainObs.notify(event.button.x, event.button.y);
+                re = mainObs.notify(event.button.x, event.button.y);
                 refresh();
-                return (true);
+                return (re);
             }
         }
     }
-    return (false);
+    return (DEFAULT);
 }
 void Graph::showError(const std::string & str)
 {
@@ -103,7 +104,7 @@ void Graph::addTextToScreen(const std::string &text, int x, int y)
                 SDL_RenderCopy(this->pRenderer, pTexture, NULL, &dest);
                 SDL_DestroyTexture(pTexture);
             }
-            delete(pSprite);
+            SDL_FreeSurface(pSprite);
         }
     }
 }
@@ -178,10 +179,10 @@ void Graph::init(ICoreObserver *coreObserver)
         loop();
              if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
              {
-                 toto.aff();
+                mainObs.actualMenu();
                  refresh();
                  t = Clock::now();
-             }
+            }
         SDL_Delay(10);
     }
 
@@ -259,12 +260,18 @@ void Graph::popupString()
 
 void Graph::prompt()
 {
-    auto t=  Clock::now();
-    while (loop() != true)
+    auto t =  Clock::now();
+    mainObs.actualMenu();
+    popupString();
+    refresh();
+    while (loop() != BOARD)
     {
+        if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > SHOWTIME)
+        {
             mainObs.actualMenu();
-            popupString();
             refresh();
+            t = Clock::now();
+        }
         SDL_Delay(10);
     }
 }

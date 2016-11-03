@@ -7,11 +7,12 @@
 
 using namespace GUI;
 
-void Obs::notify(int x, int y)
+typeButton Obs::notify(int x, int y)
 {
   std::vector<IMenu*>::iterator it = listMenu.begin();
   std::vector<IButton*>::iterator itButons;
    bool find = false;
+    typeButton  re;
    std::vector<IButton*> buffButtons;
   if (listMenu.empty() == false)
   while (it != listMenu.end())
@@ -23,6 +24,7 @@ void Obs::notify(int x, int y)
 	    if ((*itButons)->checkPos(x, y ) == true)
 	    {
 	      (*itButons)->execute();
+            re = (*itButons)->getType();
 		find = true;
 	    }
 	  itButons++;
@@ -34,6 +36,7 @@ void Obs::notify(int x, int y)
             break;
     }
     actualMenu();
+    return re;
 }
 
 

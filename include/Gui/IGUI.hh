@@ -5,6 +5,7 @@
 #include "Definitions.hh"
 #include "ICoreOberser.hh"
 #include "IPlayerObserver.hh"
+#include "IButton.hpp"
 #include <string>
 #include <list>
 #include <map>
@@ -45,7 +46,7 @@ namespace GUI
 
         virtual void addToScreen(const std::string &name, int x, int y) = 0;
 
-        virtual bool loop() = 0;
+        virtual typeButton loop() = 0;
 
         virtual void refresh() = 0;
 

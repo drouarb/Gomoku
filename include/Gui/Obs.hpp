@@ -22,7 +22,7 @@ namespace  GUI
    private:
     std::vector<IMenu*>listMenu;
    public:
-    void notify(int x, int y);
+    typeButton notify(int x, int y);
     void  addMenu(IMenu *menu);
     void notify(eventObs e);
       void actualMenu();

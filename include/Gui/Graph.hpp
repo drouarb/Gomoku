@@ -68,7 +68,7 @@ namespace GUI {
 
         void addToScreen(const std::string &name, int x, int y);
 
-        bool loop();
+        typeButton loop();
 
         void refresh();
 
