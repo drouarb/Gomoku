@@ -25,6 +25,7 @@ namespace  GUI
     void notify(int x, int y);
     void  addMenu(IMenu *menu);
     void notify(eventObs e);
+      void actualMenu();
   };
 }
 #endif //CPP_PLAZZA_OBS_HPP

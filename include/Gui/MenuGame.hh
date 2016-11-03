@@ -26,7 +26,7 @@ namespace GUI
         void aff();
         void loadLayer();
         void setSomething(void *);
-        void affButtons() const;
+        void affButtons();
         void sendRule(void *data);
         void playGameOnePlayers();
         void playGameTwoPlayers();

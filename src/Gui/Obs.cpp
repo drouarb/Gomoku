@@ -33,8 +33,15 @@ void Obs::notify(int x, int y)
         if (find == true)
             break;
     }
-  it = listMenu.begin();
-  while (it != listMenu.end())
+    actualMenu();
+}
+
+
+void Obs::actualMenu()
+{
+    int i = 0;
+    std::vector<IMenu*>::iterator it = listMenu.begin();
+    while (it != this->listMenu.end())
   {
        (*it)->aff();
     it++;

@@ -45,7 +45,7 @@ namespace GUI
 
         virtual void addToScreen(const std::string &name, int x, int y) = 0;
 
-        virtual void loop() = 0;
+        virtual bool loop() = 0;
 
         virtual void refresh() = 0;
 

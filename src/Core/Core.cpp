@@ -53,11 +53,11 @@ void Core::Core::playGame(GamePlayers player_config)
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());
     int player_index = 0;
-    //while (referee->getWinner() == NOPLAYER)
-   // {
+    while (referee->getWinner() == NOPLAYER)
+    {
         letPlayerPlay(player_index);
-  //      player_index = !player_index;
-//    }
+          player_index = !player_index;
+    }
 
     gui->endGame(TEAMNAME(referee->getWinner()));
 }

@@ -46,7 +46,7 @@ void Graph::addToScreen(const std::string &name, int x, int y)
         }
     }
 
-void Graph::loop()
+bool Graph::loop()
 {
     SDL_Delay(1);
     if (SDL_PollEvent(&this->event))
@@ -63,9 +63,11 @@ void Graph::loop()
                 last->dimx = event.button.x;
                 mainObs.notify(event.button.x, event.button.y);
                 refresh();
+                return (true);
             }
         }
     }
+    return (false);
 }
 void Graph::showError(const std::string & str)
 {
@@ -222,12 +224,12 @@ void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
 void Graph::setCurrentPlayer(Players::IPlayer *player)
 {
     current = player;
-    show(player->getName());
+    show(player->getName() + " Turn ");
 }
 
 void Graph::startGame()
 {
-//    show("GAME START");
+    show("GAME START");
 }
 
 void Graph::endGame(const std::string &winner_name)
@@ -257,4 +259,12 @@ void Graph::popupString()
 
 void Graph::prompt()
 {
+    auto t=  Clock::now();
+    while (loop() != true)
+    {
+            mainObs.actualMenu();
+            popupString();
+            refresh();
+        SDL_Delay(10);
+    }
 }

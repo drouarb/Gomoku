@@ -5,7 +5,7 @@
 #ifndef CPP_PLAZZA_GRAPH_HPP
 #define CPP_PLAZZA_GRAPH_HPP
 
-#define SHOWTIME 3
+#define SHOWTIME 1
 #include <SDL2/SDL.h>
 #include <map>
 #include "SDL2/SDL_ttf.h"
@@ -68,7 +68,7 @@ namespace GUI {
 
         void addToScreen(const std::string &name, int x, int y);
 
-        void loop();
+        bool loop();
 
         void refresh();
 
