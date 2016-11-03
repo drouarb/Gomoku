@@ -5,7 +5,8 @@
 #ifndef CPP_PLAZZA_GRAPH_HPP
 #define CPP_PLAZZA_GRAPH_HPP
 
-#define SHOWTIME 1
+#define SHOWTIME 0.5
+
 #include <SDL2/SDL.h>
 #include <map>
 #include "SDL2/SDL_ttf.h"
@@ -14,11 +15,14 @@
 #include <chrono>
 #include <mutex>
 #include "Obs.hpp"
+
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePoint;
-namespace GUI {
+namespace GUI
+{
 
-    class Graph : public IGUI, public IUIHandle {
+    class Graph : public IGUI, public IUIHandle
+    {
     private:
         SDL_Event event;
         SDL_Window *fenetre;
@@ -36,14 +40,21 @@ namespace GUI {
         t_size *last;
         IPlayerObserver *players[2];
         Players::IPlayer *current;
-        Graph(ICoreObserver *coreObserver);
-        std::list<std::pair<std::string, bool>> rules;
-        ~Graph() {};
 
-        Graph() {};
+        Graph(ICoreObserver *coreObserver);
+
+        std::list<std::pair<std::string, bool>> rules;
+
+        ~Graph()
+        {};
+
+        Graph()
+        {};
 
         void init(ICoreObserver *);
-        GameBoard_t  board;
+
+        GameBoard_t board;
+
         ICoreObserver *getICoreObserver();
 
         void registerPlayer(Players::IPlayer *); //create observer
@@ -58,7 +69,7 @@ namespace GUI {
 
         void endGame(const std::string &winner_name);
 
-        void show(const std::string&);
+        void show(const std::string &);
 
         void prompt();
 
@@ -81,7 +92,8 @@ namespace GUI {
         void changeOpacity(const std::string &name, int r, int g, int b);
 
         t_size getSizePicture(const std::string &name);
-    void popupString();
+
+        void popupString();
     };
 }
 #endif //CPP_PLAZZA_GRAPH_HPP
