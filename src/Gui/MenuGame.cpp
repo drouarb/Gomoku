@@ -2,6 +2,8 @@
 // Created by celeriy on 02/11/16.
 //
 
+#include <list>
+#include <Gui/Graph.hpp>
 #include "MenuGame.hh"
 #include "Button.hpp"
 #include "Layer.hh"
@@ -23,7 +25,7 @@ void GUI::MenuGame::loadAsset()
     gui->loadImage("./ressource/Twoplayers.png", "Twoplayers");
     gui->loadImage("./ressource/Iaplayers.png", "Iaplayers");
     gui->loadImage("./ressource/background.png", "Background");
-    gui->setPolice("./ressource/PTC55F.ttf", 45);
+    gui->setPolice("./ressource/PTC55F.ttf", 35);
     gui->loadImage("./ressource/checked.png", "Checked");
     gui->loadImage("./ressource/Launch.png", "Launch");
     gui->loadImage("./ressource/white_stones.png", "WhiteStones");
@@ -47,17 +49,26 @@ void GUI::MenuGame::loadButton()
     IButton *board = new Button<MenuGame>(buff.dimx, buff.dimy, 460, 0, "Board", this, &MenuGame::setSomething);
     board->setTypButton(BOARD);
     buff = gui->getSizePicture("Checked");
-    IButton *doubleThree = new Button<MenuGame>(buff.dimx, buff.dimy, board->getStartx() + board->getWitdh() + 10, 700,
-                                                "DoubleThree", this, &MenuGame::setSomething);
-    doubleThree->setTypButton(CHECKBOX);
-    doubleThree->setStats(UNCHECKED);
-    IButton *Cassable = new Button<MenuGame>(buff.dimx, buff.dimy, board->getStartx() + board->getWitdh() + 10,
-                                             doubleThree->getStarty() + doubleThree->getHeight() + 20, "5 Unbreakable",
-                                             this, &MenuGame::setSomething);
-    Cassable->setTypButton(CHECKBOX);
-    Cassable->setStats(UNCHECKED);
-    buff = gui->getSizePicture("White");
 
+    Graph *g = dynamic_cast<Graph*>(this->gui);
+    std::list<std::pair<std::string, bool>> rules = g->rules;
+    IButton *buffer;
+    int y = 0;
+    for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
+         it != rules.end(); ++it)
+    {
+       buffer = new Button<MenuGame>(buff.dimx, buff.dimy, board->getStartx() + board->getWitdh() + 10, 100 + y,
+                             it->first,this, &MenuGame::sendRule);
+        buffer->setDataHandler(buffer);
+        buffer->setTypButton(CHECKBOX);
+        if (it->second == false)
+        buffer->setStats(UNCHECKED);
+        else
+            buffer->setStats(CHECKED);
+        addButtons(buffer);
+        y+= buff.dimy;
+    }
+    buff = gui->getSizePicture("White");
     IButton *White = new Button<MenuGame>(buff.dimx, buff.dimy, 100, 600, "White", this, &MenuGame::setSomething);
     White->setTypButton(SELECTBOX);
     IButton *Black = new Button<MenuGame>(buff.dimx, buff.dimy, White->getWitdh() + White->getStartx() + 100,
@@ -67,19 +78,17 @@ void GUI::MenuGame::loadButton()
     buff = gui->getSizePicture("Oneplayer");
     IButton *Oneplayer = new Button<MenuGame>(buff.dimx, buff.dimy, 100,
                                               White->getStarty() + White->getHeight() + 10, "Oneplayer", this,
-                                              &MenuGame::setSomething);
+                                              &MenuGame::playGameOnePlayers);
     Oneplayer->setTypButton(STARTGAME);
     IButton *Twoplayer = new Button<MenuGame>(buff.dimx, buff.dimy, Oneplayer->getStartx(),
                                               Oneplayer->getStarty() + Oneplayer->getHeight() + 10, "Twoplayers", this,
-                                              &MenuGame::setSomething);
+                                              &MenuGame::playGameTwoPlayers);
     Twoplayer->setTypButton(STARTGAME);
     IButton *Iaplayers = new Button<MenuGame>(buff.dimx, buff.dimy, Oneplayer->getStartx(),
                                               Twoplayer->getStarty() + Twoplayer->getHeight() + 10, "Iaplayers", this,
-                                              &MenuGame::setSomething);
+                                              &MenuGame::playGameIa);
     Iaplayers->setTypButton(STARTGAME);
     addButtons(board);
-    addButtons(Cassable);
-    addButtons(doubleThree);
     addButtons(Iaplayers);
     addButtons(Twoplayer);
     addButtons(Oneplayer);
@@ -105,11 +114,25 @@ void MenuGame::affButtons() const
 {
     std::vector<IButton *> f = getListButton();
     std::vector<IButton *>::iterator it = f.begin();
+    Graph *g = dynamic_cast<Graph*>(this->gui);
+    std::list<std::pair<std::string, bool>> rules = g->rules;
     while (it != f.end())
     {
 
         if ((*it)->getType() == CHECKBOX)
         {
+            for (std::list<std::pair<std::string, bool> >::iterator it2 = rules.begin();
+                 it2 != rules.end(); ++it2)
+            {
+                if (it2->first == (*it)->getName())
+                {
+                    if (it2->second == true && (*it)->getStats() != CHECKED)
+                        (*it)->setStats(CHECKED);
+                    if (it2->second == false && (*it)->getStats() != UNCHECKED)
+                        (*it)->setStats(UNCHECKED);
+                }
+            }
+
             if ((*it)->getStats() == CHECKED)
                 gui->addToScreen("Checked", (*it)->getStartx(), (*it)->getStarty());
             else
@@ -148,13 +171,38 @@ MenuGame::MenuGame(IGUI *gui)
 void MenuGame::loadLayer()
 {
     t_size buff = gui->getSizePicture("Rules");
-    ILayer *Rules = new Layer(gui->getSizePicture("Board").dimx + 500, 600, buff.dimx, buff.dimy, "Rules");
+    ILayer *Rules = new Layer(gui->getSizePicture("Board").dimx + 500, 0, buff.dimx, buff.dimy, "Rules");
     ILayer *Lauch = new Layer(100, 500, buff.dimx, buff.dimy, "Launch");
     buff = gui->getSizePicture("Player1");
     ILayer *Player1 = new Layer(0, 0, buff.dimx, buff.dimy, "Player1");
-    ILayer *Player2 = new Layer(this->witdh - buff.dimx, 0, buff.dimx, buff.dimy, "Player2");
+    ILayer *Player2 = new Layer(0, buff.dimy, buff.dimx, buff.dimy, "Player2");
     addLayer(Player1);
     addLayer(Player2);
     addLayer(Rules);
     addLayer(Lauch);
 }
+
+void MenuGame::sendRule(void *button)
+{
+ IButton *but = static_cast<IButton*>(button);
+    if (but->getStats() == CHECKED)
+        this->gui->getICoreObserver()->setRule(but->getName(), false);
+    else
+        this->gui->getICoreObserver()->setRule(but->getName(), true);
+}
+
+void MenuGame::playGameOnePlayers()
+{
+    this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
+}
+
+void MenuGame::playGameTwoPlayers()
+{
+    this->gui->getICoreObserver()->playGame(GamePlayers::TWOPLAYERS);
+}
+
+void MenuGame::playGameIa()
+{
+    this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+}
+

@@ -7,6 +7,7 @@
 #include "Graph.hpp"
 #include "GraphicException.hpp"
 #include <thread>
+#include <Gui/MenuGame.hh>
 
 using namespace GUI;
 
@@ -53,13 +54,16 @@ void Graph::loop()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-//                refresh();
-                show("kokokkoo");
+                mainObs.notify(event.button.x, event.button.y);
+                refresh();
             }
         }
     }
 }
-
+void Graph::showError(const std::string & str)
+{
+    show(str);
+}
 void Graph::refresh()
 {
     SDL_RenderPresent(this->pRenderer);
@@ -73,7 +77,6 @@ void Graph::loadImage(const std::string &path, const std::string &name)
     pSprite = static_cast<void *>(IMG_Load(path.c_str()));
     if (pSprite)
     {
-        std::cout << path << std::endl;
         this->images.insert(std::pair<std::string, void *>(name, pSprite));
     }
 }
@@ -83,10 +86,10 @@ void Graph::addTextToScreen(const std::string &text, int x, int y)
     if (police != NULL)
     {
         SDL_Color couleurBlanche;
-        couleurBlanche.a = 255;
-        couleurBlanche.b = 255;
-        couleurBlanche.r = 255;
-        couleurBlanche.g = 255;
+        couleurBlanche.a = 0;
+        couleurBlanche.b = 0;
+        couleurBlanche.r = 0;
+        couleurBlanche.g = 0;
         void *texte = static_cast<void *>(TTF_RenderText_Shaded(police, text.c_str(), colorTexte, couleurBlanche));
         SDL_Surface *pSprite = static_cast<SDL_Surface *>(texte);
         SDL_Texture *pTexture;
@@ -155,9 +158,23 @@ void Graph::init(ICoreObserver *coreObserver)
     colorTexte.g = 0;
     std::cout << "init" << std::endl;
     this->coreObserver = coreObserver;
+    MenuGame  toto(this);
+    mainObs.addMenu(&toto);
+    toto.aff();
+    players[0] = NULL;
+    players[1] = NULL;
+    while (1)
+    {
+        loop();
+        SDL_Delay(10);
+    }
 
 }
 
+ICoreObserver *Graph::getICoreObserver()
+{
+    return this->coreObserver;
+}
 void Graph::registerPlayer(Players::IPlayer *player)
 {
     std::cout << "register player " << (void *) player << std::endl;
@@ -172,9 +189,9 @@ void Graph::registerPlayer(Players::IPlayer *player)
 void Graph::unregisterPlayer(Players::IPlayer *player)
 {
     std::cout << "unregister player " << (void *) player << std::endl;
-    if (players[1]->getPlayer() == player)
-        players[1] = NULL;
-    else
+    if  (players[1] != NULL &&  players[1]->getPlayer() == player)
+            players[1] = NULL;
+    if  (players[0] != NULL &&  players[0]->getPlayer() == player)
         players[0] = NULL;
 }
 
@@ -185,21 +202,19 @@ void Graph::feedBoard(const GameBoard_t &)
 
 void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
 {
-    for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
-         it != rules.end(); ++it)
-    {
-        std::cout << it->first << " " << it->second << std::endl;
-    }
-    std::cout << std::endl;
+    this->rules = rules;
 }
 
 void Graph::setCurrentPlayer(Players::IPlayer *player)
 {
     current = player;
+    show("C'est le tour de " + player->getName());
 }
 
 void Graph::startGame()
-{}
+{
+    show("GAME START");
+}
 
 void Graph::endGame(const std::string &winner_name)
 {}
@@ -218,7 +233,7 @@ void Graph::popupString()
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - (*it).second).count() < SHOWTIME)
         {
-            addTextToScreen((*it).first, 800, 600);
+            addTextToScreen((*it).first, 900, 520);
         }
         it++;
     }
@@ -226,23 +241,4 @@ void Graph::popupString()
 
 void Graph::prompt()
 {
-    std::cout << "prompt: " << current->getName() << std::endl;
-    uint8_t x, y;
-    std::cout << "x? > ";
-    std::cin >> x;
-    std::cout << "y? > ";
-    std::cin >> y;
-    if (current)
-    {
-        if (players[0] && players[0]->getPlayer() == current)
-            players[0]->sendPlay(x, y);
-        else if (players[1] && players[1]->getPlayer() == current)
-            players[1]->sendPlay(x, y);
-    }
-
-    //should not happen
-    if (!current)
-        std::cout << "/!\\ no current player" << std::endl;
-    if (!players[0] || !players[1])
-        std::cout << "/!\\ not enough players" << std::endl;
 }

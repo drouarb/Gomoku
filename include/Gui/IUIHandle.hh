@@ -12,7 +12,7 @@ namespace GUI
     {
     public:
         virtual ~IUIHandle(){};
-//        virtual void show(const std::string &) = 0;
+       virtual void showError(const std::string &) = 0;
         virtual void prompt() = 0;
     };
 }

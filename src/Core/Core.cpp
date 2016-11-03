@@ -48,7 +48,7 @@ void Core::Core::playGame(GamePlayers player_config)
         createPlayerHuman(1);
     else
         createPlayerAI(1);
-
+   // std::cout << player_config << std::endl;
     referee->initialize();
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());

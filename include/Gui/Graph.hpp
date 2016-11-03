@@ -13,6 +13,7 @@
 #include "IUIHandle.hh"
 #include <chrono>
 #include <mutex>
+#include "Obs.hpp"
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePoint;
 namespace GUI {
@@ -24,22 +25,25 @@ namespace GUI {
         SDL_Renderer *pRenderer;
         std::map<std::string, void *> images;
         TTF_Font *police;
+        ICoreObserver *coreObserver;
+        Obs mainObs;
         std::map<std::string, TimePoint> listMessage;
     private:
         SDL_Color colorTexte;
         t_size sizebuff;
-        ICoreObserver *coreObserver;
         IPlayerObserver *players[2];
         Players::IPlayer *current;
 
     public:
         Graph(ICoreObserver *coreObserver);
-
+        std::list<std::pair<std::string, bool>> rules;
         ~Graph() {};
 
         Graph() {};
 
         void init(ICoreObserver *);
+
+        ICoreObserver *getICoreObserver();
 
         void registerPlayer(Players::IPlayer *); //create observer
         void unregisterPlayer(Players::IPlayer *); //destroy observer
@@ -58,6 +62,8 @@ namespace GUI {
         void prompt();
 
         void quit();
+
+        void showError(const std::string &);
 
         void addToScreen(const std::string &name, int x, int y);
 

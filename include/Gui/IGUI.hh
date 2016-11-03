@@ -25,6 +25,8 @@ namespace GUI
         virtual void show(const std::string &) = 0;
         virtual void init(ICoreObserver *) = 0;
 
+        virtual ICoreObserver *getICoreObserver() = 0;
+
         virtual void registerPlayer(Players::IPlayer *) = 0;
 
         virtual void unregisterPlayer(Players::IPlayer *) = 0;
