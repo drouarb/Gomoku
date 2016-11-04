@@ -27,7 +27,7 @@ bool Humain::tryPlay(uint8_t x, uint8_t y)
     return true;
     else
     {
-        this->handle->showErrror(std::string("cannot play"));
+        this->handle->showError(std::string("cannot play"));
         this->handle->prompt();
         return false;
     }
@@ -42,4 +42,14 @@ Humain::Humain(std::string &Name, GUI::IUIHandle *iuiHandle)
 {
     this->name = Name;
     this->handle = iuiHandle;
+}
+
+void Humain::setScore(int score)
+{
+    this->score = score;
+}
+
+int Humain::getScore()
+{
+    return this->score;
 }

@@ -59,4 +59,5 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 void			Core::BoardOperator::ForceupdateBoard(Team player, uint8_t x, uint8_t y)
 {
 
+ this->board[0][x + y * 19] = player;
 }

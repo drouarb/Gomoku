@@ -7,6 +7,8 @@ namespace Players
 {
     class Ai : public IAi
     {
+    private:
+        int score = 0;
     public:
         Ai(std::string &name);
 
@@ -21,6 +23,8 @@ namespace Players
         bool tryPlay(uint8_t x, uint8_t y);
 
         void setIBoardOperator(Core::IBoardOperator *);
+        void setScore(int);
+        int getScore();
 
     private:
         std::string name;

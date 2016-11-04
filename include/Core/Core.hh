@@ -25,10 +25,10 @@ namespace Core
 
         void playGame(enum GamePlayers player_config);
         void setRule(const std::string & rule, bool on);
+        GUI::IGUI * gui;
 
     private:
-        GUI::IGUI * gui;
-        std::map<RuleID, Rule> rules;
+         std::map<RuleID, Rule> rules;
         std::list<std::list<RuleID> > uniqueRules;
         IReferee * referee;
         Players::IPlayer * players[2]; //human first
