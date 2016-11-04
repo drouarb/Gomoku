@@ -53,13 +53,15 @@ void Core::Core::playGame(GamePlayers player_config)
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());
     int player_index = 0;
-    while (referee->getWinner() == NOPLAYER && gui->getObs()->getStop() == false)
+    while (referee->getWinner() == NOPLAYER && !gui->getObs()->getStop() && gui->getICoreObserver()->gameIsRunning())
     {
         letPlayerPlay(player_index);
           player_index = !player_index;
     }
-
+    if (gui->getICoreObserver()->gameIsRunning())
     gui->endGame(TEAMNAME(referee->getWinner()));
+    else
+        gui->endGame("NO ONE");
 }
 
 void Core::Core::setRule(const std::string &rulename, bool on)

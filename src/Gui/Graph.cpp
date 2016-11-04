@@ -170,12 +170,10 @@ void Graph::init(ICoreObserver *coreObserver)
     colorTexte.b = 0;
     colorTexte.r = 0;
     colorTexte.g = 0;
-    std::cout << "init" << std::endl;
     this->coreObserver = coreObserver;
     MenuGame  toto(this);
     mainObs = new Obs();
     mainObs->addMenu(&toto);
-    toto.aff();
     board = NULL;
     players[0] = NULL;
     players[1] = NULL;
@@ -185,6 +183,7 @@ void Graph::init(ICoreObserver *coreObserver)
         loop();
              if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
              {
+                popupString();
                 mainObs->actualMenu();
                  refresh();
                  t = Clock::now();
@@ -240,7 +239,9 @@ void Graph::startGame()
 }
 
 void Graph::endGame(const std::string &winner_name)
-{}
+{
+    show("GAME END WINNER " + winner_name);
+}
 
 
 void Graph::show(const std::string &str)
@@ -257,7 +258,7 @@ void Graph::popupString()
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - (*it).second).count() < SHOWTIME)
         {
-            addTextToScreen((*it).first, 900, 520 + y);
+            addTextToScreen((*it).first, 1000 - (*it).first.length() * 10, 520 + y);
             y+= 100;
         }
         it++;
@@ -270,7 +271,7 @@ void Graph::prompt()
     mainObs->actualMenu();
     popupString();
     refresh();
-    while (loop() != BOARD && mainObs->getStop() == false)
+    while (loop() != BOARD && mainObs->getStop() == false && getICoreObserver()->gameIsRunning())
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > SHOWTIME)
         {
