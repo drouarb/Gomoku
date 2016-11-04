@@ -28,7 +28,15 @@ namespace Core
          */
         Pattern(Team team, uint8_t length, Team first, Team last);
 
+        /**
+         * Creates and fills a one-stone pattern.
+         * \param team The team owning the stone.
+         */
+        Pattern(Team team);
+
         ~Pattern();
+
+        bool operator==(const Pattern &);
 
         //char * line; + 1 malloc + 1 void* = too slow + too much mem space
         Team line[MAX_PATTERN_LENGTH];
