@@ -12,12 +12,16 @@ namespace GUI
 {
     class CoreObserver : public ICoreObserver
     {
+    private:
+        bool stop;
     public:
         CoreObserver(Core::Core &);
         ~CoreObserver();
 
         void playGame(GamePlayers playerConfiguration);
         void setRule(const std::string & rule, bool on);
+        void endGame();
+        bool gameIsRunning();
 
     private:
         Core::Core & core;

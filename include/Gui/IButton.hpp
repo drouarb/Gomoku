@@ -31,6 +31,7 @@ namespace GUI
         BOARD,
         SELECTBOX,
         STARTGAME,
+        ENDGAME,
         DEFAULT
     };
 

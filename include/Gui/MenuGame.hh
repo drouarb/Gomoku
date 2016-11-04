@@ -19,12 +19,14 @@ namespace GUI
     private:
         IGUI *gui;
     public:
+        bool ingame;
         ~MenuGame(){};
         MenuGame(IGUI *gui);
         void loadAsset();
         void loadButton();
         void aff();
         void loadLayer();
+        void endGame();
         void setSomething(void *);
         void affButtons();
         void sendRule(void *data);

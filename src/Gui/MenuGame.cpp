@@ -15,6 +15,7 @@ using namespace GUI;
 void GUI::MenuGame::loadAsset()
 {
     gui->loadImage("./ressource/rules.png", "Rules");
+    gui->loadImage("./ressource/end.png", "End");
     gui->loadImage("./ressource/Player1.png", "Player1");
     gui->loadImage("./ressource/Player2.png", "Player2");
     gui->loadImage("./ressource/board.png", "Board");
@@ -70,17 +71,23 @@ void GUI::MenuGame::loadButton()
         y += buff.dimy;
     }
     buff = gui->getSizePicture("White");
-    IButton *White = new Button<MenuGame>(buff.dimx, buff.dimy, 100, 600, "White", this, &MenuGame::setSomething);
-    White->setTypButton(SELECTBOX);
-    IButton *Black = new Button<MenuGame>(buff.dimx, buff.dimy, White->getWitdh() + White->getStartx() + 100,
-                                          White->getStarty(), "Black", this, &MenuGame::setSomething);
-    Black->setTypButton(SELECTBOX);
-    Black->setStats(SELECTED);
+    IButton *White = new Button<MenuGame>(buff.dimx, buff.dimy, 100, 500, "White", this, &MenuGame::setSomething);
+    //  White->setTypButton(SELECTBOX);
+    // IButton *Black = new Button<MenuGame>(buff.dimx, buff.dimy, White->getWitdh() + White->getStartx() + 100,
+//                                          White->getStarty(), "Black", this, &MenuGame::setSomething);
+    // Black->setTypButton(SELECTBOX);
+    // Black->setStats(SELECTED);
     buff = gui->getSizePicture("Oneplayer");
     IButton *Oneplayer = new Button<MenuGame>(buff.dimx, buff.dimy, 100,
                                               White->getStarty() + White->getHeight() + 10, "Oneplayer", this,
                                               &MenuGame::playGameOnePlayers);
     Oneplayer->setTypButton(STARTGAME);
+
+    buff = gui->getSizePicture("End");
+    IButton *End = new Button<MenuGame>(buff.dimx, buff.dimy, 100,
+                                        White->getStarty() - White->getHeight() + 10, "End", this,
+                                        &MenuGame::endGame);
+    End->setTypButton(ENDGAME);
     IButton *Twoplayer = new Button<MenuGame>(buff.dimx, buff.dimy, Oneplayer->getStartx(),
                                               Oneplayer->getStarty() + Oneplayer->getHeight() + 10, "Twoplayers", this,
                                               &MenuGame::playGameTwoPlayers);
@@ -93,8 +100,9 @@ void GUI::MenuGame::loadButton()
     addButtons(Iaplayers);
     addButtons(Twoplayer);
     addButtons(Oneplayer);
-    addButtons(White);
-    addButtons(Black);
+    addButtons(End);
+    //addButtons(White);
+    //addButtons(Black);
 }
 
 void GUI::MenuGame::aff()
@@ -126,6 +134,20 @@ void GUI::MenuGame::aff()
             }
         }
     gui->popupString();
+}
+
+void MenuGame::sendPlay()
+{
+    t_size *last = (dynamic_cast<GUI::Graph *>(gui))->last;
+    Players::IPlayer *player = (dynamic_cast<GUI::Graph *>(gui))->current;
+    IPlayerObserver *iob1 = (dynamic_cast<GUI::Graph *>(gui))->players[0];
+    uint8_t x = invcalcx(last->dimx);
+    uint8_t y = invcalcy(last->dimy);
+    if (iob1 != NULL && iob1->getPlayer() == player)
+        iob1->sendPlay(x, y);
+    iob1 = (dynamic_cast<GUI::Graph *>(gui))->players[1];
+    if (iob1 != NULL && iob1->getPlayer() == player)
+        iob1->sendPlay(x, y);
 }
 
 void MenuGame::affButtons()
@@ -165,10 +187,15 @@ void MenuGame::affButtons()
             else
                 gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
 
-        } else
+        } else if ((*it)->getType() == ENDGAME && this->ingame == true)
         {
             gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
-        }
+        } else if ((*it)->getType() == STARTGAME && this->ingame == false)
+        {
+            gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
+        } else if ((*it)->getType() == BOARD)
+            gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
+
         it++;
     }
 }
@@ -183,6 +210,7 @@ MenuGame::MenuGame(IGUI *gui)
     this->gui = gui;
     loadAsset();
     loadButton();
+    ingame = false;
     loadLayer();
     aff();
 }
@@ -191,14 +219,9 @@ void MenuGame::loadLayer()
 {
     t_size buff = gui->getSizePicture("Rules");
     ILayer *Rules = new Layer(gui->getSizePicture("Board").dimx + 500, 0, buff.dimx, buff.dimy, "Rules");
-    ILayer *Lauch = new Layer(100, 500, buff.dimx, buff.dimy, "Launch");
-    buff = gui->getSizePicture("Player1");
-    ILayer *Player1 = new Layer(0, 0, buff.dimx, buff.dimy, "Player1");
-    ILayer *Player2 = new Layer(0, buff.dimy, buff.dimx, buff.dimy, "Player2");
-    addLayer(Player1);
-    addLayer(Player2);
+//    ILayer *Lauch = new Layer(100, 500, buff.dimx, buff.dimy, "Launch");
     addLayer(Rules);
-    addLayer(Lauch);
+  //  addLayer(Lauch);
 }
 
 void MenuGame::sendRule(void *button)
@@ -212,30 +235,39 @@ void MenuGame::sendRule(void *button)
 
 void MenuGame::playGameOnePlayers()
 {
-    this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
+    if (this->ingame == false)
+    {
+        this->ingame = true;
+        this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
+    }
 }
 
 void MenuGame::playGameTwoPlayers()
 {
-    this->gui->getICoreObserver()->playGame(GamePlayers::TWOPLAYERS);
+    if (this->ingame == false)
+    {
+        this->ingame = true;
+        this->gui->getICoreObserver()->playGame(GamePlayers::TWOPLAYERS);
+    }
 }
 
 void MenuGame::playGameIa()
 {
-    this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+    if (this->ingame == false)
+    {
+        this->ingame = true;
+        this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+    }
 }
 
-void MenuGame::sendPlay()
+void MenuGame::endGame()
 {
-    t_size *last = (dynamic_cast<GUI::Graph *>(gui))->last;
-    Players::IPlayer *player = (dynamic_cast<GUI::Graph *>(gui))->current;
-    IPlayerObserver *iob1 = (dynamic_cast<GUI::Graph *>(gui))->players[0];
-    uint8_t x = invcalcx(last->dimx);
-    uint8_t y = invcalcy(last->dimy);
-    if (iob1 != NULL && iob1->getPlayer() == player)
-        iob1->sendPlay(x, y);
-    iob1 = dynamic_cast<IPlayerObserver *>((dynamic_cast<GUI::Graph *>(gui))->players[1]);
-    if (iob1 != NULL && iob1->getPlayer() == player)
-        iob1->sendPlay(x, y);
+    if (this->ingame == true)
+    {
+
+        this->ingame = false;
+        this->gui->getICoreObserver()->endGame();
+    }
 }
+
 
