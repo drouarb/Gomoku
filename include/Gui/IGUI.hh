@@ -6,6 +6,7 @@
 #include "ICoreOberser.hh"
 #include "IPlayerObserver.hh"
 #include "IButton.hpp"
+#include "Obs.hpp"
 #include <string>
 #include <list>
 #include <map>
@@ -61,6 +62,8 @@ namespace GUI
         virtual t_size getSizePicture(const std::string &name) = 0;
 
         virtual void popupString() = 0;
+
+        virtual Obs *getObs() = 0;
     };
 }
 

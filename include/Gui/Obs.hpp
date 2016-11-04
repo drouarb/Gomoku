@@ -16,16 +16,18 @@ namespace  GUI
   class Obs {
    public:
     Obs();
-   private:
    public:
     void setListMenu(std::vector<IMenu *> &listMenu);
    private:
+      bool stop;
     std::vector<IMenu*>listMenu;
    public:
     typeButton notify(int x, int y);
     void  addMenu(IMenu *menu);
     void notify(eventObs e);
       void actualMenu();
+      void setStop(bool);
+      bool getStop() const;
   };
 }
 #endif //CPP_PLAZZA_OBS_HPP

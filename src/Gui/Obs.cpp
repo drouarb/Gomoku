@@ -51,8 +51,16 @@ void Obs::actualMenu()
   }
 }
 
+void Obs::setStop(bool value)
+{
+    this->stop = value;
+}
+bool Obs::getStop() const {
+    return this->stop;
+}
 Obs::Obs()
 {
+    this->stop = false;
 }
 
 void Obs::addMenu(IMenu *menu)

@@ -31,7 +31,7 @@ namespace GUI
         std::map<std::string, void *> Textureimages;
         TTF_Font *police;
         ICoreObserver *coreObserver;
-        Obs mainObs;
+        Obs *mainObs;
         std::map<std::string, TimePoint> listMessage;
     private:
         SDL_Color colorTexte;
@@ -40,7 +40,7 @@ namespace GUI
         t_size *last;
         IPlayerObserver *players[2];
         Players::IPlayer *current;
-
+        Obs *getObs();
         Graph(ICoreObserver *coreObserver);
 
         std::list<std::pair<std::string, bool>> rules;

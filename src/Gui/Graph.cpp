@@ -17,6 +17,10 @@ void Graph::setPolice(const std::string &path, int size)
     police = TTF_OpenFont(path.c_str(), size);
 }
 
+Obs *Graph::getObs()
+{
+    return  this->mainObs;
+}
 void Graph::quit()
 {
     SDL_DestroyWindow(fenetre);
@@ -55,6 +59,7 @@ typeButton Graph::loop()
         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
         {
             this->quit();
+            mainObs->setStop(true);
         }
         if (event.type == SDL_MOUSEBUTTONUP)
         {
@@ -62,7 +67,7 @@ typeButton Graph::loop()
             {
                 last->dimy  = event.button.y;
                 last->dimx = event.button.x;
-                re = mainObs.notify(event.button.x, event.button.y);
+                re = mainObs->notify(event.button.x, event.button.y);
                 refresh();
                 return (re);
             }
@@ -168,18 +173,19 @@ void Graph::init(ICoreObserver *coreObserver)
     std::cout << "init" << std::endl;
     this->coreObserver = coreObserver;
     MenuGame  toto(this);
-    mainObs.addMenu(&toto);
+    mainObs = new Obs();
+    mainObs->addMenu(&toto);
     toto.aff();
     board = NULL;
     players[0] = NULL;
     players[1] = NULL;
     auto t=  Clock::now();
-    while (1)
+    while (getObs()->getStop() == false)
     {
         loop();
              if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
              {
-                mainObs.actualMenu();
+                mainObs->actualMenu();
                  refresh();
                  t = Clock::now();
             }
@@ -261,14 +267,14 @@ void Graph::popupString()
 void Graph::prompt()
 {
     auto t =  Clock::now();
-    mainObs.actualMenu();
+    mainObs->actualMenu();
     popupString();
     refresh();
-    while (loop() != BOARD)
+    while (loop() != BOARD && mainObs->getStop() == false)
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > SHOWTIME)
         {
-            mainObs.actualMenu();
+            mainObs->actualMenu();
             refresh();
             t = Clock::now();
         }
