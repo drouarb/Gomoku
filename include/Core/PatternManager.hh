@@ -11,6 +11,12 @@
 
 namespace Core
 {
+    struct PatternRef
+    {
+        Pattern * pattern;
+        uint8_t posOnPattern;
+    };
+
     class PatternManager
     {
     public:
@@ -18,16 +24,16 @@ namespace Core
         PatternManager(const PatternManager &); //copy constructor
         ~PatternManager();
 
-        const PLIST<Pattern *> & operator[](boardPos_t) const;
+        const PLIST<PatternRef> & operator[](boardPos_t) const;
 
         const PLIST<Pattern> & getPatterns() const;
-        const PMAP<boardPos_t, PLIST<Pattern *> > getMap() const;
+        const PMAP<boardPos_t, PLIST<PatternRef> > getMap() const;
         void addStone(uint16_t position, Team team);
         void removeStone(uint16_t position);
 
     private:
         PLIST<Pattern> patterns;
-        PMAP<boardPos_t, PLIST<Pattern *> > map;
+        PMAP<boardPos_t, PLIST<PatternRef> > map;
 
         void addPattern();
         void removePattern();

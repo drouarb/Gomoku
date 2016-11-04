@@ -11,7 +11,7 @@ PatternManager::PatternManager(const PatternManager & other) : patterns(other.ge
 PatternManager::~PatternManager()
 { }
 
-const PLIST<Pattern *>& PatternManager::operator[](boardPos_t pos) const
+const PLIST<PatternRef>& PatternManager::operator[](boardPos_t pos) const
 {
     return (map.at(pos));
 }
@@ -21,7 +21,7 @@ const PLIST<Pattern>& PatternManager::getPatterns() const
     return (patterns);
 }
 
-const PMAP<boardPos_t, PLIST<Pattern *> > PatternManager::getMap() const
+const PMAP<boardPos_t, PLIST<PatternRef> > PatternManager::getMap() const
 {
     return (map);
 }
@@ -39,7 +39,7 @@ void PatternManager::addStone(uint16_t position, Team team)
 
     // TEST
     patterns.push_front(Pattern(team));
-    map[position].push_back(&patterns.front());
+    map[position].push_back({ &patterns.front(), 0 });
 }
 
 void PatternManager::removeStone(uint16_t position)
@@ -50,7 +50,7 @@ void PatternManager::removeStone(uint16_t position)
     }*/
 
     // TEST
-    patterns.remove(*map[position].front());
+    patterns.remove(*map[position].front().pattern);
     map.erase(position);
 }
 
@@ -98,7 +98,7 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
         out << entry.first;
         for (auto pattern : entry.second)
         {
-            out << " " << (void*)pattern;
+            out << " " << (void*)pattern.pattern << "-" << std::to_string(pattern.posOnPattern);
         }
         out << std::endl;
     }
