@@ -30,15 +30,14 @@ void PatternManager::addStone(uint16_t position, Team team)
 {
     for (int i = 0; i < 9; i++)
     {
-        /*
-        for (auto& pattern : map[position + checkMap[i]]) // the [] operator creates an entry
+        /*for (auto& pattern : map[position + checkMap[i]]) // the [] operator creates an entry
         {
-            // create/remove patterns
+
         }*/
     }
 
     // TEST
-    patterns.push_front(Pattern(team));
+    patterns.push_front(Pattern(team, position));
     map[position].push_back({ &patterns.front(), 0 });
 }
 
@@ -67,15 +66,27 @@ void PatternManager::removePattern()
 
 
 const boardPos_t PatternManager::checkMap[] = {
+        0,
         -XBOARD - 1,
         -XBOARD - 0,
         -XBOARD + 1,
-        -1,
-        -0,
         +1,
-        +XBOARD - 1,
+        +XBOARD + 1,
         +XBOARD - 0,
-        +XBOARD + 1
+        +XBOARD - 1,
+        -1
+};
+
+const boardPos_t PatternManager::twoDistCircle[] = {
+        0,
+        -2 * XBOARD - 2,
+        -2 * XBOARD - 0,
+        -2 * XBOARD + 2,
+        +2,
+        +2 * XBOARD + 2,
+        +2 * XBOARD - 0,
+        +2 * XBOARD - 2,
+        -2
 };
 
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
