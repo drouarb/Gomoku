@@ -48,7 +48,7 @@ bool              Core::BoardOperator::checkBreakable(Team player)
 
 Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
 {
-  return (NOPLAYER);
+  return (board[y * XBOARD + x]);
 }
 
 uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
