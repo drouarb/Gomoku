@@ -40,3 +40,13 @@ void Ai::setIBoardOperator(Core::IBoardOperator *op)
 {
     this->boardOperator = op;
 }
+
+void Ai::setScore(int score)
+{
+this->score = score;
+}
+
+int Ai::getScore()
+{
+    return this->score;
+}

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <tuple>
+#include <map>
+#include "Definitions.hh"
 #include "IReferee.hh"
 #include "IBoardOperator.hh"
 #include "BoardOperator.hh"
@@ -14,7 +16,10 @@ namespace Core
 
   struct	statPlayer
   {
-    Team	team;
+    statPlayer() {
+      eaten = 0;
+    };
+    
     uint8_t	eaten;
   };
   
@@ -23,9 +28,8 @@ namespace Core
     private:
       IBoardOperator				*boardOp;
       GameBoard_t				board;
-      std::vector<statPlayer>			stats;
+      std::map<Team, statPlayer>		stats;
       Team					player;
-
       Team					winner;
       
     public:
@@ -44,8 +48,6 @@ namespace Core
         virtual bool tryPlay(uint8_t x, uint8_t y);
 
         virtual bool tryPlay(uint8_t x, uint8_t y, GameBoard_t *);
-
-        virtual const IBoardOperator *getBoardOperator();
 
         virtual Team getWinner() const;
     };

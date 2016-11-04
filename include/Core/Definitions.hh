@@ -34,5 +34,6 @@ enum RuleID : uint8_t
 };
 
 typedef char* GameBoard_t;
+typedef int16_t boardPos_t;
 
 #endif

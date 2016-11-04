@@ -3,8 +3,8 @@
 //
 
 #include "Core.hh"
-#include "GUImas.hh"
-#include "Referee.hh"
+#include "Graph.hpp"
+#include "Referee.hpp"
 #include "CoreOberser.hh"
 #include "Human.hh"
 #include "Ai.hh"
@@ -30,7 +30,7 @@ Core::Core::Core()
     players[1] = NULL;
 
     // gui
-    gui = new GUI::GUImas();
+    gui = new GUI::Graph();
     feedRules();
     gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }
@@ -48,16 +48,15 @@ void Core::Core::playGame(GamePlayers player_config)
         createPlayerHuman(1);
     else
         createPlayerAI(1);
-
+   // std::cout << player_config << std::endl;
     referee->initialize();
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());
-
     int player_index = 0;
-    while (referee->getWinner() == NOPLAYER)
+    while (referee->getWinner() == NOPLAYER && gui->getObs()->getStop() == false)
     {
         letPlayerPlay(player_index);
-        player_index = !player_index;
+          player_index = !player_index;
     }
 
     gui->endGame(TEAMNAME(referee->getWinner()));

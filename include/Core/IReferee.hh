@@ -23,8 +23,6 @@ namespace Core
       
         virtual bool tryPlay(uint8_t x, uint8_t y, GameBoard_t *) = 0;
       
-        virtual const IBoardOperator *getBoardOperator() = 0;
-
         virtual Team getWinner() const = 0 ;
     };
 }

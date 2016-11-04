@@ -2,6 +2,7 @@
 #define GOMOKU_BOARDOPERATOR_HH
 
 #include "IBoardOperator.hh"
+#include "PatternManager.hh"
 
 namespace Core
 {
@@ -9,6 +10,7 @@ namespace Core
     {
     private:
       GameBoard_t	*board;
+      PatternManager	*patternM;
     public:
       BoardOperator();
       virtual ~BoardOperator();

@@ -12,6 +12,7 @@ namespace Players
         std::string name;
         Core::IReferee *referee;
         GUI::IUIHandle *handle;
+        int score = 0;
     public:
         Humain(std::string &Name, GUI::IUIHandle *);
 
@@ -23,6 +24,8 @@ namespace Players
 
         bool init(Core::IReferee *referee);
 
+        int getScore();
+        void setScore(int score);
         bool tryPlay(uint8_t x, uint8_t y);
     };
 }

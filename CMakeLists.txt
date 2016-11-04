@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.0)
 project(Gomoku)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -17,3 +17,4 @@ include_directories(include/Core)
 include_directories(include/Players)
 include_directories(include/Gui)
 add_executable(Gomoku ${GOMOKU})
+target_link_libraries(Gomoku  -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)

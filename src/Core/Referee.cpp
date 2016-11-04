@@ -1,4 +1,4 @@
-#include "Referee.hh"
+#include "Referee.hpp"
 
 Core::Referee::Referee()
 {
@@ -25,8 +25,8 @@ void		Core::Referee::initialize()
       ++i;
     }
   stats.erase(stats.begin(), stats.end());
-  stats.push_back({Core::Team::WHITE, 0});
-  stats.push_back({Core::Team::BLACK, 0});
+  stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
+  stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
@@ -58,8 +58,8 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
     return (false);
   if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
-  stats[player - 1].eaten += boardOp->applyEat(player, x, y);
-  if (stats[player - 1].eaten >= EATWIN)
+  stats[player].eaten += boardOp->applyEat(player, x, y);
+  if (stats[player].eaten >= EATWIN)
     winner = player;
   if (boardOp->checkfiveWin(player) == true)
     winner = player;
@@ -70,25 +70,12 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, GameBoard_t *nboard)
 {
   boardOp->feed(nboard);
-<<<<<<< HEAD
-  if (boardOp->checkPos(x, y) != Core::Team::NOPLAYER)
-=======
-  if (winner != NOPLAYER)
-    return (false);
   if (boardOp->checkPos(x, y) != NOPLAYER)
->>>>>>> ec931bcf5448788154dde496a27031ef925c9a5e
     return (false);
   if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
-  //boardOp->ForceupdateBoard(player, x, y);
+  boardOp->ForceupdateBoard(player, x, y);
   return (true);
-}
-
-#warning "je suis pas d'accord avec cette méthode en bas"
-
-const Core::IBoardOperator *Core::Referee::getBoardOperator()
-{
-  return (boardOp);
 }
 
 Team	Core::Referee::getWinner() const
