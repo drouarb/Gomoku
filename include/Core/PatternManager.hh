@@ -39,6 +39,7 @@ namespace Core
         void removePattern();
 
         static const boardPos_t checkMap[];
+        static const boardPos_t twoDistCircle[];
     };
 }
 
