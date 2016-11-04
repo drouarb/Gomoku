@@ -20,5 +20,20 @@ Pattern::Pattern(Team team, uint8_t length, uint8_t interruptionIndex, Team firs
         line[interruptionIndex] = NOPLAYER;
 }
 
+Pattern::Pattern(Team team) : lineLength(1), interrupted(0)
+{
+    line[0] = team;
+}
+
 Pattern::~Pattern()
 { }
+
+bool Pattern::operator==(const Pattern & other)
+{
+    if (lineLength != other.lineLength || interrupted != other.interrupted)
+        return (false);
+    for (int i = 0; i < lineLength; ++i)
+        if (line[i] != other.line[i])
+            return (false);
+    return (true);
+}
