@@ -67,15 +67,15 @@ void PatternManager::removePattern()
 
 
 const boardPos_t PatternManager::checkMap[] = {
+        0,
         -XBOARD - 1,
         -XBOARD - 0,
         -XBOARD + 1,
-        -1,
-        -0,
         +1,
-        +XBOARD - 1,
+        +XBOARD + 1,
         +XBOARD - 0,
-        +XBOARD + 1
+        +XBOARD - 1,
+        -1
 };
 
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
