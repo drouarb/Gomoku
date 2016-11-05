@@ -8,6 +8,8 @@
 
 #define PLIST std::list
 #define PMAP std::map
+#define OPPDIR(x) ((x) + 4)
+#define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
 
 namespace Core
 {
@@ -24,22 +26,27 @@ namespace Core
         PatternManager(PatternManager &); //copy constructor
         ~PatternManager();
 
-      PLIST<PatternRef> & operator[](boardPos_t);
+        PLIST<PatternRef> & operator[](boardPos_t);
 
-      PLIST<Pattern> & getPatterns();
-      PMAP<boardPos_t, PLIST<PatternRef> > getMap() const;
-      void addStone(uint16_t position, Team team);
-        void removeStone(uint16_t position);
+        PLIST<Pattern> & getPatterns();
+        const PLIST<Pattern> & getPatterns() const;
+        PMAP<boardPos_t, PLIST<PatternRef> > getMap() const;
+        void addStone(boardPos_t position, Team team);
+        void removeStone(boardPos_t position);
 
     private:
         PLIST<Pattern> patterns;
         PMAP<boardPos_t, PLIST<PatternRef> > map;
 
-        void addPattern();
-        void removePattern();
+        void removePattern(Pattern * pattern);
+        Team teamAt(boardPos_t);
+        void addToMap(Pattern * pattern);
+        void addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern);
+        void removeFromMap(Pattern * pattern);
 
         static const boardPos_t checkMap[];
         static const boardPos_t twoDistCircle[];
+        static const boardPos_t dirRelations[];
     };
 }
 

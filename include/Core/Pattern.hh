@@ -39,17 +39,30 @@ namespace Core
          */
         Pattern(Team team, boardPos_t pos);
 
+        Pattern();
+
         ~Pattern();
 
         bool operator==(const Pattern &);
 
+        void set(Team team, uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction);
+        /**
+         * The given position becomes an empty value (no stone), and only the first half of the pattern is kept.
+         * @param posOnPattern Position on the pattern where the stone was removed.
+         */
+        void breatAt(uint8_t posOnPattern);
+
         //char * line; + 1 malloc + 1 void* = too slow + too much mem space
-        Team line[MAX_PATTERN_LENGTH];
+        Team *line;
         //you can get the team owning the pattern simply by doing line[1]
         uint8_t lineLength;
         uint8_t interrupted; //1 if line is interrupted, 0 if not
         boardPos_t posOfFirst;
         boardPos_t direction; //number to add to get to the next stone in the line
+
+    private:
+        void reallocLine();
+        void allocLine();
     };
 }
 
