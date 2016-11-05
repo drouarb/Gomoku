@@ -17,7 +17,7 @@ void		Core::BoardOperator::feed(GameBoard_t *nboard)
 
 bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t y)
 {
-  PLIST<PatternRef>		*patterns;
+  PLIST<PatternRef>		patterns;
   PLIST<PatternRef>::iterator	it;
   PMAP<boardPos_t, PLIST<PatternRef> > Map;
   Pattern			*pat;
@@ -25,13 +25,13 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   
   Map = patternM->getMap();
   std::cout << "1" << std::endl;
-  patterns = &patternM->getMap()[y * XBOARD + x];
+  patterns = patternM->getMap()[y * XBOARD + x]; //ne fais pas ça
   std::cout << "2" << std::endl;
   nbr3P = 0;
   std::cout << "3" << std::endl;
-  it = patterns->begin();
+  it = patterns.begin();
   std::cout << "4" << std::endl;
-  while (it != patterns->end())
+  while (it != patterns.end())
     {
       std::cout << "5" << std::endl;
       pat = it->pattern;
@@ -139,14 +139,14 @@ Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
 uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 {
   uint8_t		nbrEat;
-  PLIST<PatternRef>	*patterns;
+  PLIST<PatternRef>	patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
-  patterns = &patternM->getMap()[y * XBOARD + x];
-  it = patterns->begin();
+  patterns = patternM->getMap()[y * XBOARD + x]; //ne fais pas ça
+  it = patterns.begin();
   nbrEat = 0;
-  while (it != patterns->end())
+  while (it != patterns.end())
     {
       pat = it->pattern;
       if (pat->lineLength - 2 == 2 && pat->line[1] != player && ((pat->line[0] == player && pat->posOfFirst == x + y * XBOARD) || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)))
