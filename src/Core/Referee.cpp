@@ -2,7 +2,6 @@
 
 Core::Referee::Referee()
 {
-  board = new char[BOARDSIZE];
   initialize();
 }
 
@@ -18,6 +17,7 @@ void		Core::Referee::initialize()
   i = 0;
   player = NOPLAYER;
   winner = NOPLAYER;
+  board = new char[BOARDSIZE];
   boardOp = new BoardOperator;
   while (i < BOARDSIZE)
     {

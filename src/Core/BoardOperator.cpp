@@ -2,6 +2,8 @@
 
 Core::BoardOperator::BoardOperator()
 {
+  board = NULL;
+  patternM = new PatternManager();
 }
 
 Core::BoardOperator::~BoardOperator()
@@ -17,9 +19,11 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
 {
   PLIST<PatternRef>		*patterns;
   PLIST<PatternRef>::iterator	it;
+  PMAP<boardPos_t, PLIST<PatternRef> > Map;
   Pattern			*pat;
   unsigned int			nbr3P;
   
+  Map = patternM->getMap();
   patterns = &patternM->getMap()[y * XBOARD + x];
   nbr3P = 0;
   it = patterns->begin();
@@ -119,7 +123,7 @@ bool              Core::BoardOperator::checkBreakable(Team player)
 
 Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
 {
-  return ((Team)(*board[y * XBOARD + x]));
+  return ((Team)(*board)[y * XBOARD + x]);
 }
 
 uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
