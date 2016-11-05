@@ -24,18 +24,26 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   unsigned int			nbr3P;
   
   Map = patternM->getMap();
+  std::cout << "1" << std::endl;
   patterns = &patternM->getMap()[y * XBOARD + x];
+  std::cout << "2" << std::endl;
   nbr3P = 0;
+  std::cout << "3" << std::endl;
   it = patterns->begin();
+  std::cout << "4" << std::endl;
   while (it != patterns->end())
     {
+      std::cout << "5" << std::endl;
       pat = it->pattern;
-      if (pat->lineLength - 2 - pat->interrupted == 3
+      std::cout << "6" << std::endl;
+      /*if (pat->lineLength - 2 - pat->interrupted == 3
 	  && pat->line[0] && pat->line[pat->lineLength - 1]
 	  && pat->line[1] == player)
-	nbr3P++;
+	  nbr3P++;*/
+      std::cout << "7" << std::endl;
       it++;
     }
+  std::cout << "8" << std::endl;
   if (nbr3P >= 2)
     return (true);
   return (false);
@@ -75,36 +83,38 @@ bool              Core::BoardOperator::checkfiveWin(Team player)
 {
   PLIST<Pattern>	*patterns;
   PLIST<Pattern>::iterator	it;
+  PLIST<PatternRef>	*patSecond;
+  PLIST<PatternRef>::iterator itS;
+  Pattern			*pat;
+  int				nbrNoBreak;
   int				i;
-  PLIST<PatternRef>	*patternsSecond;
-  PLIST<PatternRef>::iterator	itSecond;
-  Pattern			*patSecond;
 
   patterns = &patternM->getPatterns();
   it = patterns->begin();
   while (it != patterns->end())
     {
-      if (it->lineLength - 2 == 5 && it->line[1] == player)
+      if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
 	{
 	  i = 1;
-	  while (i < 6)
+	  nbrNoBreak = 0;
+	  while (i < it->lineLength - 1)
 	    {
-	      patternsSecond = &patternM->getMap()[it->posOfFirst + it->direction * (i - 1)];
-	      itSecond = patternsSecond->begin();
-	      while (itSecond != patternsSecond->end())
+	      patSecond = &patternM->getMap()[it->posOfFirst + i * pat->direction];
+	      itS = patSecond->begin();
+	      while (itS != patSecond->end())
 		{
-		  patSecond = itSecond->pattern;
-		  if (patSecond->lineLength - 2 == 2)
-		    if ((checkEatPlayer(player, patSecond->posOfFirst % XBOARD,
-				       patSecond->posOfFirst / XBOARD) == true)
-		      || checkEatPlayer(player, (patSecond->posOfFirst + 3 * patSecond->direction) % XBOARD,
-					(patSecond->posOfFirst + 3 * patSecond->direction) / XBOARD) == true)
-		      return (false);
-		  itSecond++;
+		  pat = itS->pattern;
+		  if (pat->lineLength - 2 == 2 && pat->line[1] == player
+		      && ((pat->line[0] != player && pat->line[pat->lineLength - 1] == NOPLAYER)
+			  || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player)))
+		    nbrNoBreak = -1;
+		  itS++;
 		}
+	      nbrNoBreak++;
+	      if (nbrNoBreak == 5)
+		return (true);
 	      ++i;
 	    }
-	  return (true);
 	}
       it++;
     }

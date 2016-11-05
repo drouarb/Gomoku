@@ -52,18 +52,26 @@ void		Core::Referee::setPlayer(Team nplayer)
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
   boardOp->feed(&board);
+  std::cout << "a" << std::endl;
   if (winner != NOPLAYER)
     return (false);
+  std::cout << "b" << std::endl;
   if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
+  std::cout << "c" << std::endl;
   if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
+  std::cout << "d" << std::endl;
   stats[player].eaten += boardOp->applyEat(player, x, y);
+  std::cout << "e" << std::endl;
   if (stats[player].eaten >= EATWIN)
     winner = player;
+  std::cout << "f" << std::endl;
   if (boardOp->checkfiveWin(player) == true)
     winner = player;
+  std::cout << "g" << std::endl;
   boardOp->ForceupdateBoard(player, x, y);
+  std::cout << "h" << std::endl;
   return (true);
 }
 
