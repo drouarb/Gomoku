@@ -39,10 +39,11 @@ namespace Core
         PMAP<boardPos_t, PLIST<PatternRef> > map;
 
         void removePattern(Pattern * pattern);
+        void removeFromList(Pattern * pattern);
+        void removeFromMap(Pattern * pattern);
         Team teamAt(boardPos_t);
         void addToMap(Pattern * pattern);
         void addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern);
-        void removeFromMap(Pattern * pattern);
 
         static const boardPos_t checkMap[];
         static const boardPos_t twoDistCircle[];
@@ -50,6 +51,6 @@ namespace Core
     };
 }
 
-std::ostream& operator<< (std::ostream &, Core::PatternManager &);
+std::ostream& operator<< (std::ostream &, const Core::PatternManager &);
 
 #endif

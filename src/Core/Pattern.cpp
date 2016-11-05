@@ -3,7 +3,7 @@
 using namespace Core;
 
 Pattern::Pattern(Team team, uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction) :
-        lineLength(length), interrupted(0), posOfFirst(posOfFirst), direction(direction)
+        lineLength(length), interrupted(0), posOfFirst(posOfFirst), direction(direction), team(team)
 {
     allocLine();
     line[0] = first;
@@ -13,7 +13,7 @@ Pattern::Pattern(Team team, uint8_t length, Team first, Team last, boardPos_t po
 }
 
 Pattern::Pattern(Team team, uint8_t length, uint8_t interruptionIndex, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction) :
-        lineLength(length), interrupted((uint8_t )(interruptionIndex != 0)), posOfFirst(posOfFirst), direction(direction)
+        lineLength(length), interrupted((uint8_t )(interruptionIndex != 0)), posOfFirst(posOfFirst), direction(direction), team(team)
 {
     allocLine();
     line[0] = first;
@@ -24,7 +24,7 @@ Pattern::Pattern(Team team, uint8_t length, uint8_t interruptionIndex, Team firs
         line[interruptionIndex] = NOPLAYER;
 }
 
-Pattern::Pattern(Team team, boardPos_t pos) : lineLength(1), interrupted(0), posOfFirst(pos)
+Pattern::Pattern(Team team, boardPos_t pos) : lineLength(1), interrupted(0), posOfFirst(pos), team(team)
 {
     allocLine();
     line[0] = team;
@@ -47,7 +47,7 @@ bool Pattern::operator==(const Pattern & other)
     return (true);
 }
 
-void Pattern::set(Team team, uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)
+void Pattern::set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)
 {
     lineLength = length;
     reallocLine();
@@ -61,7 +61,17 @@ void Pattern::set(Team team, uint8_t length, Team first, Team last, boardPos_t p
 
 void Pattern::breatAt(uint8_t posOnPattern)
 {
-
+    if (posOnPattern == 2)
+    {
+        lineLength = 1;
+        line[0] = team;
+        posOfFirst += direction;
+    }
+    else
+    {
+        line[posOnPattern] = NOPLAYER;
+        lineLength = posOnPattern + (uint8_t)1;
+    }
 }
 
 void Pattern::reallocLine()

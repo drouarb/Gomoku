@@ -45,10 +45,11 @@ namespace Core
 
         bool operator==(const Pattern &);
 
-        void set(Team team, uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction);
+        void set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction);
         /**
          * The given position becomes an empty value (no stone), and only the first half of the pattern is kept.
-         * @param posOnPattern Position on the pattern where the stone was removed.
+         * \param team The team owning the pattern.
+         * \param posOnPattern Position on the pattern where the stone was removed.
          */
         void breatAt(uint8_t posOnPattern);
 
@@ -59,6 +60,7 @@ namespace Core
         uint8_t interrupted; //1 if line is interrupted, 0 if not
         boardPos_t posOfFirst;
         boardPos_t direction; //number to add to get to the next stone in the line
+        Team team;
 
     private:
         void reallocLine();
