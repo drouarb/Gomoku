@@ -150,10 +150,10 @@ void MenuGame::affPlayer() const
         gui->addTextToScreen("Current " + player->getName(), 50, 800);
     IPlayerObserver *iob1 = (dynamic_cast<Graph *>(gui))->players[0];
     if (iob1 != NULL)
-        gui->addTextToScreen(iob1->getPlayer()->getName() + " : " + std::__cxx11::to_string(iob1->getPlayer()->getScore()) + " stones", 50 , 100);
+        gui->addTextToScreen(iob1->getPlayer()->getName() + " : " + std::to_string(iob1->getPlayer()->getScore()) + " stones", 50 , 100);
     iob1 = (dynamic_cast<Graph *>(gui))->players[1];
     if (iob1 != NULL && iob1->getPlayer())
-        gui->addTextToScreen(iob1->getPlayer()->getName() + "  : " + std::__cxx11::to_string(iob1->getPlayer()->getScore()) + " stones", 50 , 200);
+        gui->addTextToScreen(iob1->getPlayer()->getName() + "  : " + std::to_string(iob1->getPlayer()->getScore()) + " stones", 50 , 200);
 }
 
 void MenuGame::sendPlay()
