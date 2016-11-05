@@ -90,18 +90,18 @@ void Graph::addTextToScreen(const std::string &text, int x, int y)
 {
     if (police != NULL)
     {
-        SDL_Color couleurBlanche;
-        couleurBlanche.a = 0;
-        couleurBlanche.b = 0;
-        couleurBlanche.r = 0;
-        couleurBlanche.g = 0;
-        SDL_Surface *pSprite = TTF_RenderText_Shaded(police, text.c_str(), colorTexte, couleurBlanche);
+        SDL_Color backgrounColor;
+        backgrounColor.a = 0;
+        backgrounColor.b = 0;
+        backgrounColor.r = 0;
+        backgrounColor.g = 0;
+        SDL_Surface *pSprite = TTF_RenderText_Shaded(police, text.c_str(), colorTexte, backgrounColor);
         SDL_Texture *pTexture;
         SDL_Rect dest;
         if (pSprite)
         {
-            Uint32 colorkey = SDL_MapRGB(pSprite->format, 255, 255, 255);
-            SDL_SetColorKey(pSprite, SDL_TRUE, colorkey);
+           // Uint32 colorkey = SDL_MapRGB(pSprite->format, 0, 0, 0);
+            //SDL_SetColorKey(pSprite, SDL_TRUE, colorkey);
             pTexture = SDL_CreateTextureFromSurface(this->pRenderer, pSprite);
             if (pTexture)
             {
@@ -166,10 +166,10 @@ void Graph::init(ICoreObserver *coreObserver)
     last->dimy = 0;
     last->dimx = 0;
     this->police = NULL;
-    colorTexte.a = 0;
-    colorTexte.b = 0;
-    colorTexte.r = 0;
-    colorTexte.g = 0;
+    colorTexte.a = 255;
+    colorTexte.b = 255;
+    colorTexte.r = 255;
+    colorTexte.g = 255;
     this->coreObserver = coreObserver;
     MenuGame  toto(this);
     mainObs = new Obs();
@@ -260,6 +260,8 @@ void Graph::popupString()
         {
             addTextToScreen((*it).first, 1000 - (*it).first.length() * 10, 520 + y);
             y+= 100;
+            listMessage.erase((it));
+            break;
         }
         it++;
     }
@@ -282,3 +284,8 @@ void Graph::prompt()
         SDL_Delay(10);
     }
 }
+void Graph::getMousePose(int *x, int *y)
+{
+    SDL_GetMouseState(x,y);
+}
+

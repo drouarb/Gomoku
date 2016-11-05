@@ -77,6 +77,7 @@ namespace GUI
 
         void showError(const std::string &);
 
+        void getMousePose(int *x, int *y);
         void addToScreen(const std::string &name, int x, int y);
 
         typeButton loop();

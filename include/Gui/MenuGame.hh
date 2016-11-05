@@ -34,6 +34,10 @@ namespace GUI
         void playGameTwoPlayers();
         void playGameIa();
         void sendPlay();
+
+        void affPlayer() const;
+
+        void affLayers() const;
     };
 }
 #endif //GOMOKU_MENUGAME_HH

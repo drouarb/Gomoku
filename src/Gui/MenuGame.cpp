@@ -109,9 +109,17 @@ void GUI::MenuGame::aff()
 {
     gui->addToScreen("Background", 0, 0);
     affButtons();
-    std::vector<ILayer *> f = getListLayer();
-    std::vector<ILayer *>::iterator it = f.begin();
-    GameBoard_t board = dynamic_cast<GUI::Graph *>(this->gui)->board;
+    affLayers();
+    gui->popupString();
+
+    affPlayer();
+}
+
+void MenuGame::affLayers() const
+{
+    std::vector<ILayer*> f = getListLayer();
+    std::vector<ILayer*>::iterator it = f.begin();
+    GameBoard_t board = dynamic_cast<Graph *>(gui)->board;
     int x = 0;
     int y = 0;
     while (it != f.end())
@@ -133,7 +141,16 @@ void GUI::MenuGame::aff()
                 x = 0;
             }
         }
-    gui->popupString();
+}
+
+void MenuGame::affPlayer() const
+{
+    IPlayerObserver *iob1 = (dynamic_cast<Graph *>(gui))->players[0];
+    if (iob1 != NULL)
+        gui->addTextToScreen(iob1->getPlayer()->getName() + " : " + std::__cxx11::to_string(iob1->getPlayer()->getScore()) + " stones", 0 , 100);
+    iob1 = (dynamic_cast<Graph *>(gui))->players[1];
+    if (iob1 != NULL && iob1->getPlayer())
+        gui->addTextToScreen(iob1->getPlayer()->getName() + "  : " + std::__cxx11::to_string(iob1->getPlayer()->getScore()) + " stones", 0 , 200);
 }
 
 void MenuGame::sendPlay()
@@ -155,6 +172,7 @@ void MenuGame::affButtons()
     std::vector<IButton *> f = getListButton();
     std::vector<IButton *>::iterator it = f.begin();
     Graph *g = dynamic_cast<Graph *>(this->gui);
+    Players::IPlayer *player = (dynamic_cast<GUI::Graph *>(gui))->current;
     std::list<std::pair<std::string, bool>> rules = g->rules;
     while (it != f.end())
     {
@@ -194,8 +212,9 @@ void MenuGame::affButtons()
         {
             gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
         } else if ((*it)->getType() == BOARD)
+        {
             gui->addToScreen((*it)->getName(), (*it)->getStartx(), (*it)->getStarty());
-
+        }
         it++;
     }
 }

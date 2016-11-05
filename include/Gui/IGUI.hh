@@ -51,6 +51,8 @@ namespace GUI
 
         virtual void refresh() = 0;
 
+        virtual void getMousePose(int *x, int *y) = 0;
+
         virtual void loadImage(const std::string &path, const std::string &name) = 0;
 
         virtual void addTextToScreen(const std::string &text, int x, int y) = 0;
