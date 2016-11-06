@@ -3,6 +3,7 @@
 
 #include "Definitions.hh"
 #include "BoardOperator.hh"
+#include "Rule.hh"
 
 namespace Core
 {
@@ -16,6 +17,8 @@ namespace Core
         virtual GameBoard_t getBoardCopy() = 0;
       
         virtual const GameBoard_t &getBoardRef() = 0;
+
+        virtual void feedRules(std::map<RuleID, Rule>) = 0;
       
         virtual void setPlayer(Team player) = 0;
       

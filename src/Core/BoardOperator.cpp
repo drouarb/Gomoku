@@ -79,7 +79,7 @@ std::vector<std::tuple<uint8_t, uint8_t, uint8_t>> Core::BoardOperator::getEatPo
 {
 }
 
-bool              Core::BoardOperator::checkfiveWin(Team player)
+bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 {
   PLIST<Pattern>	*patterns;
   PLIST<Pattern>::iterator	it;
@@ -122,6 +122,23 @@ bool              Core::BoardOperator::checkfiveWin(Team player)
 }
 
 
+bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
+{
+  PLIST<Pattern>	*patterns;
+  PLIST<Pattern>::iterator	it;
+
+  patterns = &patternM->getPatterns();
+  it = patterns->begin();
+  while (it != patterns->end())
+    {
+      if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
+	return (true);
+      it++;
+    }
+  return (false);
+}
+
+
 std::vector<std::pair<uint8_t, uint8_t>> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
 {
 }
@@ -144,19 +161,30 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
   Pattern			*pat;
 
   patterns = &patternM->getMap()[y * XBOARD + x];
+  std::cout << "1" << std::endl;
   it = patterns->begin();
+    std::cout << "2" << std::endl;
   nbrEat = 0;
+    std::cout << "3" << std::endl;
   while (it != patterns->end())
     {
+        std::cout << "4" << std::endl;
       pat = it->pattern;
+        std::cout << "5" << std::endl;
       if (pat->lineLength - 2 == 2 && pat->line[1] != player && ((pat->line[0] == player && pat->posOfFirst == x + y * XBOARD) || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)))
 	{
+	    std::cout << "6" << std::endl;
 	  (*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
+	    std::cout << "7" << std::endl;
 	  patternM->removeStone(pat->posOfFirst + pat->direction);
+	    std::cout << "8" << std::endl;
 	  (*board)[pat->posOfFirst + pat->direction * 2] = Team::NOPLAYER;
+	    std::cout << "9" << std::endl;
 	  patternM->removeStone(pat->posOfFirst + pat->direction * 2);
+	    std::cout << "10" << std::endl;
 	  nbrEat++;
 	}
+        std::cout << "11" << std::endl;
       it++;
     }
 }

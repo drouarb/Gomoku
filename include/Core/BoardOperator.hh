@@ -25,7 +25,9 @@ namespace Core
       
       virtual std::vector<std::tuple<uint8_t, uint8_t, uint8_t>> getEatPos(Team player);
       
-      virtual bool		checkfiveWin(Team player);
+      virtual bool		checkfiveWinBreak(Team player);
+
+      virtual bool		checkfiveWinNoBreak(Team player);
       
       virtual std::vector<std::pair<uint8_t, uint8_t>> getXPossible(uint8_t numberPiece, Team player);
       

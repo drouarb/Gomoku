@@ -31,6 +31,7 @@ namespace Core
       std::map<Team, statPlayer>		stats;
       Team					player;
       Team					winner;
+      std::map<RuleID, Rule>			rRules;
       
     public:
         Referee();
@@ -42,6 +43,8 @@ namespace Core
         virtual GameBoard_t getBoardCopy();
 
         virtual const GameBoard_t &getBoardRef();
+
+        virtual void feedRules(std::map<RuleID, Rule> rules);
 
         virtual void setPlayer(Team player);
 

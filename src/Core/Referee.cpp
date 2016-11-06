@@ -59,7 +59,8 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
   std::cout << "c" << std::endl;
-  if (boardOp->checkFreeDoubleThree(player, x, y) == true)
+  if (rRules[DOUBLE_THREE].on == true)
+    if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
   std::cout << "d" << std::endl;
   stats[player].eaten += boardOp->applyEat(player, x, y);
@@ -67,8 +68,14 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   if (stats[player].eaten >= EATWIN)
     winner = player;
   std::cout << "f" << std::endl;
-  if (boardOp->checkfiveWin(player) == true)
-    winner = player;
+  if (rRules[BREAKABLE_FIVE].on == true)
+    {
+      if (boardOp->checkfiveWinBreak(player) == true)
+	winner = player;
+    }
+  else
+    if (boardOp->checkfiveWinNoBreak(player) == true)
+      winner = player;
   std::cout << "g" << std::endl;
   boardOp->ForceupdateBoard(player, x, y);
   std::cout << "h" << std::endl;
@@ -84,6 +91,11 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, GameBoard_t *nboard)
     return (false);
   boardOp->ForceupdateBoard(player, x, y);
   return (true);
+}
+
+void		Core::Referee::feedRules(std::map<RuleID, Rule> rules)
+{
+  rRules = rules;
 }
 
 Team	Core::Referee::getWinner() const
