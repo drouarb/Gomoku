@@ -17,7 +17,7 @@ void		Core::BoardOperator::feed(GameBoard_t *nboard)
 
 bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t y)
 {
-  PLIST<PatternRef>		*patterns;
+  PLIST<PatternRef>		patterns;
   PLIST<PatternRef>::iterator	it;
   PMAP<boardPos_t, PLIST<PatternRef> > Map;
   Pattern			*pat;
@@ -25,21 +25,21 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   
   Map = patternM->getMap();
   std::cout << "1" << std::endl;
-  patterns = &patternM->getMap()[y * XBOARD + x];
+  patterns = patternM->getMap()[y * XBOARD + x];
   std::cout << "2" << std::endl;
   nbr3P = 0;
   std::cout << "3" << std::endl;
-  it = patterns->begin();
+  it = patterns.begin();
   std::cout << "4" << std::endl;
-  while (it != patterns->end())
+  while (it != patterns.end())
     {
       std::cout << "5" << std::endl;
       pat = it->pattern;
       std::cout << "6" << std::endl;
-      /*if (pat->lineLength - 2 - pat->interrupted == 3
+      if (pat->lineLength - 2 - pat->interrupted == 3
 	  && pat->line[0] && pat->line[pat->lineLength - 1]
 	  && pat->line[1] == player)
-	  nbr3P++;*/
+	nbr3P++;
       std::cout << "7" << std::endl;
       it++;
     }
@@ -55,13 +55,13 @@ std::vector<std::pair<uint8_t, uint8_t>> Core::BoardOperator::getFreeDoubleThree
 
 bool              Core::BoardOperator::checkEatPlayer(Team player, uint8_t x, uint8_t y)
 {
-  PLIST<PatternRef>	*patterns;
+  PLIST<PatternRef>	patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
-  patterns = &patternM->getMap()[y * XBOARD + x];
-  it = patterns->begin();
-  while (it != patterns->end())
+  patterns = patternM->getMap()[y * XBOARD + x];
+  it = patterns.begin();
+  while (it != patterns.end())
     {
       pat = it->pattern;
       if (((pat->lineLength - 2) == 2 && pat->line[1] != player)
@@ -81,38 +81,50 @@ std::vector<std::tuple<uint8_t, uint8_t, uint8_t>> Core::BoardOperator::getEatPo
 
 bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 {
-  PLIST<Pattern>	*patterns;
+  PLIST<Pattern>	patterns;
   PLIST<Pattern>::iterator	it;
-  PLIST<PatternRef>	*patSecond;
+  PLIST<PatternRef>	patSecond;
   PLIST<PatternRef>::iterator itS;
   Pattern			*pat;
   int				nbrNoBreak;
   int				i;
 
-  patterns = &patternM->getPatterns();
-  it = patterns->begin();
-  while (it != patterns->end())
+  patterns = patternM->getPatterns();
+  it = patterns.begin();
+  std::cout << "1" << std::endl;
+  while (it != patterns.end())
     {
+        std::cout << "1" << std::endl;
       if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
 	{
+	    std::cout << "1" << std::endl;
 	  i = 1;
 	  nbrNoBreak = 0;
+	    std::cout << "1" << std::endl;
 	  while (i < it->lineLength - 1)
 	    {
-	      patSecond = &patternM->getMap()[it->posOfFirst + i * pat->direction];
-	      itS = patSecond->begin();
-	      while (itS != patSecond->end())
+	        std::cout << "1" << std::endl;
+	      patSecond = patternM->getMap()[it->posOfFirst + i * pat->direction];
+	      itS = patSecond.begin();
+	        std::cout << "1" << std::endl;
+	      while (itS != patSecond.end())
 		{
+		    std::cout << "1" << std::endl;
 		  pat = itS->pattern;
+		    std::cout << "1" << std::endl;
 		  if (pat->lineLength - 2 == 2 && pat->line[1] == player
 		      && ((pat->line[0] != player && pat->line[pat->lineLength - 1] == NOPLAYER)
 			  || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player)))
 		    nbrNoBreak = -1;
+		    std::cout << "1" << std::endl;
 		  itS++;
 		}
+	        std::cout << "1" << std::endl;
 	      nbrNoBreak++;
+	        std::cout << "1" << std::endl;
 	      if (nbrNoBreak == 5)
 		return (true);
+	        std::cout << "1" << std::endl;
 	      ++i;
 	    }
 	}
@@ -124,17 +136,23 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 
 bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 {
-  PLIST<Pattern>	*patterns;
+  PLIST<Pattern>	patterns;
   PLIST<Pattern>::iterator	it;
 
-  patterns = &patternM->getPatterns();
-  it = patterns->begin();
-  while (it != patterns->end())
+  patterns = patternM->getPatterns();
+  it = patterns.begin();
+  std::cout << "ko" << std::endl;
+  while (it != patterns.end())
     {
+      std::cout << "pat : " << int(it->lineLength) << std::endl;
       if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
-	return (true);
+	{
+	  std::cout << "true" << std::endl;
+	  return (true);
+	}
       it++;
     }
+  std::cout << "false" << std::endl;
   return (false);
 }
 
@@ -150,43 +168,39 @@ bool              Core::BoardOperator::checkBreakable(Team player)
 
 Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
 {
+  std::cout << (Team)(*board)[y * XBOARD + x] << std::endl;
   return ((Team)(*board)[y * XBOARD + x]);
 }
 
 uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 {
-  uint8_t		nbrEat;
-  PLIST<PatternRef>	*patterns;
+  PLIST<PatternRef>	patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
-  patterns = &patternM->getMap()[y * XBOARD + x];
-  std::cout << "1" << std::endl;
-  it = patterns->begin();
-    std::cout << "2" << std::endl;
-  nbrEat = 0;
-    std::cout << "3" << std::endl;
-  while (it != patterns->end())
+  patterns = patternM->getMap()[y * XBOARD + x];
+  it = patterns.begin();
+  while (it != patterns.end())
     {
-        std::cout << "4" << std::endl;
       pat = it->pattern;
-        std::cout << "5" << std::endl;
-      if (pat->lineLength - 2 == 2 && pat->line[1] != player && ((pat->line[0] == player && pat->posOfFirst == x + y * XBOARD) || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)))
+      if (pat->lineLength - 2 == 2 && pat->line[1] != player)
 	{
-	    std::cout << "6" << std::endl;
-	  (*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
-	    std::cout << "7" << std::endl;
-	  patternM->removeStone(pat->posOfFirst + pat->direction);
-	    std::cout << "8" << std::endl;
-	  (*board)[pat->posOfFirst + pat->direction * 2] = Team::NOPLAYER;
-	    std::cout << "9" << std::endl;
-	  patternM->removeStone(pat->posOfFirst + pat->direction * 2);
-	    std::cout << "10" << std::endl;
-	  nbrEat++;
+	  if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
+	      || (pat->line[0] == player && pat->posOfFirst == x + y * XBOARD)
+	      || (pat->line[pat->lineLength - 1] == player
+		  && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
+	      || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst == x + y * XBOARD))
+	    {
+	      (*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
+	      patternM->removeStone(pat->posOfFirst + pat->direction);
+	      (*board)[pat->posOfFirst + pat->direction * 2] = Team::NOPLAYER;
+	      patternM->removeStone(pat->posOfFirst + pat->direction * 2);
+	      return (1 + applyEat(player, x, y));
+	    }
 	}
-        std::cout << "11" << std::endl;
       it++;
     }
+  return (0);
 }
 
 void			Core::BoardOperator::ForceupdateBoard(Team player, uint8_t x, uint8_t y)

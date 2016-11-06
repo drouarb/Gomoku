@@ -9,7 +9,7 @@
 #include "IBoardOperator.hh"
 #include "BoardOperator.hh"
 
-#define EATWIN 10
+#define EATWIN 5
 
 namespace Core
 {

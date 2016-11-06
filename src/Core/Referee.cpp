@@ -52,33 +52,31 @@ void		Core::Referee::setPlayer(Team nplayer)
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
   boardOp->feed(&board);
-  std::cout << "a" << std::endl;
   if (winner != NOPLAYER)
     return (false);
-  std::cout << "b" << std::endl;
   if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
-  std::cout << "c" << std::endl;
   if (rRules[DOUBLE_THREE].on == true)
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
     return (false);
-  std::cout << "d" << std::endl;
+  boardOp->ForceupdateBoard(player, x, y);
+  std::cout << "d winner = " << winner << std::endl;
   stats[player].eaten += boardOp->applyEat(player, x, y);
-  std::cout << "e" << std::endl;
+  std::cout << "eaten by " << player << " : " << int(stats[player].eaten) << std::endl;
   if (stats[player].eaten >= EATWIN)
     winner = player;
-  std::cout << "f" << std::endl;
-  if (rRules[BREAKABLE_FIVE].on == true)
-    {
+  /*if (rRules[BREAKABLE_FIVE].on == true)
+    {*/
+      std::cout << "with5 winner = " << winner << std::endl;
       if (boardOp->checkfiveWinBreak(player) == true)
 	winner = player;
-    }
-  else
-    if (boardOp->checkfiveWinNoBreak(player) == true)
-      winner = player;
-  std::cout << "g" << std::endl;
-  boardOp->ForceupdateBoard(player, x, y);
-  std::cout << "h" << std::endl;
+      //}
+  /*else
+    {
+      if (boardOp->checkfiveWinNoBreak(player) == true)
+	winner = player;
+	}*/
+  std::cout << "h winner = " << winner << std::endl;
   return (true);
 }
 
