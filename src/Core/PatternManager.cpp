@@ -155,12 +155,12 @@ void PatternManager::addStone(boardPos_t position, Team team)
                         }
                         firstTeam = teamAt(firstPos);
 
-                        target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * checkMap[OPPDIR(i)]), firstPos,
-                                    dir);
+                        target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * checkMap[OPPDIR(i)]), firstPos, dir);
+                        checkExtremities(target);
                         addToMap(target);
                     }
 
-                if (size != list.size())
+                if (list.size() != size)
                 {
                     if (prev_it == list.end())
                     {
@@ -188,6 +188,8 @@ void PatternManager::addStone(boardPos_t position, Team team)
         map[position].front().posOnPattern = 0;
         map[position].front().pattern = &patterns.front();
     }
+
+    std::cout << *this << std::endl;
 }
 
 void PatternManager::removeStone(boardPos_t position)
@@ -215,7 +217,7 @@ void PatternManager::removeStone(boardPos_t position)
             }
             else
             {
-                //std::cout << "pattern: start=" << //std::to_string(pattern.pattern->posOfFirst) << " len=" << //std::to_string(pattern.pattern->lineLength) << " dir=" << //std::to_string(pattern.pattern->direction) << //std::endl;
+                std::cout << "pattern: start=" << std::to_string(pattern.pattern->posOfFirst) << " len=" << std::to_string(pattern.pattern->lineLength) << " dir=" << std::to_string(pattern.pattern->direction) << std::endl;
 
                 removeFromMap(pattern.pattern);
                 //TODO: if pattern len >= 6 and not interrupted: becomes interrupted
@@ -239,7 +241,7 @@ void PatternManager::removeStone(boardPos_t position)
                             if (singleStoneList.end() == singleStoneList.begin())
                             {
                                 //if stone is not part of any other pattern, create new 1-stone pattern
-                                //std::cout << "2nd half: 1 stone" << //std::endl;
+                                std::cout << "2nd half: 1 stone" << std::endl;
                                 patterns.push_front(Pattern(team, position + pattern.pattern->direction));
                                 addToMap(&patterns.front());
                             }
@@ -247,7 +249,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //new multiple-stone pattern (starting at position, since pattern dir is always positive)
-                            //std::cout << "2nd half: multiple stones" << //std::endl;
+                            std::cout << "2nd half: multiple stones" << std::endl;
                             patterns.push_front(Pattern(team, halfSize + (uint8_t) 1, NOPLAYER,
                                                         pattern.pattern->line[pattern.pattern->lineLength -
                                                                               (uint8_t) 1],
@@ -267,13 +269,13 @@ void PatternManager::removeStone(boardPos_t position)
                             if (singleStoneList.begin() != singleStoneList.end())
                             {
                                 //only one stone, and it is part of another pattern
-                                //std::cout << "1st half: erased" << //std::endl;
+                                std::cout << "1st half: erased" << std::endl;
                                 removeFromList(pattern.pattern);
                             }
                             else
                             {
                                 //change pattern
-                                //std::cout << "1st half: change pattern" << //std::endl;
+                                std::cout << "1st half: change pattern" << std::endl;
                                 pattern.pattern->breatAt(pattern.posOnPattern);
                                 addToMap(pattern.pattern);
                             }
@@ -281,7 +283,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //change pattern
-                            //std::cout << "1st half: change pattern" << //std::endl;
+                            std::cout << "1st half: change pattern" << std::endl;
                             pattern.pattern->breatAt(pattern.posOnPattern);
                             addToMap(pattern.pattern);
                         }
@@ -289,15 +291,15 @@ void PatternManager::removeStone(boardPos_t position)
                     else
                     {
                         //destroy pattern
-                        //std::cout << "1st half: erased" << //std::endl;
+                        std::cout << "1st half: erased" << std::endl;
                         removeFromList(pattern.pattern);
                     }
                 }
             }
 
-            if (size != list.size())
+            if (list.size() < size)
             {
-                if (prev_it == list.end())
+                if (prev_it != list.end())
                 {
                     it = list.begin();
                 }
@@ -314,6 +316,7 @@ void PatternManager::removeStone(boardPos_t position)
             }
         }
     }
+    std::cout << *this << std::endl;
 }
 
 void PatternManager::removePattern(Pattern * pattern)
@@ -375,6 +378,32 @@ void PatternManager::addToMap(Pattern * pattern, boardPos_t position, uint8_t po
     map[position].push_front(PatternRef());
     map[position].front().pattern = pattern;
     map[position].front().posOnPattern = posOnPattern;
+}
+
+void PatternManager::checkExtremities(Pattern * pattern)
+{
+    //if extremities of pattern are also on a 1-stone pattern, remove that 1-stone pattern
+    if (pattern->line[0] != pattern->team && pattern->line[0] != NOPLAYER)
+    {
+        removeOneStone(pattern->posOfFirst);
+    }
+    if (pattern->line[pattern->lineLength - 1] != pattern->team && pattern->line[pattern->lineLength - 1] != NOPLAYER)
+    {
+        removeOneStone(pattern->posOfFirst + (pattern->lineLength - (boardPos_t)1) * pattern->direction);
+    }
+}
+
+void PatternManager::removeOneStone(boardPos_t position)
+{
+    for (auto pat = map[position].begin(); pat != map[position].end(); ++pat)
+    {
+        if (pat->pattern->lineLength == 1)
+        {
+            map[position].erase(pat);
+            removeFromList(pat->pattern);
+            break;
+        }
+    }
 }
 
 

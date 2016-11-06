@@ -12,33 +12,20 @@
 int main(int ac, char **av)
 {
     Core::Core core;
-    /*Core::PatternManager pm;
+    //Core::PatternManager pm;
 
-    pm.addStone(180, WHITE);
-    pm.addStone(142, BLACK);
-    pm.addStone(181, WHITE);
-    pm.addStone(143, BLACK);
-    //pm.addStone(182, WHITE);
-    std::cout << pm << std::endl;
-    for (auto mit : pm.getMap())
-    {
-        for (auto lit : mit.second)
-        {
-            std::cout << std::to_string(lit.pattern->posOfFirst) << std::endl;
-        }
-    }*/
-
-    /*pm.addStone(5, BLACK);
+/*
+    pm.addStone(5, BLACK);
     std::cout << pm << std::endl;
     pm.addStone(6, BLACK);
     std::cout << pm << std::endl;
     pm.addStone(4, BLACK);
     std::cout << pm << std::endl;
     pm.addStone(5 + 19, BLACK);
-    std::cout << pm << std::endl;*/
-
-
-    /*pm.addStone(100, BLACK);
+    std::cout << pm << std::endl;
+*/
+/*
+    pm.addStone(100, BLACK);
     pm.addStone(100 + 1 * 19 + 1, BLACK);
     pm.addStone(100 + 3 * 19 + 3, BLACK);
     pm.addStone(100 + 4 * 19 + 4, BLACK);
@@ -46,8 +33,8 @@ int main(int ac, char **av)
     pm.addStone(100 + 2 * 19 + 2, BLACK);
     std::cout << pm << std::endl;
     pm.addStone(179, BLACK);
-    std::cout << pm << std::endl;*/
-
+    std::cout << pm << std::endl;
+*/
 /*
     pm.addStone(50, WHITE);
     pm.addStone(51, WHITE);
@@ -57,8 +44,8 @@ int main(int ac, char **av)
     pm.removeStone(50);
     std::cout << pm << std::endl;
 */
-
 /*
+
     pm.addStone(150, WHITE);
     pm.addStone(151, WHITE);
     pm.addStone(152, BLACK);
