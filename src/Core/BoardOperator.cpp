@@ -91,40 +91,30 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 
   patterns = patternM->getPatterns();
   it = patterns.begin();
-  std::cout << "1" << std::endl;
   while (it != patterns.end())
     {
-        std::cout << "2" << std::endl;
       if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
 	{
-	    std::cout << "3" << std::endl;
 	  i = 1;
 	  nbrNoBreak = 0;
-	    std::cout << "4" << std::endl;
 	  while (i < it->lineLength - 1)
 	    {
-	        std::cout << "5" << std::endl;
-	      patSecond = patternM->getMap()[it->posOfFirst + i * pat->direction];
+	      patSecond = patternM->getMap()[it->posOfFirst + i * it->direction];
 	      itS = patSecond.begin();
-	        std::cout << "6" << std::endl;
 	      while (itS != patSecond.end())
 		{
-		    std::cout << "7" << std::endl;
-		  pat = itS->pattern;
-		    std::cout << "8" << std::endl;
-		  if (pat->lineLength - 2 == 2 && pat->line[1] == player
-		      && ((pat->line[0] != player && pat->line[pat->lineLength - 1] == NOPLAYER)
-			  || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player)))
-		    nbrNoBreak = -1;
-		    std::cout << "9" << std::endl;
+		    pat = itS->pattern;
+		    if (pat->lineLength - 2 == 2 && pat->line[1] == player
+			&& ((pat->line[0] != player && pat->line[0] != NOPLAYER
+			     && pat->line[pat->lineLength - 1] == NOPLAYER)
+			    || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
+				&& pat->line[pat->lineLength - 1] != NOPLAYER)))
+			nbrNoBreak = -1;
 		  itS++;
 		}
-	        std::cout << "10" << std::endl;
 	      nbrNoBreak++;
-	        std::cout << "11" << std::endl;
 	      if (nbrNoBreak == 5)
 		return (true);
-	        std::cout << "12" << std::endl;
 	      ++i;
 	    }
 	}

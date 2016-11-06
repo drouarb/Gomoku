@@ -65,17 +65,17 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   std::cout << "eaten by " << player << " : " << int(stats[player].eaten) << std::endl;
   if (stats[player].eaten >= EATWIN)
     winner = player;
-  /*if (rRules[BREAKABLE_FIVE].on == true)
-    {*/
+  if (rRules[BREAKABLE_FIVE].on == true)
+    {
       std::cout << "with5 winner = " << winner << std::endl;
       if (boardOp->checkfiveWinBreak(player) == true)
 	winner = player;
-      //}
-  /*else
+    }
+  else
     {
       if (boardOp->checkfiveWinNoBreak(player) == true)
 	winner = player;
-	}*/
+    }
   std::cout << "h winner = " << winner << std::endl;
   return (true);
 }
