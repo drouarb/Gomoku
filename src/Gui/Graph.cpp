@@ -238,19 +238,19 @@ void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
 void Graph::setCurrentPlayer(Players::IPlayer *player)
 {
     current = player;
-    show(player->getName() + " Turn ");
+    show(player->getName() + "'s turn ");
 }
 
 void Graph::startGame()
 {
     listMessage.clear();
     permMessage = "";
-    show("GAME START");
+    show("START GAME");
 }
 
 void Graph::endGame(const std::string &winner_name)
 {
-    this->permMessage = "GAME END WINNER " + winner_name;
+    this->permMessage = "END OF GAME. WINNER: " + winner_name;
     mainObs->actualMenu();
     popupString();
     refresh();

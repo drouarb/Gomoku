@@ -147,7 +147,7 @@ void MenuGame::affPlayer() const
 {
     Players::IPlayer *player = (dynamic_cast<GUI::Graph *>(gui))->current;
     if (player != NULL && this->ingame == true)
-        gui->addTextToScreen("Current " + player->getName(), 50, 800);
+        gui->addTextToScreen("Round: " + player->getName(), 50, 800);
     IPlayerObserver *iob1 = (dynamic_cast<Graph *>(gui))->players[0];
     if (iob1 != NULL)
         gui->addTextToScreen(iob1->getPlayer()->getName() + " : " + std::to_string(iob1->getPlayer()->getScore()) + " stones", 50 , 100);

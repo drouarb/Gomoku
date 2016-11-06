@@ -27,7 +27,7 @@ bool Humain::tryPlay(uint8_t x, uint8_t y)
     return true;
     else
     {
-        this->handle->showError(std::string("Can't play"));
+        this->handle->showError(std::string("Forbidden"));
         this->handle->prompt();
         return false;
     }

@@ -8,7 +8,7 @@ const char *GUI::GraphicException::what() const throw()
 {
   std::stringstream stringstream;
 
-  stringstream << "Graphic Error: " << this->reason << ". " << this->description;
+  stringstream << "Graphical Error: " << this->reason << ". " << this->description;
   return (stringstream.str().c_str());
 }
 
