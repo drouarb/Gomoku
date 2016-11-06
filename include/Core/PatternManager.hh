@@ -38,6 +38,7 @@ namespace Core
         PLIST<Pattern> patterns;
         PMAP<boardPos_t, PLIST<PatternRef> > map;
 
+        void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
         void removePattern(Pattern * pattern);
         void removeFromList(Pattern * pattern);
         void removeFromMap(Pattern * pattern);
@@ -50,6 +51,7 @@ namespace Core
         void addOneStone(Team team, boardPos_t position);
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
+        void incFlexibleIterator(PLIST<PatternRef> & list, int prev_size, PLIST<PatternRef>::iterator & prev_it, PLIST<PatternRef>::iterator & it);
 
         static const boardPos_t checkMap[];
         static const boardPos_t twoDistCircle[];
