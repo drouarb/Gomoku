@@ -259,8 +259,8 @@ void MenuGame::playGameOnePlayers()
 {
     if (this->ingame == false)
     {
-        this->ingame = true;
-        this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
+    //    this->ingame = true;
+      //  this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
     }
 }
 
@@ -277,8 +277,8 @@ void MenuGame::playGameIa()
 {
     if (this->ingame == false)
     {
-        this->ingame = true;
-        this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+//        this->ingame = true;
+  //      this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
     }
 }
 
