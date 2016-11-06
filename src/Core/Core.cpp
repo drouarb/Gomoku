@@ -81,13 +81,25 @@ void Core::Core::setRule(const std::string &rulename, bool on)
 
     for (auto& uniqueList : uniqueRules)
     {
+        bool uniqueListChanged = false;
         for (auto& uniqueRule : uniqueList)
         {
-            for (auto& rule : rules)
+            if (rules[uniqueRule].name == rulename)
             {
-                if (uniqueRule == rule.first && rule.second.name != rulename)
+                uniqueListChanged = true;
+                break;
+            }
+        }
+        if (uniqueListChanged)
+        {
+            for (auto &uniqueRule : uniqueList)
+            {
+                for (auto &rule : rules)
                 {
-                    rule.second.on = false;
+                    if (uniqueRule == rule.first && rule.second.name != rulename)
+                    {
+                        rule.second.on = false;
+                    }
                 }
             }
         }
