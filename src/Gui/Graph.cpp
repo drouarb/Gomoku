@@ -19,13 +19,15 @@ void Graph::setPolice(const std::string &path, int size)
 
 Obs *Graph::getObs()
 {
-    return  this->mainObs;
+    return this->mainObs;
 }
+
 void Graph::quit()
 {
     SDL_DestroyWindow(fenetre);
     SDL_Quit();
 }
+
 void Graph::loadImage(const std::string &path, const std::string &name)
 {
     SDL_Surface *pSprite;
@@ -36,24 +38,25 @@ void Graph::loadImage(const std::string &path, const std::string &name)
         this->images.insert(std::pair<std::string, void *>(name, pSprite));
         pTexture = SDL_CreateTextureFromSurface(this->pRenderer, pSprite);
         if (pTexture)
-        this->Textureimages.insert(std::pair<std::string, void *>(name, pTexture));
+            this->Textureimages.insert(std::pair<std::string, void *>(name, pTexture));
     }
 }
+
 void Graph::addToScreen(const std::string &name, int x, int y)
 {
-    SDL_Texture *pTexture  = static_cast<SDL_Texture *>(this->Textureimages[name]);
+    SDL_Texture *pTexture = static_cast<SDL_Texture *>(this->Textureimages[name]);
     SDL_Surface *pSprite = static_cast<SDL_Surface *>(this->images[name]);
-        if (pTexture && pSprite)
-        {
-            SDL_Rect dest = {x, y, pSprite->w, pSprite->h};
-            SDL_RenderCopy(this->pRenderer, pTexture, NULL, &dest);
-        }
+    if (pTexture && pSprite)
+    {
+        SDL_Rect dest = {x, y, pSprite->w, pSprite->h};
+        SDL_RenderCopy(this->pRenderer, pTexture, NULL, &dest);
     }
+}
 
 typeButton Graph::loop()
 {
     SDL_Delay(1);
-    typeButton  re;
+    typeButton re;
     if (SDL_PollEvent(&this->event))
     {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
@@ -65,7 +68,7 @@ typeButton Graph::loop()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                last->dimy  = event.button.y;
+                last->dimy = event.button.y;
                 last->dimx = event.button.x;
                 re = mainObs->notify(event.button.x, event.button.y);
                 refresh();
@@ -75,10 +78,12 @@ typeButton Graph::loop()
     }
     return (DEFAULT);
 }
-void Graph::showError(const std::string & str)
+
+void Graph::showError(const std::string &str)
 {
     show(str);
 }
+
 void Graph::refresh()
 {
     SDL_RenderPresent(this->pRenderer);
@@ -100,7 +105,7 @@ void Graph::addTextToScreen(const std::string &text, int x, int y)
         SDL_Rect dest;
         if (pSprite)
         {
-           // Uint32 colorkey = SDL_MapRGB(pSprite->format, 0, 0, 0);
+            // Uint32 colorkey = SDL_MapRGB(pSprite->format, 0, 0, 0);
             //SDL_SetColorKey(pSprite, SDL_TRUE, colorkey);
             pTexture = SDL_CreateTextureFromSurface(this->pRenderer, pSprite);
             if (pTexture)
@@ -123,8 +128,9 @@ void Graph::changeOpacity(const std::string &name, int r, int g, int b)
         Uint32 colorkey = SDL_MapRGB(pSprite->format, r, g, b);
         SDL_SetColorKey(pSprite, SDL_TRUE, colorkey);
         pTexture = SDL_CreateTextureFromSurface(this->pRenderer, pSprite);
-        if (pTexture) {
-            this->Textureimages[name]= pTexture;
+        if (pTexture)
+        {
+            this->Textureimages[name] = pTexture;
         }
 
     }
@@ -171,23 +177,24 @@ void Graph::init(ICoreObserver *coreObserver)
     colorTexte.r = 255;
     colorTexte.g = 255;
     this->coreObserver = coreObserver;
-    MenuGame  toto(this);
+    MenuGame toto(this);
+    this->permMessage = "";
     mainObs = new Obs();
     mainObs->addMenu(&toto);
     board = NULL;
     players[0] = NULL;
     players[1] = NULL;
-    auto t=  Clock::now();
+    auto t = Clock::now();
     while (getObs()->getStop() == false)
     {
         loop();
-             if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
-             {
-                popupString();
-                mainObs->actualMenu();
-                 refresh();
-                 t = Clock::now();
-            }
+        if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
+        {
+            popupString();
+            mainObs->actualMenu();
+            refresh();
+            t = Clock::now();
+        }
         SDL_Delay(10);
     }
 
@@ -197,6 +204,7 @@ ICoreObserver *Graph::getICoreObserver()
 {
     return this->coreObserver;
 }
+
 void Graph::registerPlayer(Players::IPlayer *player)
 {
     std::cout << "register player " << (void *) player << std::endl;
@@ -211,9 +219,9 @@ void Graph::registerPlayer(Players::IPlayer *player)
 void Graph::unregisterPlayer(Players::IPlayer *player)
 {
     std::cout << "unregister player " << (void *) player << std::endl;
-    if  (players[1] != NULL &&  players[1]->getPlayer() == player)
-            players[1] = NULL;
-    if  (players[0] != NULL &&  players[0]->getPlayer() == player)
+    if (players[1] != NULL && players[1]->getPlayer() == player)
+        players[1] = NULL;
+    if (players[0] != NULL && players[0]->getPlayer() == player)
         players[0] = NULL;
 }
 
@@ -235,12 +243,17 @@ void Graph::setCurrentPlayer(Players::IPlayer *player)
 
 void Graph::startGame()
 {
+    listMessage.clear();
+    permMessage = "";
     show("GAME START");
 }
 
 void Graph::endGame(const std::string &winner_name)
 {
-    show("GAME END WINNER " + winner_name);
+    this->permMessage = "GAME END WINNER " + winner_name;
+    mainObs->actualMenu();
+    popupString();
+    refresh();
 }
 
 
@@ -259,17 +272,21 @@ void Graph::popupString()
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - (*it).second).count() < SHOWTIME)
         {
             addTextToScreen((*it).first, 1000 - (*it).first.length() * 10, 520 + y);
-            y+= 100;
+            y += 100;
             listMessage.erase((it));
             break;
         }
         it++;
     }
+    if (permMessage != "")
+    {
+        addTextToScreen(permMessage, 1000 - permMessage.length() * 10, 520 + y);
+    }
 }
 
 void Graph::prompt()
 {
-    auto t =  Clock::now();
+    auto t = Clock::now();
     mainObs->actualMenu();
     popupString();
     refresh();
@@ -284,8 +301,9 @@ void Graph::prompt()
         SDL_Delay(10);
     }
 }
+
 void Graph::getMousePose(int *x, int *y)
 {
-    SDL_GetMouseState(x,y);
+    SDL_GetMouseState(x, y);
 }
 

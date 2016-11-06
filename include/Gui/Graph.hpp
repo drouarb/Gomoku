@@ -33,6 +33,7 @@ namespace GUI
         ICoreObserver *coreObserver;
         Obs *mainObs;
         std::map<std::string, TimePoint> listMessage;
+        std::string permMessage;
     private:
         SDL_Color colorTexte;
         t_size sizebuff;
@@ -93,6 +94,8 @@ namespace GUI
         void changeOpacity(const std::string &name, int r, int g, int b);
 
         t_size getSizePicture(const std::string &name);
+
+        void permString(std::string & str);
 
         void popupString();
     };
