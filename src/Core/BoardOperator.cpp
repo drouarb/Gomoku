@@ -23,27 +23,23 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   Pattern			*pat;
   unsigned int			nbr3P;
   
-  Map = patternM->getMap();
-  std::cout << "1" << std::endl;
+  patternM->addStone(x + y * XBOARD, player);
   patterns = patternM->getMap()[y * XBOARD + x];
-  std::cout << "2" << std::endl;
   nbr3P = 0;
-  std::cout << "3" << std::endl;
   it = patterns.begin();
-  std::cout << "4" << std::endl;
   while (it != patterns.end())
     {
-      std::cout << "5" << std::endl;
       pat = it->pattern;
-      std::cout << "6" << std::endl;
-      if (pat->lineLength - 2 - pat->interrupted == 3
-	  && pat->line[0] && pat->line[pat->lineLength - 1]
+      std::cout << "pat:" << pat->lineLength << std::endl;
+      if (pat->lineLength - 2 - pat->interrupted >= 3
+	  && pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER
 	  && pat->line[1] == player)
 	nbr3P++;
       std::cout << "7" << std::endl;
       it++;
     }
   std::cout << "8" << std::endl;
+  patternM->removeStone(x + y * XBOARD);
   if (nbr3P >= 2)
     return (true);
   return (false);
