@@ -59,15 +59,12 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   if (rRules[DOUBLE_THREE].on == true)
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
       return (false);
-  std::cout << "d winner = " << winner << std::endl;
   stats[player].eaten += boardOp->applyEat(player, x, y);
   boardOp->ForceupdateBoard(player, x, y);
-  std::cout << "eaten by " << player << " : " << int(stats[player].eaten) << std::endl;
   if (stats[player].eaten >= EATWIN)
     winner = player;
   if (rRules[BREAKABLE_FIVE].on == true)
     {
-      std::cout << "with5 winner = " << winner << std::endl;
       if (boardOp->checkfiveWinBreak(player) == true)
 	winner = player;
     }
@@ -76,7 +73,6 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
       if (boardOp->checkfiveWinNoBreak(player) == true)
 	winner = player;
     }
-  std::cout << "h winner = " << winner << std::endl;
   return (true);
 }
 

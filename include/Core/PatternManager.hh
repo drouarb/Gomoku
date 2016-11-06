@@ -44,7 +44,11 @@ namespace Core
         Team teamAt(boardPos_t);
         void addToMap(Pattern * pattern);
         void addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern);
-        void checkExtremities(Pattern * pattern);
+        void addOSExtremities(Pattern * pattern);
+        void addOSFirstExtremity(Pattern * pattern);
+        void addOSLastExtremity(Pattern * pattern);
+        void addOneStone(Team team, boardPos_t position);
+        void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
 
         static const boardPos_t checkMap[];
