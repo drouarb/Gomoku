@@ -11,6 +11,8 @@ namespace Core
     private:
       GameBoard_t	*board;
       PatternManager	*patternM;
+    private:
+      bool		checkThreeFreeOnMe(Team player, Pattern *pats);
     public:
       BoardOperator();
       virtual ~BoardOperator();

@@ -15,17 +15,46 @@ void		Core::BoardOperator::feed(GameBoard_t *nboard)
   board = nboard;
 }
 
+bool		Core::BoardOperator::checkThreeFreeOnMe(Team player, Pattern *patS)
+{
+  PLIST<PatternRef>		patterns;
+  PLIST<PatternRef>::iterator	it;
+  Pattern			*pat;
+  int				i;
+
+  i = 1;
+  //std::cout << "lookSecondThree" << std::endl;
+  while (i < patS->lineLength - 2 - patS->interrupted)
+    {
+      patterns = patternM->getMap()[patS->posOfFirst + i * patS->direction];
+      it = patterns.begin();
+      //std::cout << "check for pos :" << i << std::endl;
+      while (it != patterns.end())
+	{
+	  pat = it->pattern;
+	  //std::cout << "pattern: len:" << int(pat->lineLength - 2) << " ,pos:" << pat->posOfFirst << " ,dir:" << pat->direction << std::endl;
+	  if (pat != patS && pat->lineLength - 2 >= 3 && pat->line[0] == NOPLAYER
+	      && pat->line[pat->lineLength - 1] == NOPLAYER
+	      && pat->line[1] == player)
+	    {
+	      return (true);
+	    }
+	  it++;
+	}
+      ++i;
+    }
+  return (false);
+}
+
 bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t y)
 {
   PLIST<PatternRef>		patterns;
   PLIST<PatternRef>::iterator	it;
-  PMAP<boardPos_t, PLIST<PatternRef> > Map;
   Pattern			*pat;
-  unsigned int			nbr3P;
-  
+
+  //std::cout << "checkFreeDoubleThree" << std::endl;
   patternM->addStone(x + y * XBOARD, player);
   patterns = patternM->getMap()[y * XBOARD + x];
-  nbr3P = 0;
   it = patterns.begin();
   while (it != patterns.end())
     {
@@ -33,12 +62,15 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
       if (pat->lineLength - 2 - pat->interrupted >= 3
 	  && pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER
 	  && pat->line[1] == player)
-	nbr3P++;
+	{
+	  //std::cout << "pattern3 find" << std::endl;
+	  //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << pat->line[4] << "]" << std::endl;
+	  if (checkThreeFreeOnMe(player, pat) == true)
+	    return (true);
+	}
       it++;
     }
   patternM->removeStone(x + y * XBOARD);
-  if (nbr3P >= 2)
-    return (true);
   return (false);
 }
 
@@ -147,7 +179,6 @@ bool              Core::BoardOperator::checkBreakable(Team player)
 
 Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
 {
-  std::cout << (Team)(*board)[y * XBOARD + x] << std::endl;
   return ((Team)(*board)[y * XBOARD + x]);
 }
 
@@ -160,12 +191,13 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 
   patterns = patternM->getMap()[y * XBOARD + x];
   it = patterns.begin();
+  std::cout << "applyEat" << std::endl;
   while (it != patterns.end())
     {
       pat = it->pattern;
       if (pat->lineLength - 2 == 2 && pat->line[1] != player)
 	{
-	  std::cout << "pat2 ok" << std::endl;
+	  std::cout << "applyEat : pat2 find" << std::endl;
 	  std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
 	  std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
 	  if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
