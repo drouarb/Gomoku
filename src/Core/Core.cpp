@@ -53,7 +53,7 @@ void Core::Core::playGame(GamePlayers player_config)
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());
     players[0]->setScore(0);
-    players[1]->setScore(1);
+    players[1]->setScore(0);
     referee->feedRules(rules);
     int player_index = 0;
     while (referee->getWinner() == NOPLAYER && !gui->getObs()->getStop() && gui->getICoreObserver()->gameIsRunning())
