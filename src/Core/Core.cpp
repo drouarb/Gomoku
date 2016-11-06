@@ -52,9 +52,8 @@ void Core::Core::playGame(GamePlayers player_config)
     referee->initialize();
     gui->startGame();
     gui->feedBoard(referee->getBoardRef());
-    referee->getTeamEat(BLACK);
-    referee->getTeamEat(WHITE);
-    //TODO: feed to gui
+    players[0]->setScore(0);
+    players[1]->setScore(1);
     referee->feedRules(rules);
     int player_index = 0;
     while (referee->getWinner() == NOPLAYER && !gui->getObs()->getStop() && gui->getICoreObserver()->gameIsRunning())
@@ -144,6 +143,7 @@ void Core::Core::letPlayerPlay(int index)
     referee->setPlayer(TEAMOF(index));
     players[index]->play();
     gui->feedBoard(referee->getBoardRef());
+    players[index]->setScore(referee->getTeamEat(TEAMOF(index)));
 }
 
 void Core::Core::feedRules()
