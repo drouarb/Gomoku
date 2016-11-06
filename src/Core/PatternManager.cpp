@@ -57,8 +57,10 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     {
                         if (i == 0)
                         {
+                            std::cout << "add extremity" << std::endl;
                             found = true;
                             pattern.pattern->line[pattern.posOnPattern] = team;
+                            //check interrupted
                         }
                         //found value is extremity of a pattern OR in case of checkMap[0], value may be middle of a pattern
                         //this if statement is always true for i == 0
@@ -156,7 +158,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     }
                     firstTeam = teamAt(firstPos);
 
-                    target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * checkMap[OPPDIR(i)]), firstPos, dir);
+                    target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * dir), firstPos, dir);
                     removeOSExtremities(target);
                     addToMap(target);
                 }
