@@ -56,9 +56,9 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
     return (false);
   if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
-  //if (rRules[DOUBLE_THREE].on == true)
-  if (boardOp->checkFreeDoubleThree(player, x, y) == true)
-    return (false);
+  if (rRules[DOUBLE_THREE].on == true)
+    if (boardOp->checkFreeDoubleThree(player, x, y) == true)
+      return (false);
   std::cout << "d winner = " << winner << std::endl;
   stats[player].eaten += boardOp->applyEat(player, x, y);
   boardOp->ForceupdateBoard(player, x, y);

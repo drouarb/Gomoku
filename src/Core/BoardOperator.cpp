@@ -156,6 +156,7 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
   PLIST<PatternRef>	patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
+  int				save;
 
   patterns = patternM->getMap()[y * XBOARD + x];
   it = patterns.begin();
@@ -173,10 +174,11 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 		  && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
 	      || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst == x + y * XBOARD))
 	    {
+	      save = pat->posOfFirst + pat->direction * 2;
 	      (*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
 	      patternM->removeStone(pat->posOfFirst + pat->direction);
-	      (*board)[pat->posOfFirst + pat->direction * 2] = Team::NOPLAYER;
-	      patternM->removeStone(pat->posOfFirst + pat->direction * 2);
+	      (*board)[save] = Team::NOPLAYER;
+	      patternM->removeStone(save);
 	      return (1 + applyEat(player, x, y));
 	    }
 	}
