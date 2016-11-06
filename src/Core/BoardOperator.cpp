@@ -30,15 +30,12 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   while (it != patterns.end())
     {
       pat = it->pattern;
-      std::cout << "pat:" << pat->lineLength << std::endl;
       if (pat->lineLength - 2 - pat->interrupted >= 3
 	  && pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER
 	  && pat->line[1] == player)
 	nbr3P++;
-      std::cout << "7" << std::endl;
       it++;
     }
-  std::cout << "8" << std::endl;
   patternM->removeStone(x + y * XBOARD);
   if (nbr3P >= 2)
     return (true);
@@ -127,18 +124,14 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 
   patterns = patternM->getPatterns();
   it = patterns.begin();
-  std::cout << "ko" << std::endl;
   while (it != patterns.end())
     {
-      std::cout << "pat : " << int(it->lineLength) << std::endl;
       if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
 	{
-	  std::cout << "true" << std::endl;
 	  return (true);
 	}
       it++;
     }
-  std::cout << "false" << std::endl;
   return (false);
 }
 
@@ -166,7 +159,6 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 
   patterns = patternM->getMap()[y * XBOARD + x];
   it = patterns.begin();
-  std::cout << "a" << std::endl;
   while (it != patterns.end())
     {
       pat = it->pattern;
