@@ -100,3 +100,8 @@ Team	Core::Referee::getWinner() const
 {
   return (winner);
 }
+
+uint8_t	Core::Referee::getTeamEat(Team player)
+{
+  return (stats[player].eaten * 2);
+}

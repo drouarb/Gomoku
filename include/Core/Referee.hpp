@@ -53,6 +53,8 @@ namespace Core
         virtual bool tryPlay(uint8_t x, uint8_t y, GameBoard_t *);
 
         virtual Team getWinner() const;
+
+        virtual uint8_t getTeamEat(Team player);
     };
 }
 
