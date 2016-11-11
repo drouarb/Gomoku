@@ -60,7 +60,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
                         pattern = &pref;
                         break;
                     }
-                    else if (pref.pattern->team == team && pref.pattern->direction == checkMap[ACTDIR(i)])
+                    else if (pref.pattern->getTeam() == team && pref.pattern->direction == checkMap[ACTDIR(i)])
                     {
                         //found aligned
                         pattern = &pref;
@@ -186,7 +186,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
                 foundOppPattern = oppPattern.pattern;
                 break;
             }
-            else if (pattern.pattern->team == team && oppPattern.pattern->direction == checkMap[ACTDIR(i)])
+            else if (pattern.pattern->getTeam() == team && oppPattern.pattern->direction == checkMap[ACTDIR(i)])
             {
                 //found aligned
                 foundOppPattern = oppPattern.pattern;
@@ -248,7 +248,7 @@ void PatternManager::removeStone(boardPos_t position)
             size = (uint8_t)list.size();
             auto & pattern = *it;
 
-            team = pattern.pattern->team;
+            team = pattern.pattern->getTeam();
             if (pattern.pattern->line[pattern.posOnPattern] != team)
             {
                 //removed extremity of line (not interrupted, since interruption is always empty value)
@@ -425,7 +425,7 @@ void PatternManager::addOSExtremities(Pattern *pattern)
 
 void PatternManager::addOSFirstExtremity(Pattern *pattern)
 {
-    if (pattern->line[0] != pattern->team && pattern->line[0] != NOPLAYER)
+    if (pattern->line[0] != pattern->getTeam() && pattern->line[0] != NOPLAYER)
     {
         addOneStone(pattern->line[0], pattern->posOfFirst);
     }
@@ -433,7 +433,7 @@ void PatternManager::addOSFirstExtremity(Pattern *pattern)
 
 void PatternManager::addOSLastExtremity(Pattern *pattern)
 {
-    if (pattern->line[pattern->lineLength - 1] != pattern->team && pattern->line[pattern->lineLength - 1] != NOPLAYER)
+    if (pattern->line[pattern->lineLength - 1] != pattern->getTeam() && pattern->line[pattern->lineLength - 1] != NOPLAYER)
     {
         addOneStone(pattern->line[pattern->lineLength - 1], pattern->posOfFirst + (pattern->lineLength - (boardPos_t)1) * pattern->direction);
     }
@@ -448,11 +448,11 @@ void PatternManager::addOneStone(Team team, boardPos_t position)
 void PatternManager::removeOSExtremities(Pattern *pattern)
 {
     //if extremities of pattern are also on a 1-stone pattern, remove that 1-stone pattern
-    if (pattern->line[0] != pattern->team && pattern->line[0] != NOPLAYER)
+    if (pattern->line[0] != pattern->getTeam() && pattern->line[0] != NOPLAYER)
     {
         removeOneStone(pattern->posOfFirst);
     }
-    if (pattern->line[pattern->lineLength - 1] != pattern->team && pattern->line[pattern->lineLength - 1] != NOPLAYER)
+    if (pattern->line[pattern->lineLength - 1] != pattern->getTeam() && pattern->line[pattern->lineLength - 1] != NOPLAYER)
     {
         removeOneStone(pattern->posOfFirst + (pattern->lineLength - (boardPos_t)1) * pattern->direction);
     }
@@ -534,12 +534,10 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
     for (auto& pattern : pm.getPatterns())
     {
         out << (void*)&pattern;
-        out << " length=" << std::to_string((int)pattern.lineLength);
-        if (pattern.interrupted)
-            out << " interrupted";
-        out << " startPos=" << pattern.posOfFirst;
-        out << " dir=" << std::to_string((int)pattern.direction);
-        out << " line=";
+        out << "\tlength=" << std::to_string((int)pattern.lineLength);
+        out << "\tstartPos=" << pattern.posOfFirst;
+        out << "\tdir=" << std::to_string((int)pattern.direction);
+        out << "\tline=";
         for (int i = 0; i < pattern.lineLength; ++i)
             out << std::to_string((int)pattern.line[i]);
         out << std::endl;

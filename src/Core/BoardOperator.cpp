@@ -23,17 +23,17 @@ bool		Core::BoardOperator::checkThreeFreeOnMe(Team player, Pattern *patS)
   int				i;
 
   i = 1;
-  //std::cout << "lookSecondThree" << std::endl;
-  while (i < patS->lineLength - 2 - patS->interrupted)
+  ////std::cout << "lookSecondThree" << std::endl;
+  while (i < patS->lineLength - 2)
     {
       patterns = patternM->getMap()[patS->posOfFirst + i * patS->direction];
       it = patterns.begin();
-      //std::cout << "check for pos :" << i << std::endl;
+      ////std::cout << "check for pos :" << i << std::endl;
       while (it != patterns.end())
 	{
 	  pat = it->pattern;
-	  //std::cout << "pattern: len:" << int(pat->lineLength - 2) << " ,pos:" << pat->posOfFirst << " ,dir:" << pat->direction << std::endl;
-	  if (pat != patS && pat->lineLength - 2 >= 3 && pat->line[0] == NOPLAYER
+	  ////std::cout << "pattern: len:" << int(pat->lineLength - 2) << " ,pos:" << pat->posOfFirst << " ,dir:" << pat->direction << std::endl;
+	  if (pat != patS && pat->lineLength - 2 >= 3 && pat->line[0] == NOPLAYER //TODO: optimize (e.g. replace -2 >= 3 by >= 5)
 	      && pat->line[pat->lineLength - 1] == NOPLAYER
 	      && pat->line[1] == player)
 	    {
@@ -52,19 +52,19 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
   PLIST<PatternRef>::iterator	it;
   Pattern			*pat;
 
-  //std::cout << "checkFreeDoubleThree" << std::endl;
+  ////std::cout << "checkFreeDoubleThree" << std::endl;
   patternM->addStone(x + y * XBOARD, player);
   patterns = patternM->getMap()[y * XBOARD + x];
   it = patterns.begin();
   while (it != patterns.end())
     {
       pat = it->pattern;
-      if (pat->lineLength - 2 - pat->interrupted >= 3
+      if (pat->lineLength - 2 >= 3
 	  && pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER
 	  && pat->line[1] == player)
 	{
-	  //std::cout << "pattern3 find" << std::endl;
-	  //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << pat->line[4] << "]" << std::endl;
+	  ////std::cout << "pattern3 find" << std::endl;
+	  ////std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << pat->line[4] << "]" << std::endl;
 	  if (checkThreeFreeOnMe(player, pat) == true)
 	    return (true);
 	}
@@ -118,7 +118,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
   it = patterns.begin();
   while (it != patterns.end())
     {
-      if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
+      if (it->lineLength - 2 >= 5 && it->line[1] == player)
 	{
 	  i = 1;
 	  nbrNoBreak = 0;
@@ -158,7 +158,7 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
   it = patterns.begin();
   while (it != patterns.end())
     {
-      if (it->lineLength - 2 >= 5 && it->line[1] == player && it->interrupted == 0)
+      if (it->lineLength - 2 >= 5 && it->line[1] == player)
 	{
 	  return (true);
 	}
@@ -191,15 +191,15 @@ uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
 
   patterns = patternM->getMap()[y * XBOARD + x];
   it = patterns.begin();
-  std::cout << "applyEat" << std::endl;
+  //std::cout << "applyEat" << std::endl;
   while (it != patterns.end())
     {
       pat = it->pattern;
       if (pat->lineLength - 2 == 2 && pat->line[1] != player)
 	{
-	  std::cout << "applyEat : pat2 find" << std::endl;
-	  std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
-	  std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
+	  //std::cout << "applyEat : pat2 find" << std::endl;
+	  //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
+	  //std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
 	  if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
 	      || (pat->line[0] == player && pat->posOfFirst == x + y * XBOARD)
 	      || (pat->line[pat->lineLength - 1] == player
