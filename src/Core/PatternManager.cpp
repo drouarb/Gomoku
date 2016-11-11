@@ -47,7 +47,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
             {
                 if (pref.pattern->line[pref.posOnPattern] != team)
                 {
-                    //found value is extremity of a pref
+                    //found value is extremity of a pattern, or middle of an interrupted pattern
                     //this if statement is always true for i == 0
                     //TODO: interrupted pref
                     //set done if applicable
@@ -131,134 +131,34 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 addToMap(target);
                 //TODO: interrupted?
             }
-            
-            
-            
-/*
-            auto list = map[position + checkMap[i]];
-            //size remembrance and prev_it are needed because the iterator can be erased
-            uint8_t size;
-            PLIST<PatternRef>::iterator prev_it = list.end();
-            PLIST<PatternRef>::iterator it = list.begin();
-            while (it != list.end())
-            {
-                size = (uint8_t)list.size();
-                auto & pattern = *it;
-
-                if (pattern.pattern->line[pattern.posOnPattern] != team)
-                {
-                    if (pattern.pattern->line[pattern.posOnPattern] == NOPLAYER)
-                    {
-                        if (i == 0)
-                        {
-			                std::cout << "add extremity" << std::endl;
-                            found = true;
-                            pattern.pattern->line[pattern.posOnPattern] = team;
-                            //check interrupted
-                        }
-                        //found value is extremity of a pattern OR in case of checkMap[0], value may be middle of a pattern
-                        //this if statement is always true for i == 0
-                        //TODO: interrupted pattern
-                        //found=true if applicable
-                    }
-                    //else: nothing
-                }
-                else
-                {
-                    found = true;
-
-                    Pattern *newpattern = NULL;
-                    boardPos_t newlen;
-                    if (!done[i] && pattern.pattern->lineLength == 1)
-                    {
-            		    std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
-                        //single stone
-                        done[i] = true;
-                        newlen = 4;
-                        removeFromMap(pattern.pattern);
-                    }
-                    else if (!done[i] && pattern.pattern->team == team && pattern.pattern->direction == checkMap[ACTDIR(i)])
-                    {
-                        std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
-                        //aligned pattern
-                        done[i] = true;
-                        newlen = pattern.pattern->lineLength + (boardPos_t) 1;
-                        removeFromMap(pattern.pattern);
-                        //TODO: interrupted pattern...?
-                    }
-                    else if (!done[i])
-                    {
-		                std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
-                        //new pattern
-                        done[i] = true;
-                        patterns.push_front(Pattern(team, 4, teamAt(position + checkMap[i] * (boardPos_t) 2),
-                                                    teamAt(position + checkMap[OPPDIR(i)]),
-                                                    position + checkMap[i] * (boardPos_t) 2,
-                                                    checkMap[ACTDIR(i)]));
-                        newpattern = &patterns.front();
-                        newlen = 4;
-                    }
-                    else
-                    {
-                        incFlexibleIterator(list, size, prev_it, it);
-                        continue;
-                    }
-
-                    doOppPattern(position, i, team, pattern, newlen, done);
-
-                    //change pattern or newpattern to give it the new length and extremities
-                    Pattern *target = (newpattern ? newpattern : pattern.pattern);
-                    boardPos_t firstPos;
-                    Team firstTeam;
-                    boardPos_t dir = (i > 4 ? checkMap[i] : checkMap[OPPDIR(i)]);
-                    if (i <= 4)
-                    {
-                        firstPos = target->posOfFirst;
-                        if (target->lineLength == 1)
-                            firstPos += checkMap[i];
-                    }
-                    else
-                    {
-                        firstPos = position + checkMap[OPPDIR(i)];
-                    }
-                    firstTeam = teamAt(firstPos);
-
-                    target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * dir), firstPos, dir);
-                    removeOSExtremities(target);
-                    addToMap(target);
-                }
-
-                if (list.size() < size)
-                {
-                    if (prev_it == list.end())
-                    {
-                        it = list.begin();
-                    }
-                    else
-                    {
-                        it = prev_it;
-                        ++it;
-                    }
-                }
-                else
-                {
-                    prev_it = it;
-                    ++it;
-                }
-            }
-*/
         }
     }
-    if (!found)
+    if (!addMiddle(position, team))
     {
-      std::cout << "create new 1-stone pattern" << std::endl;
-        patterns.push_front(Pattern(team, position));
-        map[position].push_front(PatternRef());
-        map[position].front().posOnPattern = 0;
-        map[position].front().pattern = &patterns.front();
+        if (!found)
+        {
+            std::cout << "create new 1-stone pattern" << std::endl;
+            patterns.push_front(Pattern(team, position));
+            map[position].push_front(PatternRef());
+            map[position].front().posOnPattern = 0;
+            map[position].front().pattern = &patterns.front();
+        }
     }
 
     std::cout << *this << std::endl;
+}
+
+bool PatternManager::addMiddle(boardPos_t position, Team team)
+{
+    if (map.find(position) != map.end())
+    {
+        for (auto pref : map[position])
+        {
+            pref.pattern->line[pref.posOnPattern] = team;
+        }
+        return (true);
+    }
+    return (false);
 }
 
 void PatternManager::doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done)
@@ -273,7 +173,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     {
         if (oppPattern.pattern->line[oppPattern.posOnPattern] != team)
         {
-            //found value is extremity of a oppPattern
+            //found value is extremity of a oppPattern, or middle of an interrupted pattern
             //this if statement is always true for i == 0
             //TODO: interrupted oppPattern
             //set done if applicable

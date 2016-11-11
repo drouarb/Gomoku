@@ -38,6 +38,7 @@ namespace Core
         PLIST<Pattern> patterns;
         PMAP<boardPos_t, PLIST<PatternRef> > map;
 
+        bool addMiddle(boardPos_t position, Team team);
         void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
         void removePattern(Pattern * pattern);
         void removeFromList(Pattern * pattern);
