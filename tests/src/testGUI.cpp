@@ -127,22 +127,26 @@ GUI::Obs *GUI::testGUI::getObs() {
 void GUI::testGUI::showError(const std::string &e) {
     std::cout << "Error: " << e << std::endl;
     if (e == "Forbidden") {
+        /*
         if (this->assertion) {
             this->assertion = false;
         } else {
             std::cerr << "Assertion failed" << this->last << std::endl;
             std::exit(-1);
         }
+         */
     }
 }
 
 void GUI::testGUI::prompt() {
     ConfParser::line_t line;
 
+    /*
     if (assertion) {
         std::cerr << "Assertion failed" << this->last << std::endl;
         std::exit(-1);
     }
+     */
 
     try {
         line = this->confParser->getNextPlay();
