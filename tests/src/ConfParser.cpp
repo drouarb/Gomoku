@@ -15,6 +15,8 @@ ConfParser::ConfParser(const std::string &path) {
     }
     std::string line;
 
+    std::stack<line_t> tmp;
+
     while (getline(this->file, line)) {
         if (line.length() == 0) {
             continue;
@@ -25,12 +27,18 @@ ConfParser::ConfParser(const std::string &path) {
             continue;
         }
         if (line1.cmd == "put") {
-            this->commandList.push(line1);
+            tmp.push(line1);
         }
         if (line1.cmd == "end") {
             this->end = line1;
         }
     }
+
+    while (tmp.size() > 0) {
+        this->commandList.push(tmp.top());
+        tmp.pop();
+    }
+
     this->file.close();
 }
 
@@ -38,7 +46,7 @@ ConfParser::line_t ConfParser::getNextPlay() {
     if (this->commandList.size() == 0) {
         throw std::logic_error("No play left");
     }
-    line_t line = this->commandList.back();
+    line_t line = this->commandList.top();
     this->commandList.pop();
     return line;
 }

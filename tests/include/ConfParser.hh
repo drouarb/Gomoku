@@ -33,7 +33,7 @@ public:
 private:
     std::ifstream file;
 
-    std::queue<line_t> commandList;
+    std::stack<line_t> commandList;
 
     line_t end;
 private:
