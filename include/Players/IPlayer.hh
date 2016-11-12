@@ -15,5 +15,9 @@ namespace Players
         virtual int getScore() = 0;
         virtual  void setScore(int) = 0;
     };
+
+    std::ostream &operator<<(std::ostream &, IPlayer *player);
+
+
 }
 #endif

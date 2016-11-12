@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <sstream>
+#include <stdlib.h>
 #include "ConfParser.hh"
 
 
@@ -15,6 +16,9 @@ ConfParser::ConfParser(const std::string &path) {
     std::string line;
 
     while (getline(this->file, line)) {
+        if (line.length() == 0) {
+            continue;
+        }
         line_t line1 = line_t(line);
         if (line1.comment) {
             std::cout << "comment" << std::endl;
@@ -22,6 +26,9 @@ ConfParser::ConfParser(const std::string &path) {
         }
         if (line1.cmd == "put") {
             this->commandList.push(line1);
+        }
+        if (line1.cmd == "end") {
+            this->end = line1;
         }
     }
     this->file.close();
@@ -34,6 +41,10 @@ ConfParser::line_t ConfParser::getNextPlay() {
     line_t line = this->commandList.top();
     this->commandList.pop();
     return line;
+}
+
+const ConfParser::line_t &ConfParser::getEnd() const {
+    return end;
 }
 
 std::ostream &operator<<(std::ostream &ostream, const ConfParser::line_t &line) {
@@ -54,11 +65,16 @@ ConfParser::line_t::line_t(std::string toParse) {
     while (std::getline(ss, item, ' ')) {
         splited.push_back(item);
     }
-    if (splited.size() != 5) {
-        throw std::logic_error("Bad conf file");
-    }
-    this->comment = false;
     this->cmd = splited[0];
+    this->comment = false;
+    if (splited.size() < 4) {
+        throw std::logic_error("Bad conf file");
+    } else {
+        if (this->cmd == "put") {
+            this->success = (splited[4] == "true");
+        }
+    }
+
     this->y = std::atoi(splited[1].c_str());
     this->x = std::atoi(splited[2].c_str());
     this->team = (splited[3] == "white" ? Team::WHITE : (splited[3] == "black" ? Team::BLACK : Team::NOPLAYER));

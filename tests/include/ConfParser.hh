@@ -34,12 +34,16 @@ private:
 
     std::stack<line_t> commandList;
 
+    line_t end;
 private:
 
 public:
     ConfParser(const std::string &path);
 
     line_t getNextPlay();
+
+    const line_t &getEnd() const;
+
 };
 
 std::ostream &operator<<(std::ostream &ostream, const ConfParser::line_t &line);

@@ -2,8 +2,10 @@
 // Created by greg on 11/11/16.
 //
 
+#include <IPlayer.hh>
 #include <Gui/ICoreOberser.hh>
 #include <Gui/PlayerObserver.hh>
+#include <iomanip>
 #include "testGUI.hh"
 
 void GUI::testGUI::popupString() {}
@@ -22,10 +24,10 @@ GUI::ICoreObserver *GUI::testGUI::getICoreObserver() {
 }
 
 void GUI::testGUI::registerPlayer(Players::IPlayer *player) {
-    std::cout << "register player " << (void *) player << std::endl;
+    std::cout << "register player " << player->getName() << " : " << player->getScore() << std::endl;
     PlayerObserver *po = new PlayerObserver();
     po->setPlayer(dynamic_cast<Players::IHumain *>(player));
-    if (players[0] == NULL) //TODO why ?
+    if (players[0] == NULL)
         players[0] = po;
     else
         players[1] = po;
@@ -58,6 +60,14 @@ void GUI::testGUI::startGame() {
 
 void GUI::testGUI::endGame(const std::string &winner_name) {
     show("END OF GAME. WINNER: " + winner_name);
+    this->refresh();
+    if ((winner_name == "NO ONE" && this->winner == Team::NOPLAYER) ||
+        (winner_name == "Black" && this->winner == Team::BLACK) ||
+        (winner_name == "White" && this->winner == Team::WHITE)) {
+        return;
+    }
+    std::cerr << "Victory condition not respected : " << this->confParser->getEnd() << std::endl;
+    exit(-1);
 }
 
 void GUI::testGUI::quit() {}
@@ -69,8 +79,30 @@ GUI::typeButton GUI::testGUI::loop() {
 }
 
 void GUI::testGUI::refresh() {
-    for (uint8_t i = 0; i < 18; ++i) {
-        std::cout << std::string(this->board).substr(i * 18, (i + 1) * 18);
+
+    std::cout << "\t";
+
+    for (uint8_t y = 0; y < 19; ++y) {
+        std::cout << std::setw(3) << y + 0;
+    }
+
+    std::cout << std::endl;
+
+    for (uint8_t y = 0; y < 19; ++y) {
+        std::cout << y + 0 << ":\t";
+
+        for (uint8_t x = 0; x < 19; ++x) {
+            std::cout << std::setw(3) << (this->board[y * 19 + x] + 0);
+        }
+
+        if (y == 8) {
+            std::cout << "   P1: Black";
+        }
+        if (y == 10) {
+            std::cout << "   P2: White";
+        }
+
+        std::cout << std::endl;
     }
 }
 
@@ -93,7 +125,7 @@ GUI::Obs *GUI::testGUI::getObs() {
 }
 
 void GUI::testGUI::showError(const std::string &e) {
-    std::cerr << e << std::endl;
+    std::cout << "Error: " << e << std::endl;
 }
 
 void GUI::testGUI::prompt() {
@@ -101,8 +133,10 @@ void GUI::testGUI::prompt() {
 
     try {
         line = this->confParser->getNextPlay();
+        this->winner = this->confParser->getEnd().team;
     } catch (std::logic_error) {
         this->coreObserver->endGame();
+        return;
     }
 
     if (line.team == NOPLAYER) {
@@ -113,5 +147,7 @@ void GUI::testGUI::prompt() {
 }
 
 GUI::testGUI::testGUI(const std::string pathToTest) {
+    this->players[0] = nullptr;
+    this->players[1] = nullptr;
     this->confParser = new ConfParser(pathToTest);
 }

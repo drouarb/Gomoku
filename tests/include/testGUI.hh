@@ -20,6 +20,7 @@ namespace GUI {
         std::list<std::pair<std::string, bool>> rules;
         Players::IPlayer *current;
         ICoreObserver *coreObserver;
+        Team winner;
 
     public:
         testGUI(const std::string pathToTest);

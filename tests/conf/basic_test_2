@@ -1,13 +1,15 @@
-//cmd y x player [assert success]
-put 8 8 white true
-put 8 8 black false
-put 1 1 black true
-put 8 9 white true
-put 2 2 black true
-put 8 10 white true
-put 3 2 black true
-put 8 11 white true
-put 3 4 black true
-put 8 12 white true
-put 3 5 black true
-put 8 8 black false
+//cmd y x player assert_success
+//Must start with black player
+put 8 8 black true
+put 1 1 white true
+put 8 9 black true
+put 2 2 white true
+put 8 10 black true
+put 3 2 white true
+put 8 11 black true
+put 3 4 white true
+put 8 12 black true
+put 3 5 white true
+toto
+//Victory condition
+end 0 0 black
