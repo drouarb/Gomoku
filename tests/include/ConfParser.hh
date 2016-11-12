@@ -17,13 +17,16 @@ public:
     struct line_t {
         bool comment;
         std::string cmd;
-        int y;
-        int x;
+        uint8_t y;
+        uint8_t x;
         Team team;
         bool success; //! if false, the play must failed
 
         line_t(std::string toParse);
+
+        line_t();
     };
+
 
 
 private:
@@ -35,7 +38,11 @@ private:
 
 public:
     ConfParser(const std::string &path);
+
+    line_t getNextPlay();
 };
+
+std::ostream &operator<<(std::ostream &ostream, const ConfParser::line_t &line);
 
 
 #endif //GOMOKU_CONFPARSER_HH

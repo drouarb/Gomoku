@@ -2,6 +2,7 @@
 // Created by lewis_e on 28/10/16.
 //
 
+#include <testGUI.hh>
 #include "Core.hh"
 #include "Graph.hpp"
 #include "Referee.hpp"
@@ -155,4 +156,29 @@ void Core::Core::feedRules()
         list.push_back(std::pair<std::string, bool>(rule.second.name, rule.second.on));
     }
     gui->feedRules(list);
+}
+
+Core::Core::Core(const std::string &path) {
+    // rules
+    uniqueRules.push_back(std::list<RuleID>());
+    uniqueRules.back().push_back(TIME_10MS);
+    uniqueRules.back().push_back(TIME_20MS);
+    uniqueRules.back().push_back(TIME_50MS);
+    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule("Double three", false)));
+    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule("Breakable five", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule("Timed AI: 10 ms", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule("Timed AI: 20 ms", false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule("Timed AI: 50 ms", false)));
+
+    // referee
+    referee = new Referee();
+
+    // players
+    players[0] = NULL;
+    players[1] = NULL;
+
+    // gui
+    gui = new GUI::testGUI(path);
+    feedRules();
+    gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }

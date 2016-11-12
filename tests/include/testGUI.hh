@@ -19,6 +19,7 @@ namespace GUI {
         GameBoard_t board;
         std::list<std::pair<std::string, bool>> rules;
         Players::IPlayer *current;
+        ICoreObserver *coreObserver;
 
     public:
         testGUI(const std::string pathToTest);
