@@ -13,6 +13,9 @@ int main() {
 
         core = new Core::Core("./tests/conf/basic_test_2");
         delete (core);
+
+        core = new Core::Core("./tests/conf/basic_test_3");
+        delete (core);
     } catch (const std::logic_error &e) {
         std::cerr << e.what() << std::endl;
     }
