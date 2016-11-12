@@ -23,7 +23,6 @@ ConfParser::ConfParser(const std::string &path) {
         }
         line_t line1 = line_t(line);
         if (line1.comment) {
-            std::cout << "comment" << std::endl;
             continue;
         }
         if (line1.cmd == "put") {
