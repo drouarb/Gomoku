@@ -1,0 +1,14 @@
+//Player white must start
+put 7 3 black true
+put 1 1 black true
+put 8 3 black true
+put 1 3 white true
+put 8 4 black true
+put 2 3 white true
+put 8 5 black true
+put 3 3 white true
+put 8 6 black true
+put 6 3 white true
+put 8 7 black true
+end 0 0 white
+//White win cause Breakable five rule is not enable

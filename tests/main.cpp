@@ -8,13 +8,13 @@ int main() {
     Core::Core *core;
 
     try {
-        core = new Core::Core("./tests/conf/basic_test_1");
+ /*       core = new Core::Core("./tests/conf/basic_test_1");
         delete (core);
 
         core = new Core::Core("./tests/conf/basic_test_2");
         delete (core);
-
-        core = new Core::Core("./tests/conf/basic_test_3");
+*/
+        core = new Core::Core("./tests/conf/Breakable_five_enable");
         delete (core);
     } catch (const std::logic_error &e) {
         std::cerr << e.what() << std::endl;

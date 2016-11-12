@@ -23,6 +23,9 @@ public:
         Team team;
         bool success; //! if false, the play must failed
 
+        bool isRule;
+        RuleID ruleID;
+
         line_t(std::string toParse);
 
         line_t();
@@ -36,6 +39,8 @@ private:
     std::stack<line_t> commandList;
 
     line_t end;
+
+    std::vector<RuleID> rules;
 private:
 
 public:
@@ -45,6 +50,7 @@ public:
 
     const line_t &getEnd() const;
 
+    const std::vector<RuleID> &getRules() const;
 };
 
 std::ostream &operator<<(std::ostream &ostream, const ConfParser::line_t &line);

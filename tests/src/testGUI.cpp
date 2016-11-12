@@ -16,6 +16,9 @@ void GUI::testGUI::show(const std::string &e) {
 
 void GUI::testGUI::init(ICoreObserver *coreObserver) {
     this->coreObserver = coreObserver;
+    for (RuleID ruleID : this->confParser->getRules()) {
+        this->coreObserver->setRule(RuleToString.at(ruleID), true);
+    }
     this->coreObserver->playGame(GamePlayers::TWOPLAYERS);
 }
 
@@ -162,9 +165,9 @@ void GUI::testGUI::prompt() {
         return;
     }
     if (this->players[0]->getPlayer() == this->current) {
-        this->players[0]->sendPlay(line.y, line.x);
+        this->players[0]->sendPlay(line.x, line.y);
     } else {
-        this->players[1]->sendPlay(line.y, line.x);
+        this->players[1]->sendPlay(line.x, line.y);
     }
 }
 

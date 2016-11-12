@@ -164,11 +164,11 @@ Core::Core::Core(const std::string &path) {
     uniqueRules.back().push_back(TIME_10MS);
     uniqueRules.back().push_back(TIME_20MS);
     uniqueRules.back().push_back(TIME_50MS);
-    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule("Double three", false)));
-    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule("Breakable five", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule("Timed AI: 10 ms", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule("Timed AI: 20 ms", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule("Timed AI: 50 ms", false)));
+    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule(RuleToString.at(DOUBLE_THREE), false)));
+    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule(RuleToString.at(BREAKABLE_FIVE), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule(RuleToString.at(TIME_10MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule(RuleToString.at(TIME_20MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule(RuleToString.at(TIME_50MS), false)));
 
     // referee
     referee = new Referee();
