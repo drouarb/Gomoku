@@ -21,6 +21,8 @@ namespace GUI {
         Players::IPlayer *current;
         ICoreObserver *coreObserver;
         Team winner;
+        bool assertion = false;
+        ConfParser::line_t last;
 
     public:
         testGUI(const std::string pathToTest);

@@ -126,10 +126,23 @@ GUI::Obs *GUI::testGUI::getObs() {
 
 void GUI::testGUI::showError(const std::string &e) {
     std::cout << "Error: " << e << std::endl;
+    if (e == "Forbidden") {
+        if (this->assertion) {
+            this->assertion = false;
+        } else {
+            std::cerr << "Assertion failed" << this->last << std::endl;
+            std::exit(-1);
+        }
+    }
 }
 
 void GUI::testGUI::prompt() {
     ConfParser::line_t line;
+
+    if (assertion) {
+        std::cerr << "Assertion failed" << this->last << std::endl;
+        std::exit(-1);
+    }
 
     try {
         line = this->confParser->getNextPlay();
@@ -144,10 +157,13 @@ void GUI::testGUI::prompt() {
         return;
     }
     this->players[line.team - 1]->sendPlay(line.y, line.x);
+    this->last = line;
+    this->assertion = !line.success;
 }
 
 GUI::testGUI::testGUI(const std::string pathToTest) {
     this->players[0] = nullptr;
     this->players[1] = nullptr;
     this->confParser = new ConfParser(pathToTest);
+    this->assertion = false;
 }

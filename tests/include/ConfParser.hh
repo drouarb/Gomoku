@@ -11,6 +11,7 @@
 #include <Core/Definitions.hh>
 #include <vector>
 #include <stack>
+#include <queue>
 
 class ConfParser {
 public:
@@ -32,7 +33,7 @@ public:
 private:
     std::ifstream file;
 
-    std::stack<line_t> commandList;
+    std::queue<line_t> commandList;
 
     line_t end;
 private:

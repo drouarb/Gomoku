@@ -38,7 +38,7 @@ ConfParser::line_t ConfParser::getNextPlay() {
     if (this->commandList.size() == 0) {
         throw std::logic_error("No play left");
     }
-    line_t line = this->commandList.top();
+    line_t line = this->commandList.back();
     this->commandList.pop();
     return line;
 }
@@ -48,7 +48,7 @@ const ConfParser::line_t &ConfParser::getEnd() const {
 }
 
 std::ostream &operator<<(std::ostream &ostream, const ConfParser::line_t &line) {
-    ostream << "team:" << line.team << ", x: " << line.x << ", y: " << line.y << ", success:" << line.success;
+    ostream << "team:" << line.team << ", x: " << static_cast<int>(line.x) << ", y: " << static_cast<int>(line.y) << ", success:" << line.success;
     return ostream;
 }
 
