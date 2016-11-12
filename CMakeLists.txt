@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(Gomoku)
 
+enable_testing()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${DBG}")
 FILE(
         GLOB_RECURSE
