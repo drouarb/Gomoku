@@ -1,3 +1,4 @@
+//Victory test (black must win with 5 play alignement)
 //cmd y x player assert_success
 //Must start with black player
 put 8 8 black true
@@ -10,6 +11,5 @@ put 8 11 black true
 put 3 4 white true
 put 8 12 black true
 put 3 5 white true
-toto
 //Victory condition
 end 0 0 black
