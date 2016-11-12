@@ -2,15 +2,16 @@
 // Created by celeriy on 28/10/16.
 //
 
-#include <Gui/Graph.hpp>
+#include <Graph.hpp>
 #include "Core.hh"
 #include "CoreOberser.hh"
 #include "MenuGame.hh"
 
 #include "PatternManager.hh"
 
-int main(int ac, char **av)
-{
+#undef main
+
+int main(int ac, char **av) {
     Core::Core core;
     //Core::PatternManager pm;
 
