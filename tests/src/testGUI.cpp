@@ -147,8 +147,6 @@ void GUI::testGUI::prompt() {
         std::exit(-1);
     }
 
-
-
     try {
         line = this->confParser->getNextPlay();
         std::cout << "Current play: " << line << std::endl;
