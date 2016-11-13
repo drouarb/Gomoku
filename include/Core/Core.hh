@@ -21,6 +21,7 @@ namespace Core
     {
     public:
         Core();
+        Core(const std::string &path); //!used for test
         ~Core();
 
         void playGame(enum GamePlayers player_config);

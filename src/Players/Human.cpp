@@ -53,3 +53,8 @@ int Humain::getScore()
 {
     return this->score;
 }
+
+std::ostream &operator<<(std::ostream &ostream, IPlayer *player) {
+    ostream << player->getName() << " : " << player->getScore();
+    return ostream;
+}

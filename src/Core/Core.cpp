@@ -2,6 +2,7 @@
 // Created by lewis_e on 28/10/16.
 //
 
+#include <testGUI.hh>
 #include "Core.hh"
 #include "Graph.hpp"
 #include "Referee.hpp"
@@ -155,4 +156,29 @@ void Core::Core::feedRules()
         list.push_back(std::pair<std::string, bool>(rule.second.name, rule.second.on));
     }
     gui->feedRules(list);
+}
+
+Core::Core::Core(const std::string &path) {
+    // rules
+    uniqueRules.push_back(std::list<RuleID>());
+    uniqueRules.back().push_back(TIME_10MS);
+    uniqueRules.back().push_back(TIME_20MS);
+    uniqueRules.back().push_back(TIME_50MS);
+    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule(RuleToString.at(DOUBLE_THREE), false)));
+    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule(RuleToString.at(BREAKABLE_FIVE), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule(RuleToString.at(TIME_10MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule(RuleToString.at(TIME_20MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule(RuleToString.at(TIME_50MS), false)));
+
+    // referee
+    referee = new Referee();
+
+    // players
+    players[0] = NULL;
+    players[1] = NULL;
+
+    // gui
+    gui = new GUI::testGUI(path);
+    feedRules();
+    gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
 }

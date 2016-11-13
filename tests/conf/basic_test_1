@@ -1,0 +1,4 @@
+//cmd y x player [assert success]
+put 9 9 black true
+put 9 9 white false
+end 0 0 none
