@@ -8,7 +8,7 @@
 ** Last update Mon Jun 13 17:37:15 2016 Alexis Trouve
 */
 
-#include "list.hh"
+#include "Helpers/list.hh"
 
 t_list		*list_init()
 {

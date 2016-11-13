@@ -1,4 +1,5 @@
 
+#include <Helpers/History.hh>
 #include "Human.hh"
 
 using namespace Players;
@@ -23,10 +24,10 @@ bool Humain::init(Core::IReferee * referee1)
 
 bool Humain::tryPlay(uint8_t x, uint8_t y)
 {
-    if (referee->tryPlay(x, y) == true)
-    return true;
-    else
-    {
+    if (referee->tryPlay(x, y) == true) {
+        Core::History::getInstance()->write(y, x, this->getName());
+        return true;
+    } else {
         this->handle->showError(std::string("Forbidden"));
         this->handle->prompt();
         return false;

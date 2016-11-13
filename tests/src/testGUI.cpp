@@ -160,15 +160,16 @@ void GUI::testGUI::prompt() {
 
     this->last = line;
     this->assertion = !line.success;
-    if (line.team == NOPLAYER) {
+    /*if (line.team == NOPLAYER) {
         std::cout << "Invalid play :" << line << std::endl;
         return;
-    }
+    }*/
     if (this->players[0]->getPlayer() == this->current) {
         this->players[0]->sendPlay(line.x, line.y);
     } else {
         this->players[1]->sendPlay(line.x, line.y);
     }
+    this->refresh();
 }
 
 GUI::testGUI::testGUI(const std::string pathToTest) {

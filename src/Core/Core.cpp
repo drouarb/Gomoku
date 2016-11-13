@@ -3,6 +3,7 @@
 //
 
 #include <testGUI.hh>
+#include <Helpers/History.hh>
 #include "Core.hh"
 #include "Graph.hpp"
 #include "Referee.hpp"
@@ -12,6 +13,8 @@
 
 Core::Core::Core()
 {
+    History::getInstance();
+
     // rules
     uniqueRules.push_back(std::list<RuleID>());
     uniqueRules.back().push_back(TIME_10MS);
@@ -41,6 +44,8 @@ Core::Core::~Core()
 
 void Core::Core::playGame(GamePlayers player_config)
 {
+  //  History::close();
+  //  History::getInstance();
     if (player_config != TWOAIS)
         createPlayerHuman(0);
     else

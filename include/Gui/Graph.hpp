@@ -54,7 +54,7 @@ namespace GUI
 
         void init(ICoreObserver *);
 
-        GameBoard_t board;
+        GameBoard_t board = NULL;
 
         ICoreObserver *getICoreObserver();
 
