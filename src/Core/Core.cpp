@@ -50,10 +50,12 @@ void Core::Core::playGame(GamePlayers player_config)
         createPlayerHuman(0);
     else
         createPlayerAI(0);
+
     if (player_config == TWOPLAYERS)
         createPlayerHuman(1);
     else
         createPlayerAI(1);
+
    // std::cout << player_config << std::endl;
     referee->initialize();
     gui->startGame();
@@ -65,7 +67,7 @@ void Core::Core::playGame(GamePlayers player_config)
     while (referee->getWinner() == NOPLAYER && !gui->getObs()->getStop() && gui->getICoreObserver()->gameIsRunning())
     {
         letPlayerPlay(player_index);
-          player_index = !player_index;
+        player_index = !player_index;
     }
     if (gui->getICoreObserver()->gameIsRunning())
     gui->endGame(TEAMNAME(referee->getWinner()));

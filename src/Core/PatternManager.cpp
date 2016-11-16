@@ -464,8 +464,8 @@ void PatternManager::removeOneStone(boardPos_t position)
     {
         if (pat->pattern->lineLength == 1)
         {
-            map[position].erase(pat);
             removeFromList(pat->pattern);
+            map[position].erase(pat);
             break;
         }
     }
