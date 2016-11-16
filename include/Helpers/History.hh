@@ -30,6 +30,8 @@ namespace Core {
         void write(int y, int x, const std::string &name);
 
         void writeFail(int y, int x, const std::string &name);
+
+        void writeWinner(const std::string &name);
     };
 }
 

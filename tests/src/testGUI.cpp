@@ -83,6 +83,7 @@ GUI::typeButton GUI::testGUI::loop() {
 
 void GUI::testGUI::refresh() {
 
+    std::cout << "MAP BEGIN" << std::endl;
     std::cout << "\t";
 
     for (uint8_t y = 0; y < 19; ++y) {
@@ -107,6 +108,7 @@ void GUI::testGUI::refresh() {
 
         std::cout << std::endl;
     }
+    std::cout << "MAP END" << std::endl;
 }
 
 void GUI::testGUI::getMousePose(int *x, int *y) {}

@@ -67,3 +67,12 @@ History::~History() {
     delete (this->stream);
 }
 
+void History::writeWinner(const std::string &name) {
+    if (name == "White player") {
+        (*this->stream) << "end " << 0 << " " << 0 << " " << "white" << std::endl;
+    }
+    if (name == "Black player") {
+        (*this->stream) << "end " << 0 << " " << 0 << " " << "black" << std::endl;
+    }
+}
+

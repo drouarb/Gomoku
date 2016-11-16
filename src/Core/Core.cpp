@@ -73,6 +73,7 @@ void Core::Core::playGame(GamePlayers player_config)
     gui->endGame(TEAMNAME(referee->getWinner()));
     else
         gui->endGame("NO ONE");
+    History::getInstance()->writeWinner(TEAMNAME(referee->getWinner()));
 }
 
 void Core::Core::setRule(const std::string &rulename, bool on)
