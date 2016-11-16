@@ -229,10 +229,10 @@ void GUI::MenuGame::setSomething(void *)
 
 MenuGame::MenuGame(IGUI *gui)
 {
+    ingame = false;
     this->gui = gui;
     loadAsset();
     loadButton();
-    ingame = false;
     loadLayer();
     aff();
 }
