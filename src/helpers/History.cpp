@@ -41,11 +41,29 @@ void History::close() {
 }
 
 void History::write(int y, int x, const std::string &name) {
-    (*this->stream) << "put " << y << " " << x << " " << name << std::endl;
+    if (name == "White player") {
+        (*this->stream) << "put " << y << " " << x << " " << "white true" << std::endl;
+    }
+    if (name == "Black player") {
+        (*this->stream) << "put " << y << " " << x << " " << "black true" << std::endl;
+    }
 }
 
 void History::init() {
     history = NULL;
     History::getInstance();
+}
+
+void History::writeFail(int y, int x, const std::string &name) {
+    if (name == "White player") {
+        (*this->stream) << "put " << y << " " << x << " " << "white false" << std::endl;
+    }
+    if (name == "Black player") {
+        (*this->stream) << "put " << y << " " << x << " " << "black false" << std::endl;
+    }
+}
+
+History::~History() {
+    delete (this->stream);
 }
 

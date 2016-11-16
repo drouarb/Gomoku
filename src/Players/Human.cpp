@@ -28,6 +28,7 @@ bool Humain::tryPlay(uint8_t x, uint8_t y)
         Core::History::getInstance()->write(y, x, this->getName());
         return true;
     } else {
+        Core::History::getInstance()->writeFail(y, x, this->getName());
         this->handle->showError(std::string("Forbidden"));
         this->handle->prompt();
         return false;
