@@ -33,12 +33,13 @@ FILE(
         generated/*.cpp
 )
 
-#if (GOMOKU_TEST)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+#message("to test :" "${GOMOKU_TESTS_SOURCES}")
+
 foreach (test ${GOMOKU_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test} ${GOMOKU})
     add_test(${test_name} ${test_name})
     target_link_libraries(${test_name} -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
 endforeach (test)
-#endif ()

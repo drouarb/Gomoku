@@ -177,13 +177,14 @@ void Graph::init(ICoreObserver *coreObserver)
     colorTexte.r = 255;
     colorTexte.g = 255;
     this->coreObserver = coreObserver;
-    MenuGame toto(this);
     this->permMessage = "";
-    mainObs = new Obs();
-    mainObs->addMenu(&toto);
     board = NULL;
     players[0] = NULL;
     players[1] = NULL;
+    MenuGame toto(this);
+    mainObs = new Obs();
+    mainObs->addMenu(&toto);
+
     auto t = Clock::now();
     while (getObs()->getStop() == false)
     {
