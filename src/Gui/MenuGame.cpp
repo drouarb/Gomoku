@@ -14,6 +14,7 @@ using namespace GUI;
 
 void GUI::MenuGame::loadAsset()
 {
+    gui->setPolice("./ressource/PTC55F.ttf", 35);
     gui->loadImage("./ressource/rules.png", "Rules");
     gui->loadImage("./ressource/end.png", "End");
     gui->loadImage("./ressource/Player1.png", "Player1");
@@ -27,7 +28,6 @@ void GUI::MenuGame::loadAsset()
     gui->loadImage("./ressource/Twoplayers.png", "Twoplayers");
     gui->loadImage("./ressource/Iaplayers.png", "Iaplayers");
     gui->loadImage("./ressource/background.png", "Background");
-    gui->setPolice("./ressource/PTC55F.ttf", 35);
     gui->loadImage("./ressource/checked.png", "Checked");
     gui->loadImage("./ressource/Launch.png", "Launch");
     gui->loadImage("./ressource/white_stones.png", "WhiteStones");
@@ -111,7 +111,6 @@ void GUI::MenuGame::aff()
     affButtons();
     affLayers();
     gui->popupString();
-
     affPlayer();
 }
 
@@ -234,7 +233,6 @@ MenuGame::MenuGame(IGUI *gui)
     loadAsset();
     loadButton();
     loadLayer();
-    aff();
 }
 
 void MenuGame::loadLayer()
@@ -259,8 +257,8 @@ void MenuGame::playGameOnePlayers()
 {
     if (this->ingame == false)
     {
-    //    this->ingame = true;
-      //  this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
+       this->ingame = true;
+        this->gui->getICoreObserver()->playGame(GamePlayers::ONEPLAYER);
     }
 }
 
@@ -277,8 +275,8 @@ void MenuGame::playGameIa()
 {
     if (this->ingame == false)
     {
-//        this->ingame = true;
-  //      this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
+           this->ingame = true;
+          this->gui->getICoreObserver()->playGame(GamePlayers::TWOAIS);
     }
 }
 
