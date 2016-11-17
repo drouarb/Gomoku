@@ -91,7 +91,7 @@ void Graph::refresh()
 }
 
 
-void Graph::addTextToScreen(const std::string &text, int x, int y)
+void Graph::addTextToScreen(const std::string & text, int x, int y)
 {
     if (police != NULL)
     {
@@ -152,6 +152,9 @@ t_size Graph::getSizePicture(const std::string &name)
 
 void Graph::init(ICoreObserver *coreObserver)
 {
+
+    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1200,
+                                     SDL_WINDOW_SHOWN);
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
         SDL_DestroyWindow(this->fenetre);
@@ -159,8 +162,6 @@ void Graph::init(ICoreObserver *coreObserver)
         throw (GraphicException("init fail", SDL_GetError()));
     }
     TTF_Init();
-    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1200,
-                                     SDL_WINDOW_SHOWN);
     this->pRenderer = SDL_CreateRenderer(this->fenetre, -1, SDL_RENDERER_ACCELERATED);
     if (!this->pRenderer)
     {
@@ -181,10 +182,10 @@ void Graph::init(ICoreObserver *coreObserver)
     board = NULL;
     players[0] = NULL;
     players[1] = NULL;
+    current = NULL;
     MenuGame toto(this);
     mainObs = new Obs();
     mainObs->addMenu(&toto);
-
     auto t = Clock::now();
     while (getObs()->getStop() == false)
     {
@@ -268,7 +269,7 @@ void Graph::popupString()
 {
     std::map<const std::string, TimePoint>::iterator it = listMessage.begin();
     int y = 0;
-    while ((it) != listMessage.end())
+     while ((it) != listMessage.end())
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - (*it).second).count() < SHOWTIME)
         {
