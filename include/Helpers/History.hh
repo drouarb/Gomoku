@@ -32,6 +32,8 @@ namespace Core {
         void writeFail(int y, int x, const std::string &name);
 
         void writeWinner(const std::string &name);
+
+        void writeRule(const RuleID id, bool on);
     };
 }
 

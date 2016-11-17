@@ -76,3 +76,9 @@ void History::writeWinner(const std::string &name) {
     }
 }
 
+void History::writeRule(const RuleID id, bool on) {
+    if (on)
+        std::cout << "set " << static_cast<int>(id) << std::endl;
+    else
+        std::cout << "unset " << static_cast<int>(id) << std::endl;
+}

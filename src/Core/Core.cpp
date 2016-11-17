@@ -83,6 +83,7 @@ void Core::Core::setRule(const std::string &rulename, bool on)
         if (rule.second.name == rulename)
         {
             rule.second.on = on;
+            History::getInstance()->writeRule(rule.first, true);
             break;
         }
     }
@@ -114,6 +115,7 @@ void Core::Core::setRule(const std::string &rulename, bool on)
     }
 
     feedRules();
+
 }
 
 void Core::Core::destroyPlayer(int index)

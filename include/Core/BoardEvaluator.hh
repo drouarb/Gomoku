@@ -11,7 +11,7 @@ namespace Core {
 
     class BoardEvaluator {
     private:
-        static const std::map<uint8_t , uint8_t > values;
+        static const std::map<std::pair<uint8_t, uint8_t > , uint8_t > values;
     public:
         static inline int getValue(const PatternManager *patternManager);
     };

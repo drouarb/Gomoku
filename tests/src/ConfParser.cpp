@@ -34,6 +34,9 @@ ConfParser::ConfParser(const std::string &path) {
         if (line1.cmd == "set") {
             this->rules.push_back(line1.ruleID);
         }
+        if (line1.cmd == "unset") {
+            throw std::runtime_error("You can't change rules during the game, check the conf files ");
+        }
     }
 
     while (tmp.size() > 0) {
