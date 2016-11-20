@@ -76,7 +76,7 @@ void Core::Core::playGame(GamePlayers player_config)
         gui->endGame("NO ONE");
         History::getInstance()->writeWinner("NOONE");
     }
-
+    History::close();
 }
 
 void Core::Core::setRule(const std::string &rulename, bool on)
