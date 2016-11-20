@@ -1,0 +1,23 @@
+//Play started the 2016-11-20
+put 9 9 white true
+put 10 10 black true
+put 8 10 white true
+put 13 9 black true
+put 7 11 white true
+put 12 8 black true
+put 9 11 white true
+put 13 10 black true
+put 10 12 white false
+//The next call must fail, problem 1
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+put 10 12 white false
+//The game is not end, problem 2
+end 0 0 noone
