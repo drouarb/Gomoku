@@ -1,0 +1,34 @@
+//Play started the 2016-11-20
+put 9 3 white true
+put 9 15 black true
+put 9 4 white true
+put 9 14 black true
+put 9 5 white true
+put 9 13 black true
+put 9 6 white true
+put 9 12 black true
+put 9 9 white true
+put 9 10 black true
+put 9 8 white true
+put 9 7 black true
+put 9 11 white true
+put 9 9 black true
+put 9 8 white true
+put 9 9 black true
+put 8 9 white true
+put 9 10 black true
+put 10 7 white true
+put 7 10 black true
+put 11 8 white true
+put 11 6 black true
+put 12 9 white true
+put 8 5 black true
+put 10 9 white true
+put 12 7 black true
+put 10 11 white true
+put 8 11 black true
+put 10 10 white true
+put 11 11 black true
+put 10 11 white true
+put 9 11 black true
+end 0 0 black
