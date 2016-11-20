@@ -31,7 +31,7 @@ include_directories(include/Gui)
 include_directories(testIntepretor/include)
 add_executable(Gomoku ${GOMOKU} src/main.cpp)
 add_executable(Gomoku_tests ${GOMOKU} tests/main.cpp)
-#add_executable(intepretor ${TEST_INTEPRETOR})
+add_executable(intepretor ${TEST_INTEPRETOR})
 target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
 target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
 
