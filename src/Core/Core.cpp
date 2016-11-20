@@ -69,11 +69,14 @@ void Core::Core::playGame(GamePlayers player_config)
         letPlayerPlay(player_index);
         player_index = !player_index;
     }
-    if (gui->getICoreObserver()->gameIsRunning())
-    gui->endGame(TEAMNAME(referee->getWinner()));
-    else
+    if (gui->getICoreObserver()->gameIsRunning()) {
+        History::getInstance()->writeWinner(TEAMNAME(referee->getWinner()));
+        gui->endGame(TEAMNAME(referee->getWinner()));
+    } else {
         gui->endGame("NO ONE");
-    History::getInstance()->writeWinner(TEAMNAME(referee->getWinner()));
+        History::getInstance()->writeWinner("NOONE");
+    }
+
 }
 
 void Core::Core::setRule(const std::string &rulename, bool on)

@@ -68,17 +68,20 @@ History::~History() {
 }
 
 void History::writeWinner(const std::string &name) {
-    if (name == "White player") {
+    if (name.find("hite") != std::string::npos) {
         (*this->stream) << "end " << 0 << " " << 0 << " " << "white" << std::endl;
+        return;
     }
-    if (name == "Black player") {
+    if (name.find("lac") != std::string::npos) {
         (*this->stream) << "end " << 0 << " " << 0 << " " << "black" << std::endl;
+        return;
     }
+    (*this->stream) << "end " << 0 << " " << 0 << " " << "noone" << std::endl;
 }
 
 void History::writeRule(const RuleID id, bool on) {
     if (on)
-        std::cout << "set " << static_cast<int>(id) << std::endl;
+        (*this->stream) << "set " << static_cast<int>(id) << std::endl;
     else
-        std::cout << "unset " << static_cast<int>(id) << std::endl;
+        (*this->stream) << "unset " << static_cast<int>(id) << std::endl;
 }
