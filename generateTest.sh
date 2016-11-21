@@ -34,6 +34,10 @@ int main() {
     return 0;
 }
     " > "generated/$(echo $file | cut -d '/' -f 4)_test.cpp"
+
+rm -f  $(echo $file | cut -d / -f 4 | cut -d . -f 1)
+
 done < .tmp
+
 
 rm -f .tmp
