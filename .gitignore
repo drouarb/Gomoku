@@ -175,5 +175,7 @@ doc/
 Gomoku
 launch.sh
 debug.sh
+.log
+
 
 generated/*.cpp
