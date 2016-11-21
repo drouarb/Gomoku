@@ -5,6 +5,8 @@ find ./tests/conf/ > .tmp
 rm -rf generated
 mkdir -p generated
 mkdir -p history
+rm -rf logs
+mkdir -p logs
 rm -f ./tests/conf/*.res
 
 
@@ -20,10 +22,15 @@ do
     echo "//Auto Generated tests
 
 #include <Core/Core.hh>
+#include <fstream>
 
 int main() {
 
     Core::Core *core;
+
+    std::ofstream out(\"logs/$(echo $file | cut -d / -f 4 | cut -d . -f 1)\");
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(out.rdbuf());
 
 
     try {
@@ -32,11 +39,13 @@ int main() {
     } catch (const std::logic_error &e) {
         std::cerr << e.what() << std::endl;
     }
+
+        std::cout.rdbuf(coutbuf);
+
+
     return 0;
 }
     " > "generated/$(echo $file | cut -d '/' -f 4)_test.cpp"
-
-rm -f  $(echo $file | cut -d / -f 4 | cut -d . -f 1)
 
 done < .tmp
 
