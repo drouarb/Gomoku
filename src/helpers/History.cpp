@@ -26,11 +26,7 @@ History *History::getInstance() {
 
 History::History() {
     time_t i = time(NULL);
-    mkdir("history"
-#ifndef WIN32
-            , 777
-#endif
-    );
+
     std::string filename("history/" + std::to_string(i) + std::string(".log"));
     struct tm * now = localtime( &i);
 
