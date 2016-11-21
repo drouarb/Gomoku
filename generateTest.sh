@@ -5,6 +5,7 @@ find ./tests/conf/ > .tmp
 rm -rf generated
 mkdir -p generated
 mkdir -p history
+rm -f ./tests/conf/*.res
 
 
 while read file
