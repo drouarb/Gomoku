@@ -4,6 +4,7 @@ find ./tests/conf/ > .tmp
 
 rm -rf generated
 mkdir -p generated
+mkdir -p history
 
 
 while read file
