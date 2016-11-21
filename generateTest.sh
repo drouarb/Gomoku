@@ -18,6 +18,8 @@ do
     echo "//Auto Generated tests
 
 #include <Core/Core.hh>
+#include <fstream>
+
 
 int main() {
 
