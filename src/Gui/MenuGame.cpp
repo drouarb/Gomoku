@@ -34,7 +34,6 @@ void GUI::MenuGame::loadAsset()
     gui->loadImage("./ressource/black_stones.png", "BlackStones");
     gui->loadImage("./ressource/unchecked.png", "Unchecked");
     gui->changeOpacity("Checked", 255, 255, 255);
-    gui->changeOpacity("Rules", 255, 255, 255);
     gui->changeOpacity("BlackStones", 255, 255, 255);
     gui->changeOpacity("Player1", 255, 255, 255);
     gui->changeOpacity("Player2", 255, 255, 255);
@@ -59,7 +58,7 @@ void GUI::MenuGame::loadButton()
     for (std::list<std::pair<std::string, bool> >::iterator it = rules.begin();
          it != rules.end(); ++it)
     {
-        buffer = new Button<MenuGame>(buff.dimx, buff.dimy, board->getStartx() + board->getWitdh() + 10, 100 + y,
+        buffer = new Button<MenuGame>(buff.dimx, buff.dimy, board->getStartx() + board->getWitdh() + 10, 200 + y,
                                       it->first, this, &MenuGame::sendRule);
         buffer->setDataHandler(buffer);
         buffer->setTypButton(CHECKBOX);
@@ -238,7 +237,7 @@ MenuGame::MenuGame(IGUI *gui)
 void MenuGame::loadLayer()
 {
     t_size buff = gui->getSizePicture("Rules");
-    ILayer *Rules = new Layer(gui->getSizePicture("Board").dimx + 500, 0, buff.dimx, buff.dimy, "Rules");
+    ILayer *Rules = new Layer(gui->getSizePicture("Board").dimx + 500, 50, buff.dimx, buff.dimy, "Rules");
 //    ILayer *Lauch = new Layer(100, 500, buff.dimx, buff.dimy, "Launch");
     addLayer(Rules);
   //  addLayer(Lauch);

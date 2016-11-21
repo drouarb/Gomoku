@@ -153,7 +153,7 @@ t_size Graph::getSizePicture(const std::string &name)
 void Graph::init(ICoreObserver *coreObserver)
 {
 
-    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1200,
+    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080,
                                      SDL_WINDOW_SHOWN);
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
