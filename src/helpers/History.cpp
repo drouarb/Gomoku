@@ -4,6 +4,13 @@
 
 #include <ctime>
 #include <string>
+#if WIN32
+#include <io.h>
+#else
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
 #include "Helpers/History.hh"
 
 using namespace Core;
@@ -19,7 +26,12 @@ History *History::getInstance() {
 
 History::History() {
     time_t i = time(NULL);
-    std::string filename(std::to_string(i) + std::string(".log"));
+    mkdir("history"
+#ifndef WIN32
+            , 777
+#endif
+    );
+    std::string filename("history/" + std::to_string(i) + std::string(".log"));
     struct tm * now = localtime( &i);
 
 

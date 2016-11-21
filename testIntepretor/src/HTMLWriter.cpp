@@ -2,6 +2,7 @@
 // Created by greg on 17/11/2016.
 //
 
+#include <stdexcept>
 #include "HTMLWriter.hh"
 
 void HTMLWriter::writeHeader(std::string title) {
@@ -36,7 +37,10 @@ void HTMLWriter::writeHeader(std::string title) {
             "    <![endif]-->\n"
             "  </head>\n"
             "<body>\n"
-            "<div class='container'>\n";
+            "<div class='container-fluid'>\n"
+            ""
+            ""
+            "";
 }
 
 void HTMLWriter::writeArray(std::vector<std::vector<HTMLWriter::element_t>> array) {

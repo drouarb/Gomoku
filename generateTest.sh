@@ -23,6 +23,10 @@ int main() {
 
     Core::Core *core;
 
+    std::ofstream out(\"$file.res\");
+    std::cout.rdbuf(out.rdbuf());
+
+
     try {
         core = new Core::Core(\"$file\");
         delete (core);
