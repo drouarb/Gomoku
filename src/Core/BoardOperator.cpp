@@ -66,7 +66,10 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t 
 	  ////std::cout << "pattern3 find" << std::endl;
 	  ////std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << pat->line[4] << "]" << std::endl;
 	  if (checkThreeFreeOnMe(player, pat) == true)
-	    return (true);
+      {
+          patternM->removeStone(x + y * XBOARD);
+          return (true);
+      }
 	}
       it++;
     }

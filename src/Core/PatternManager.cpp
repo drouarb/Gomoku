@@ -37,7 +37,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
 
     bool done[9] = { false, false, false, false, false, false, false, false, false };
     bool found = false;
-    //TODO: i = 0 case for interrupted patterns -> not the same: multiple pattern changes
     for (int i = 1; i <= 8; i++)
     {
         if (!done[i] && map.find(position + checkMap[i]) != map.end())
@@ -45,14 +44,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
             PatternRef * pattern = NULL;
             for (auto pref : map[position + checkMap[i]])
             {
-                if (pref.pattern->line[pref.posOnPattern] != team)
-                {
-                    //found value is extremity of a pattern, or middle of an interrupted pattern
-                    //this if statement is always true for i == 0
-                    //TODO: interrupted pref
-                    //set done if applicable
-                }
-                else
+                if (pref.pattern->line[pref.posOnPattern] == team)
                 {
                     if (pref.pattern->lineLength == 1)
                     {
@@ -93,7 +85,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     //aligned pattern
                     newlen = pattern->pattern->lineLength + (boardPos_t) 1;
                     removeFromMap(pattern->pattern);
-                    //TODO: interrupted pattern->..?
                 }
                 else
                 {
@@ -129,7 +120,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 target->set(newlen, firstTeam, teamAt(firstPos + (newlen - 1) * dir), firstPos, dir);
                 removeOSExtremities(target);
                 addToMap(target);
-                //TODO: interrupted?
             }
         }
     }
@@ -171,14 +161,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     //try to find an aligned one before taking a non-aligned one
     for (auto &oppPattern : map[position + checkMap[OPPDIR(i)]])
     {
-        if (oppPattern.pattern->line[oppPattern.posOnPattern] != team)
-        {
-            //found value is extremity of a oppPattern, or middle of an interrupted pattern
-            //this if statement is always true for i == 0
-            //TODO: interrupted oppPattern
-            //set done if applicable
-        }
-        else
+        if (oppPattern.pattern->line[oppPattern.posOnPattern] == team)
         {
             if (oppPattern.pattern->lineLength == 1)
             {
@@ -217,7 +200,6 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
             //aligned oppPattern
             newlen += foundOppPattern->lineLength - 2;
             removePattern(foundOppPattern);
-            //TODO: interrupted...?
         }
         else
         {
@@ -226,7 +208,6 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
             //found stone is part of a pattern, but not an entire pattern
             newlen += 1;
         }
-        //TODO: interrupted?
     }
 }
 
@@ -253,22 +234,18 @@ void PatternManager::removeStone(boardPos_t position)
             {
                 //removed extremity of line (not interrupted, since interruption is always empty value)
                 pattern.pattern->line[pattern.posOnPattern] = NOPLAYER;
-                //TODO: this might create an interrupted pattern!
             }
             else
             {
 	            std::cout << "pattern: start=" << std::to_string(pattern.pattern->posOfFirst) << " len=" << std::to_string(pattern.pattern->lineLength) << " dir=" << std::to_string(pattern.pattern->direction) << std::endl;
 
                 removeFromMap(pattern.pattern);
-                //TODO: if pattern len >= 6 and not interrupted: becomes interrupted
                 if (pattern.pattern->lineLength == 1)
                 {
                     removeFromList(pattern.pattern);
                 }
                 else
                 {
-                    //TODO: change or erase interrupted
-
                     //full size of the second half, including extremity, excluding the position of the removed stone
                     uint8_t halfSize = pattern.pattern->lineLength - pattern.posOnPattern - (uint8_t)1;
                     if (halfSize >= 2)
