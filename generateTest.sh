@@ -18,15 +18,13 @@ do
     echo "//Auto Generated tests
 
 #include <Core/Core.hh>
-//#include <fstream>
-
 
 int main() {
 
     Core::Core *core;
 
-  //  std::ofstream out(\"$file.res\");
-  //  std::cout.rdbuf(out.rdbuf());
+    std::ofstream out(\"$file.res\");
+    std::cout.rdbuf(out.rdbuf());
 
 
     try {
