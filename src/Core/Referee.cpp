@@ -56,7 +56,7 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
     return (false);
   if (boardOp->checkPos(x, y) != NOPLAYER)
     return (false);
-  if (rRules[DOUBLE_THREE].on == true)
+  if (rRules[DOUBLE_THREE].on == true) //TODO: this rule does not apply if the player is taking opposite stones
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
       return (false);
   stats[player].eaten += boardOp->applyEat(player, x, y);

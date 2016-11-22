@@ -33,17 +33,18 @@ namespace Core
         PMAP<boardPos_t, PLIST<PatternRef> > getMap() const;
         void addStone(boardPos_t position, Team team);
         void removeStone(boardPos_t position);
+        Team teamAt(boardPos_t position);
 
     private:
         PLIST<Pattern> patterns;
         PMAP<boardPos_t, PLIST<PatternRef> > map;
+        GameBoard_t board;
 
         bool addMiddle(boardPos_t position, Team team);
         void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
         void removePattern(Pattern * pattern);
         void removeFromList(Pattern * pattern);
         void removeFromMap(Pattern * pattern);
-        Team teamAt(boardPos_t);
         void addToMap(Pattern * pattern);
         void addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern);
         void addOSExtremities(Pattern * pattern);
@@ -54,6 +55,7 @@ namespace Core
         void removeOneStone(boardPos_t position);
         void incFlexibleIterator(PLIST<PatternRef> & list, int prev_size, PLIST<PatternRef>::iterator & prev_it, PLIST<PatternRef>::iterator & it);
 
+    public:
         static const boardPos_t checkMap[];
         static const boardPos_t twoDistCircle[];
         static const boardPos_t dirRelations[];
