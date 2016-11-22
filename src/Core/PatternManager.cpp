@@ -4,15 +4,15 @@ using namespace Core;
 
 PatternManager::PatternManager()
 {
-    board = new char[XBOARD * XBOARD];
-    for (int i = 0; i < XBOARD * XBOARD; ++i)
+    board = new char[(XBOARD + 2) * (XBOARD + 2)];
+    for (int i = 0; i < (XBOARD + 2) * (XBOARD + 2); ++i)
         board[i] = NOPLAYER;
 }
 
 PatternManager::PatternManager(PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
 {
-    board = new char[XBOARD * XBOARD];
-    for (int i = 0; i < XBOARD * XBOARD; ++i)
+    board = new char[(XBOARD + 2) * (XBOARD + 2)];
+    for (int i = 0; i < (XBOARD + 2) * (XBOARD + 2); ++i)
         board[i] = NOPLAYER;
 }
 
@@ -97,7 +97,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     //aligned pattern
                     newlen = pattern->pattern->lineLength + (boardPos_t) 1;
                     removeFromMap(pattern->pattern);
-                    //TODO: in this case, 1st and last team are always null because pattern is removed from map
                 }
                 else
                 {
@@ -353,6 +352,8 @@ Team PatternManager::teamAt(boardPos_t pos)
         return (NOPLAYER);
     return (cell->second.front().pattern->line[cell->second.front().posOnPattern]);
 */
+    if (pos < 0)
+        return (NOPLAYER);
     return ((Team)board[pos]);
 }
 

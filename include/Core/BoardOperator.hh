@@ -20,6 +20,9 @@ namespace Core
       void		feed(GameBoard_t *board);
       
       bool		checkFreeDoubleThree(Team player, uint8_t x, uint8_t y);
+      int       findDoubleThree(Team player, boardPos_t pos);
+      bool      findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t mypos, boardPos_t ommittedDir);
+      bool      checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir);
 
       /**
        * Do not call with a single-stone pattern.
