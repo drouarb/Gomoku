@@ -9,10 +9,10 @@ echo "<head>
 <body>
 " > report.html
 
-while read line
+while read file
 do
     DEST="./html/$file.html"
-    ./interpretor -i "$file" -o "$DEST"
+    ./intepretor -i "$file" -o "$DEST"
     echo "<a src=\"$DEST\"></a>" >> .report.html
 done < .tmp
 
