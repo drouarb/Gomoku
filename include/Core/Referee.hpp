@@ -27,7 +27,6 @@ namespace Core
     {
     private:
       IBoardOperator				*boardOp;
-      GameBoard_t				board;
       std::map<Team, statPlayer>		stats;
       Team					player;
       Team					winner;
@@ -42,15 +41,11 @@ namespace Core
 
         virtual GameBoard_t getBoardCopy();
 
-        virtual const GameBoard_t &getBoardRef();
-
         virtual void feedRules(std::map<RuleID, Rule> rules);
 
         virtual void setPlayer(Team player);
 
         virtual bool tryPlay(uint8_t x, uint8_t y);
-
-        virtual bool tryPlay(uint8_t x, uint8_t y, GameBoard_t *);
 
         virtual Team getWinner() const;
 

@@ -9,45 +9,37 @@ namespace Core
   class BoardOperator : public IBoardOperator
     {
     private:
-      GameBoard_t	*board;
-      PatternManager	*patternM;
+      PatternManager	patternM;
     private:
-      bool		checkThreeFreeOnMe(Team player, Pattern *pats);
+      int       findDoubleThree(Team player, boardPos_t pos);
+      bool      findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t mypos, boardPos_t ommittedDir);
+      bool      checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir);
+      bool      isFreeAndMine(Pattern * pat, Team me);
+      uint8_t		pApplyEat(Team player, boardPos_t pos);
+
     public:
       BoardOperator();
       ~BoardOperator();
 
-      void		feed(GameBoard_t *board);
-      
-      bool		checkFreeDoubleThree(Team player, uint8_t x, uint8_t y);
-      int       findDoubleThree(Team player, boardPos_t pos);
-      bool      findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t mypos, boardPos_t ommittedDir);
-      bool      checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir);
+        /**
+         * Do not call from inside the class.
+         */
 
-      /**
-       * Do not call with a single-stone pattern.
-       */
-      bool      isFreeAndMine(Pattern * pat, Team me);
-      
-      std::vector<std::pair<uint8_t, uint8_t>> getFreeDoubleThreePos(Team player);
-      
-      bool		checkEatPlayer(Team player, uint8_t x, uint8_t y);
-      
-      std::vector<std::tuple<uint8_t, uint8_t, uint8_t>> getEatPos(Team player);
+      Team      boardAt(boardPos_t x, boardPos_t y);
+
+      bool		checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y);
+
+      bool		checkEatPlayer(Team player, boardPos_t x, boardPos_t y);
       
       bool		checkfiveWinBreak(Team player);
 
       bool		checkfiveWinNoBreak(Team player);
       
-      std::vector<std::pair<uint8_t, uint8_t>> getXPossible(uint8_t numberPiece, Team player);
-      
       bool		checkBreakable(Team player);
-      
-      Team		checkPos(uint8_t x, uint8_t y);
 
-      uint8_t		applyEat(Team player, uint8_t x, uint8_t y);
+      uint8_t		applyEat(Team player, boardPos_t x, boardPos_t y);
       
-      void		ForceupdateBoard(Team player, uint8_t x, uint8_t y);
+      void		ForceupdateBoard(Team player, boardPos_t x, boardPos_t y);
     };
 }
 #endif //GOMOKU_BOARDOPERATOR_HH

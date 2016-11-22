@@ -11,6 +11,9 @@
 #define OPPDIR(x) ((x) + 4)
 #define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
 
+#define XPBOARD (XBOARD + 2)
+#define PBOARDDIFF 20
+
 namespace Core
 {
     struct PatternRef
@@ -27,6 +30,8 @@ namespace Core
         ~PatternManager();
 
         PLIST<PatternRef> & operator[](boardPos_t);
+
+        static boardPos_t getPPos(boardPos_t x, boardPos_t y);
 
         PLIST<Pattern> & getPatterns();
         const PLIST<Pattern> & getPatterns() const;
@@ -57,8 +62,6 @@ namespace Core
 
     public:
         static const boardPos_t checkMap[];
-        static const boardPos_t twoDistCircle[];
-        static const boardPos_t dirRelations[];
     };
 }
 

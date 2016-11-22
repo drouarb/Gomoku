@@ -4,15 +4,15 @@ using namespace Core;
 
 PatternManager::PatternManager()
 {
-    board = new char[(XBOARD + 2) * (XBOARD + 2)];
-    for (int i = 0; i < (XBOARD + 2) * (XBOARD + 2); ++i)
+    board = new char[XPBOARD * XPBOARD];
+    for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
 }
 
 PatternManager::PatternManager(PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
 {
-    board = new char[(XBOARD + 2) * (XBOARD + 2)];
-    for (int i = 0; i < (XBOARD + 2) * (XBOARD + 2); ++i)
+    board = new char[XPBOARD * XPBOARD];
+    for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
 }
 
@@ -39,6 +39,11 @@ const PLIST<Pattern>& PatternManager::getPatterns() const
 PMAP<boardPos_t, PLIST<PatternRef> > PatternManager::getMap() const
 {
     return (map);
+}
+
+boardPos_t PatternManager::getPPos(boardPos_t x, boardPos_t y)
+{
+    return (y * (boardPos_t)XPBOARD + x + (boardPos_t)PBOARDDIFF);
 }
 
 void PatternManager::addStone(boardPos_t position, Team team)
@@ -114,6 +119,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
 
                 //change pattern or newpattern to give it the new length and extremities
                 Pattern *target = (newpattern ? newpattern : pattern->pattern);
+
                 boardPos_t firstPos;
                 Team firstTeam;
                 boardPos_t dir = (i > 4 ? checkMap[i] : checkMap[OPPDIR(i)]);
@@ -352,8 +358,7 @@ Team PatternManager::teamAt(boardPos_t pos)
         return (NOPLAYER);
     return (cell->second.front().pattern->line[cell->second.front().posOnPattern]);
 */
-    if (pos < 0)
-        return (NOPLAYER);
+
     return ((Team)board[pos]);
 }
 
@@ -495,30 +500,17 @@ void PatternManager::incFlexibleIterator(PLIST<PatternRef> &list, int prev_size,
 const boardPos_t PatternManager::checkMap[] = {
         0,
         -1,
-        -XBOARD - 1,
-        -XBOARD - 0,
-        -XBOARD + 1,
+        -XPBOARD - 1,
+        -XPBOARD - 0,
+        -XPBOARD + 1,
         +1,
-        +XBOARD + 1,
-        +XBOARD - 0,
-        +XBOARD - 1,
+        +XPBOARD + 1,
+        +XPBOARD - 0,
+        +XPBOARD - 1,
         -1, //back to start of list => no need for %
-        -XBOARD - 1,
-        -XBOARD - 0,
-        -XBOARD + 1
-};
-
-
-const boardPos_t PatternManager::twoDistCircle[] = {
-        0,
-        -2,
-        -2 * XBOARD - 2,
-        -2 * XBOARD - 0,
-        -2 * XBOARD + 2,
-        +2,
-        +2 * XBOARD + 2,
-        +2 * XBOARD - 0,
-        +2 * XBOARD - 2
+        -XPBOARD - 1,
+        -XPBOARD - 0,
+        -XPBOARD + 1
 };
 
 

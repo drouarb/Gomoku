@@ -59,7 +59,7 @@ void Core::Core::playGame(GamePlayers player_config)
    // std::cout << player_config << std::endl;
     referee->initialize();
     gui->startGame();
-    gui->feedBoard(referee->getBoardRef());
+    gui->feedBoard(referee->getBoardCopy());
     players[0]->setScore(0);
     players[1]->setScore(0);
     referee->feedRules(rules);
@@ -156,7 +156,7 @@ void Core::Core::letPlayerPlay(int index)
     gui->setCurrentPlayer(players[index]);
     referee->setPlayer(TEAMOF(index));
     players[index]->play();
-    gui->feedBoard(referee->getBoardRef());
+    gui->feedBoard(referee->getBoardCopy());
     players[index]->setScore(referee->getTeamEat(TEAMOF(index)));
 }
 

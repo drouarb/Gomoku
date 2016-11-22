@@ -1,64 +1,29 @@
 #include "BoardOperator.hh"
 
 Core::BoardOperator::BoardOperator()
-{
-  board = NULL;
-  patternM = new PatternManager();
-}
+{ }
 
 Core::BoardOperator::~BoardOperator()
+{ }
+
+Team Core::BoardOperator::boardAt(boardPos_t x, boardPos_t y)
 {
+    return (patternM.teamAt(PatternManager::getPPos(x, y)));
 }
 
-void		Core::BoardOperator::feed(GameBoard_t *nboard)
+bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y)
 {
-  board = nboard;
-}
-
-bool		Core::BoardOperator::checkThreeFreeOnMe(Team player, Pattern *patS)
-{
-  PLIST<PatternRef>		patterns;
-  PLIST<PatternRef>::iterator	it;
-  Pattern			*pat;
-  int				i;
-
-  i = 1;
-  ////std::cout << "lookSecondThree" << std::endl;
-  while (i < patS->lineLength - 2)
-    {
-      patterns = patternM->getMap()[patS->posOfFirst + i * patS->direction];
-      it = patterns.begin();
-      ////std::cout << "check for pos :" << i << std::endl;
-      while (it != patterns.end())
-	{
-	  pat = it->pattern;
-	  ////std::cout << "pattern: len:" << int(pat->lineLength - 2) << " ,pos:" << pat->posOfFirst << " ,dir:" << pat->direction << std::endl;
-	  if (pat != patS && pat->lineLength - 2 >= 3 && pat->line[0] == NOPLAYER //TODO: optimize (e.g. replace -2 >= 3 by >= 5)
-	      && pat->line[pat->lineLength - 1] == NOPLAYER
-	      && pat->line[1] == player)
-	    {
-	      return (true);
-	    }
-	  it++;
-	}
-      ++i;
-    }
-  return (false);
-}
-
-bool		Core::BoardOperator::checkFreeDoubleThree(Team player, uint8_t x, uint8_t y)
-{
-    boardPos_t pos = (boardPos_t)(y * XBOARD + x);
-    patternM->addStone(pos, player);
+    boardPos_t pos = patternM.getPPos(x, y);
+    patternM.addStone(pos, player);
     int foundDoubleThrees = findDoubleThree(player, pos);
-    patternM->removeStone(pos);
+    patternM.removeStone(pos);
     return (foundDoubleThrees >= 2);
 }
 
 int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
 {
     int nbFreeThree = 0;
-    auto map = patternM->getMap();
+    auto map = patternM.getMap();
     for (auto patref : map[pos])
     {
         if (patref.pattern->lineLength == 5)
@@ -75,15 +40,15 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
             if (isFreeAndMine(patref.pattern, player))
             {
                 //look at both extremities for single stone followed by blank
-                if (patternM->teamAt(patref.pattern->posOfFirst + (boardPos_t) 4 * patref.pattern->direction) == player &&
-                    patternM->teamAt(patref.pattern->posOfFirst + (boardPos_t) 5 * patref.pattern->direction) == NOPLAYER)
+                if (patternM.teamAt(patref.pattern->posOfFirst + (boardPos_t) 4 * patref.pattern->direction) == player &&
+                    patternM.teamAt(patref.pattern->posOfFirst + (boardPos_t) 5 * patref.pattern->direction) == NOPLAYER)
                 {
                     if (findAnotherDoubleThree(player, patref.pattern->posOfFirst + (boardPos_t)1 * patref.pattern->direction, patref.pattern->posOfFirst + (boardPos_t)2 * patref.pattern->direction, patref.pattern->posOfFirst + (boardPos_t) 4 * patref.pattern->direction, pos, patref.pattern->direction))
                         return (2);
                     nbFreeThree++;
                 }
-                else if (patternM->teamAt(patref.pattern->posOfFirst - (boardPos_t) 1 * patref.pattern->direction) == player &&
-                         patternM->teamAt(patref.pattern->posOfFirst - (boardPos_t) 2 * patref.pattern->direction) == NOPLAYER)
+                else if (patternM.teamAt(patref.pattern->posOfFirst - (boardPos_t) 1 * patref.pattern->direction) == player &&
+                         patternM.teamAt(patref.pattern->posOfFirst - (boardPos_t) 2 * patref.pattern->direction) == NOPLAYER)
                 {
                     if (findAnotherDoubleThree(player, patref.pattern->posOfFirst + (boardPos_t)1 * patref.pattern->direction, patref.pattern->posOfFirst + (boardPos_t)2 * patref.pattern->direction, patref.pattern->posOfFirst - (boardPos_t) 1 * patref.pattern->direction, pos, patref.pattern->direction))
                         return (2);
@@ -99,7 +64,7 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
         while (i <= 8)
         {
             boardPos_t dir = PatternManager::checkMap[i];
-            if (patternM->teamAt(pos + dir) == NOPLAYER && patternM->teamAt(pos - dir) == NOPLAYER)
+            if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
             {
                 for (auto patref : map[pos + dir])
                 {
@@ -134,22 +99,18 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
 
 bool Core::BoardOperator::findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t me, boardPos_t ommittedDir)
 {
-    std::cout << "a " << pos1 << " " << pos2 << " " << pos3 << " - " << me << std::endl;
     if (pos1 != me && checkPosForDoubleThree(player, pos1, ommittedDir))
         return (true);
-    std::cout << "b" << std::endl;
     if (pos2 != me && checkPosForDoubleThree(player, pos2, ommittedDir))
         return (true);
-    std::cout << "c" << std::endl;
     if (pos3 != me && checkPosForDoubleThree(player, pos3, ommittedDir))
         return (true);
-    std::cout << "d" << std::endl;
     return (false);
 }
 
 bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir)
 {
-    auto map = patternM->getMap();
+    auto map = patternM.getMap();
     for (auto patref : map[pos])
     {
         if (patref.pattern->lineLength == 5)
@@ -164,13 +125,13 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
             if (patref.pattern->direction != ommittedDir && isFreeAndMine(patref.pattern, player))
             {
                 //look at both extremities for single stone followed by blank
-                if (patternM->teamAt(patref.pattern->posOfFirst + (boardPos_t) 4 * patref.pattern->direction) == player &&
-                    patternM->teamAt(patref.pattern->posOfFirst + (boardPos_t) 5 * patref.pattern->direction) == NOPLAYER)
+                if (patternM.teamAt(patref.pattern->posOfFirst + (boardPos_t) 4 * patref.pattern->direction) == player &&
+                    patternM.teamAt(patref.pattern->posOfFirst + (boardPos_t) 5 * patref.pattern->direction) == NOPLAYER)
                 {
                     return (true);
                 }
-                else if (patternM->teamAt(patref.pattern->posOfFirst - (boardPos_t) 1 * patref.pattern->direction) == player &&
-                         patternM->teamAt(patref.pattern->posOfFirst - (boardPos_t) 2 * patref.pattern->direction) == NOPLAYER)
+                else if (patternM.teamAt(patref.pattern->posOfFirst - (boardPos_t) 1 * patref.pattern->direction) == player &&
+                         patternM.teamAt(patref.pattern->posOfFirst - (boardPos_t) 2 * patref.pattern->direction) == NOPLAYER)
                 {
                     return (true);
                 }
@@ -186,7 +147,7 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
             boardPos_t dir = PatternManager::checkMap[i];
             if (dir != ommittedDir)
             {
-                if (patternM->teamAt(pos + dir) == NOPLAYER && patternM->teamAt(pos - dir) == NOPLAYER)
+                if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
                 {
                     for (auto patref : map[pos + dir])
                     {
@@ -220,34 +181,27 @@ bool Core::BoardOperator::isFreeAndMine(Pattern *pat, Team me)
             (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER));
 }
 
-std::vector<std::pair<uint8_t, uint8_t>> Core::BoardOperator::getFreeDoubleThreePos(Team player)
-{
-}
-
-bool              Core::BoardOperator::checkEatPlayer(Team player, uint8_t x, uint8_t y)
+bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x, boardPos_t y)
 {
   PLIST<PatternRef>	patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
-  patterns = patternM->getMap()[y * XBOARD + x];
+    boardPos_t pos = patternM.getPPos(x, y);
+  patterns = patternM.getMap()[pos];
   it = patterns.begin();
   while (it != patterns.end())
     {
       pat = it->pattern;
       if (((pat->lineLength - 2) == 2 && pat->line[1] != player)
 	  && ((pat->line[0] == player && pat->line[pat->lineLength - 1] == Team::NOPLAYER
-	       && pat->posOfFirst + 3 * pat->direction == y * XBOARD + x)
+	       && pat->posOfFirst + 3 * pat->direction == pos)
 	      || (pat->line[pat->lineLength - 1] == player && pat->line[0] == Team::NOPLAYER
-		  && pat->posOfFirst == y * XBOARD + x)))
+		  && pat->posOfFirst == pos)))
 	return (true);
       it++;
     }
   return (false);
-}
-
-std::vector<std::tuple<uint8_t, uint8_t, uint8_t>> Core::BoardOperator::getEatPos(Team player)
-{
 }
 
 bool              Core::BoardOperator::checkfiveWinBreak(Team player)
@@ -260,7 +214,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
   int				nbrNoBreak;
   int				i;
 
-  patterns = patternM->getPatterns();
+  patterns = patternM.getPatterns();
   it = patterns.begin();
   while (it != patterns.end())
     {
@@ -270,7 +224,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 	  nbrNoBreak = 0;
 	  while (i < it->lineLength - 1)
 	    {
-	      patSecond = patternM->getMap()[it->posOfFirst + i * it->direction];
+	      patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
 	      itS = patSecond.begin();
 	      while (itS != patSecond.end())
 		{
@@ -300,7 +254,7 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
   PLIST<Pattern>	patterns;
   PLIST<Pattern>::iterator	it;
 
-  patterns = patternM->getPatterns();
+  patterns = patternM.getPatterns();
   it = patterns.begin();
   while (it != patterns.end())
     {
@@ -313,60 +267,54 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
   return (false);
 }
 
-
-std::vector<std::pair<uint8_t, uint8_t>> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
-{
-}
-
 bool              Core::BoardOperator::checkBreakable(Team player)
 {
   return (false);
 }
 
-Team		Core::BoardOperator::checkPos(uint8_t x, uint8_t y)
+uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
-  return ((Team)(*board)[y * XBOARD + x]);
-}
+    PLIST<PatternRef>	patterns;
+    PLIST<PatternRef>::iterator it;
+    Pattern			*pat;
+    int				save;
 
-uint8_t			Core::BoardOperator::applyEat(Team player, uint8_t x, uint8_t y)
-{
-  PLIST<PatternRef>	patterns;
-  PLIST<PatternRef>::iterator it;
-  Pattern			*pat;
-  int				save;
-
-  patterns = patternM->getMap()[y * XBOARD + x];
-  it = patterns.begin();
-  //std::cout << "applyEat" << std::endl;
-  while (it != patterns.end())
+    patterns = patternM.getMap()[pos];
+    it = patterns.begin();
+    //std::cout << "applyEat" << std::endl;
+    while (it != patterns.end())
     {
-      pat = it->pattern;
-      if (pat->lineLength - 2 == 2 && pat->line[1] != player)
-	{
-	  //std::cout << "applyEat : pat2 find" << std::endl;
-	  //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
-	  //std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
-	  if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
-	      || (pat->line[0] == player && pat->posOfFirst == x + y * XBOARD)
-	      || (pat->line[pat->lineLength - 1] == player
-		  && pat->posOfFirst + 3 * pat->direction == x + y * XBOARD)
-	      || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst == x + y * XBOARD))
-	    {
-	      save = pat->posOfFirst + pat->direction * 2;
-	      (*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
-	      patternM->removeStone(pat->posOfFirst + pat->direction);
-	      (*board)[save] = Team::NOPLAYER;
-	      patternM->removeStone(save);
-	      return (1 + applyEat(player, x, y));
-	    }
-	}
-      it++;
+        pat = it->pattern;
+        if (pat->lineLength - 2 == 2 && pat->line[1] != player)
+        {
+            //std::cout << "applyEat : pat2 find" << std::endl;
+            //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
+            //std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
+            if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == pos)
+                || (pat->line[0] == player && pat->posOfFirst == pos)
+                || (pat->line[pat->lineLength - 1] == player
+                    && pat->posOfFirst + 3 * pat->direction == pos)
+                || (pat->line[pat->lineLength - 1] == player && pat->posOfFirst == pos))
+            {
+                save = pat->posOfFirst + pat->direction * 2;
+                //(*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
+                patternM.removeStone(pat->posOfFirst + pat->direction);
+                //(*board)[save] = Team::NOPLAYER;
+                patternM.removeStone(save);
+                return (1 + pApplyEat(player, pos));
+            }
+        }
+        it++;
     }
-  return (0);
+    return (0);
 }
 
-void			Core::BoardOperator::ForceupdateBoard(Team player, uint8_t x, uint8_t y)
+uint8_t			Core::BoardOperator::applyEat(Team player, boardPos_t x, boardPos_t y)
 {
-  (*board)[x + y * 19] = player;
-  patternM->addStone(x + y * 19, player);
+    return (pApplyEat(player, patternM.getPPos(x, y)));
+}
+
+void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos_t y)
+{
+  patternM.addStone(patternM.getPPos(x, y), player);
 }

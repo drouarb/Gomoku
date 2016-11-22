@@ -6,24 +6,13 @@ Core::Referee::Referee()
 }
 
 Core::Referee::~Referee()
-{
-  delete board;
-}
+{ }
 
 void		Core::Referee::initialize()
 {
-  int		i;
-
-  i = 0;
   player = NOPLAYER;
   winner = NOPLAYER;
-  board = new char[BOARDSIZE];
   boardOp = new BoardOperator;
-  while (i < BOARDSIZE)
-    {
-      board[i] = Team::NOPLAYER;
-      ++i;
-    }
   stats.erase(stats.begin(), stats.end());
   stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
   stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
@@ -31,17 +20,17 @@ void		Core::Referee::initialize()
 
 GameBoard_t	Core::Referee::getBoardCopy()
 {
-  int		i;
   GameBoard_t	newBoard;
 
-  while (i < BOARDSIZE)
-    newBoard[i] = board[i++];
+    newBoard = new char[BOARDSIZE];
+    for (int y = 0; y < XBOARD; y++)
+    {
+        for (int x = 0; x < XBOARD; x++)
+        {
+            newBoard[y * XBOARD + x] = boardOp->boardAt(x, y);
+        }
+    }
   return (newBoard);
-}
-
-const GameBoard_t&	Core::Referee::getBoardRef()
-{
-  return (board);
 }
 
 void		Core::Referee::setPlayer(Team nplayer)
@@ -51,10 +40,9 @@ void		Core::Referee::setPlayer(Team nplayer)
 
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
-  boardOp->feed(&board);
   if (winner != NOPLAYER)
     return (false);
-  if (boardOp->checkPos(x, y) != NOPLAYER)
+  if (boardOp->boardAt(x, y) != NOPLAYER)
     return (false);
   if (rRules[DOUBLE_THREE].on == true) //TODO: this rule does not apply if the player is taking opposite stones
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
@@ -73,17 +61,6 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
       if (boardOp->checkfiveWinNoBreak(player) == true)
 	winner = player;
     }
-  return (true);
-}
-
-bool		Core::Referee::tryPlay(uint8_t x, uint8_t y, GameBoard_t *nboard)
-{
-  boardOp->feed(nboard);
-  if (boardOp->checkPos(x, y) != NOPLAYER)
-    return (false);
-  if (boardOp->checkFreeDoubleThree(player, x, y) == true)
-    return (false);
-  boardOp->ForceupdateBoard(player, x, y);
   return (true);
 }
 
