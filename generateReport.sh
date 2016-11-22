@@ -2,6 +2,7 @@
 
 find ./logs/ > .tmp
 mkdir html
+mkdir html/logs
 
 echo "<head>
     <title>Report</title>
