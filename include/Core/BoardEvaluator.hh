@@ -10,8 +10,14 @@
 namespace Core {
 
     class BoardEvaluator {
+
     private:
-        static const std::map<std::pair<uint8_t, uint8_t > , uint8_t > values;
+        typedef int (*fct_t)(Core::Pattern *);
+
+/*
+        static fct_t fct = NULL;
+        */
+        static int defaultValue(Pattern *p);
     public:
         static inline int getValue(const PatternManager *patternManager);
     };

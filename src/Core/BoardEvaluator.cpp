@@ -4,20 +4,55 @@
 
 #include "BoardEvaluator.hh"
 
-const std::map<std::pair<uint8_t, uint8_t> ,uint8_t> Core::BoardEvaluator::values = {
-        {{0, 0}, 0}
+using namespace Core;
+
+
+
+/*
+const Core::BoardEvaluator::fct_t *Core::BoardEvaluator::fct = {
+    t,
 };
+*/
 
 int Core::BoardEvaluator::getValue(const Core::PatternManager *patternManager) {
     const PLIST<Pattern> &list = patternManager->getPatterns();
     int boardValue = 0;
-    for (auto i : list) {
-        const std::pair<uint8_t, uint8_t> &pair1 = std::pair<uint8_t, uint8_t>(*i.line, i.lineLength);
-        try {
-            uint8_t value = values.at(pair1);
-            boardValue += value;
-        } catch (const std::out_of_range &ignored) {
+    static int (*fct[])(Core::Pattern *) = {
+            [](Pattern *p) { //0
+                return 1;
+            },
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+            defaultValue,
+    };
+
+    for (auto e : patternManager->getPatterns()) {
+        if (e.lineLength > 20) {
+            boardValue += defaultValue(&e);
+            continue;
         }
+        boardValue += fct[e.lineLength](&e);
     }
     return boardValue;
+}
+
+int BoardEvaluator::defaultValue(Pattern *p) {
+    return 0;
 }

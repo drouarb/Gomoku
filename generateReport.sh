@@ -17,6 +17,8 @@ do
     echo "<a src=\"$DEST\"></a>" >> report.html
 done < .tmp
 
-echo '</body>' > report.html
+echo '</body>' >> report.html
+
+cp report.html /home/public/
 
 rm .tmp
