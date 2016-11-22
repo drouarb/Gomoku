@@ -14,9 +14,9 @@ while read file
 do
     DEST="./html/$file.html"
     ./intepretor -i "$file" -o "$DEST"
-    echo "<a src=\"$DEST\"></a>" >> .report.html
+    echo "<a src=\"$DEST\"></a>" >> report.html
 done < .tmp
 
-echo '</body>' > .report.html
+echo '</body>' > report.html
 
 rm .tmp
