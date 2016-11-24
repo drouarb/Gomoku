@@ -10,23 +10,19 @@
 
 static const char *htmlBoard = "";
 
-char* getCmdOption(char ** begin, char ** end, const std::string & option)
-{
-    char ** itr = std::find(begin, end, option);
-    if (itr != end && ++itr != end)
-    {
+char *getCmdOption(char **begin, char **end, const std::string &option) {
+    char **itr = std::find(begin, end, option);
+    if (itr != end && ++itr != end) {
         return *itr;
     }
     return 0;
 }
 
-bool cmdOptionExists(char** begin, char** end, const std::string& option)
-{
+bool cmdOptionExists(char **begin, char **end, const std::string &option) {
     return std::find(begin, end, option) != end;
 }
 
-int     main(int ac, char **av)
-{
+int main(int ac, char **av) {
     if (!cmdOptionExists(av, av + ac, "-i") || !cmdOptionExists(av, av + ac, "-o")) {
         std::cerr << "usage ./" << av[0] << " -i infile -o outfile.html" << std::endl;
         return -1;
@@ -37,7 +33,7 @@ int     main(int ac, char **av)
     HTMLWriter *writer = new HTMLWriter(outfile);
     writer->writeHeader(infile);
     writer->writeTitle("test");
-    
+
     std::stringstream ss;
 
     FileParser::elem *pElem = parser->getNextMap();
@@ -51,32 +47,29 @@ int     main(int ac, char **av)
     ss << "];";
 
     writer->writeRaw("<div class=\"\">\n"
-    "\n"
- "    <div class=\"row\">\n"
- "        <div class=\"col-md-5\"></div>\n"
- "        <div class=\"col-md-3\">\n"
- "            <button class=\"btn btn-default\" onclick=\"toto = (toto > 0 ? toto -1 : 0); load()\">Prev</button>\n"
- "            <button class=\"btn btn-default\" onclick=\"toto = (toto < game.length - 2 ? toto + 1 : game.length - 2); load()\">\n"
- "                Next\n"
- "            </button>\n"
- "        </div>\n"
- "    </div>\n"
- "    <br>\n"
- "    <br>\n"
- "    <div class=\"row\">\n"
- "        <div class=\"col-md-5\">\n"
- "            <canvas style=\"border:1px solid #000000;\" id=\"myCanvas\" width=\"710\" height=\"710\"></canvas>\n"
- "        </div>\n"
- "        <div class=\"col-md-5\">\n"
- "            <canvas style=\"border:1px solid #000000;\" id=\"patternCanvas\" width=\"710\" height=\"710\"></canvas>\n"
- "        </div>\n"
- "    </div>\n"
- "    <div class=\"row\">\n"
- "        <p id=\"log\">\n"
- "\n"
- "        </p>\n"
- "    </div>\n"
- ""
+                             "\n"
+                             "    <div class=\"row\">\n"
+                             "        <div class=\"col-md-5\"></div>\n"
+                             "        <div class=\"col-md-3\">\n"
+                             "            <button class=\"btn btn-default\" onclick=\"toto = (toto > 0 ? toto -1 : 0); load()\">Prev</button>\n"
+                             "            <button class=\"btn btn-default\" onclick=\"toto = (toto < game.length - 2 ? toto + 1 : game.length - 2); load()\">\n"
+                             "                Next\n"
+                             "            </button>\n"
+                             "        </div>\n"
+                             "    </div>\n"
+                             "    <br>\n"
+                             "    <br>\n"
+                             "    <div class=\"row\">\n"
+                             "        <div class=\"col-md-5\">\n"
+                             "            <canvas style=\"border:1px solid #000000;\" id=\"myCanvas\" width=\"710\" height=\"710\"></canvas>\n"
+                             "        </div>\n"
+                             "        <div class=\"col-md-5\">\n"
+                             "            <canvas style=\"border:1px solid #000000;\" id=\"patternCanvas\" width=\"710\" height=\"710\"></canvas>\n"
+                             "        </div>\n"
+                             "        <div class=\"col-md-2\">\n"
+                             "            <p id=\"log\"></p>\n"
+                             "        </div>"
+                             "    </div>\n"
                              "</div>");
     writer->writeScript(ss.str());
     writer->writeScript("/**\n"
@@ -238,7 +231,6 @@ int     main(int ac, char **av)
                                 "load();");
     writer->writeRaw(htmlBoard);
 
-    
 
     delete (writer);
 }
