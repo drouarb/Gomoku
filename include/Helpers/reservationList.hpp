@@ -19,7 +19,6 @@ class reservList
          */
         T value;
         element *   next;
-        //element *   prev;
     };
 
 public:
@@ -60,7 +59,6 @@ T * reservList<T>::take()
         expand();
     element * elem = first;
     first = first->next;
-    //first->prev = NULL;
     return (reinterpret_cast<T*>(elem));
 }
 
@@ -68,10 +66,7 @@ template<typename T>
 void reservList<T>::giveBack(T * value)
 {
     element * elem = reinterpret_cast<element*>(value);
-    //elem->prev = NULL;
     elem->next = first;
-    //if (first)
-        //first->prev = elem;
     first = elem;
 }
 
@@ -79,15 +74,11 @@ template<typename T>
 void reservList<T>::expand()
 {
     element * block = reinterpret_cast<element *>(malloc(reservSize * sizeof(element)));
-    for (int /*i = 1*/ i = 0; i < reservSize - 1; ++i)
+    for (int i = 0; i < reservSize - 1; ++i)
     {
-        //block[i].prev = &block[i - 1];
         block[i].next = &block[i + 1];
     }
-    //block[reservSize - 1].prev = &block[reservSize - 2];
     block[reservSize - 1].next = NULL;
-    //block[0].prev = NULL;
-    //block[0].next = &block[1];
     first = &block[0];
 }
 

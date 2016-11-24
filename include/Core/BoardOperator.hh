@@ -19,6 +19,7 @@ namespace Core
 
     public:
       BoardOperator();
+      BoardOperator(const BoardOperator & other);
       ~BoardOperator();
 
         /**

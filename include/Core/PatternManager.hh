@@ -2,6 +2,7 @@
 #define PATTERN_MANAGER_HH_
 
 #include "Pattern.hh"
+#include "Helpers/fastList.hpp"
 #include <list>
 #include <map>
 #include <iostream>
@@ -26,7 +27,7 @@ namespace Core
     {
     public:
         PatternManager();
-        PatternManager(PatternManager &); //copy constructor
+        PatternManager(const PatternManager &); //copy constructor
         ~PatternManager();
 
         PLIST<PatternRef> & operator[](boardPos_t);

@@ -35,7 +35,7 @@ public:
     };
 
 public:
-    fastList(reservList<element> *);
+    fastList();
     ~fastList();
 
     const iterator  begin() const;
@@ -46,16 +46,20 @@ public:
     void		    push_front(const T & value);
     void    	    pop_front();
     iterator	    erase(iterator element);
+    bool            empty();
 
 private:
     element *       first;
-    reservList<element> * elemReservList;
-
-    void            rec_delete(element *);
+    static reservList<element> elemReservList;
 
     void            del_elem(element * element);
     element*        new_elem();
 };
+
+template <typename T>
+reservList<typename fastList<T>::element> fastList<T>::elemReservList = reservList<fastList<T>::element>(1024);
+
+
 
 
 
@@ -116,25 +120,26 @@ bool fastList<T>::iterator::operator!=(iterator other)
  */
 
 template<typename T>
-fastList<T>::fastList(reservList<element> * rl)
+fastList<T>::fastList()
 {
     first = NULL;
-    elemReservList = rl;
 }
 
 template<typename T>
 fastList<T>::~fastList()
 {
-    rec_delete(first);
-}
-
-template<typename T>
-void fastList<T>::rec_delete(element * elem)
-{
-    if (elem)
+    if (first)
     {
-        rec_delete(elem->next.elem);
-        del_elem(elem);
+        element *elem = first;
+        while (elem->next.elem)
+            elem = elem->next.elem;
+        element *prev;
+        while (elem)
+        {
+            prev = elem->prev.elem;
+            del_elem(elem);
+            elem = prev;
+        }
     }
 }
 
@@ -206,15 +211,21 @@ typename fastList<T>::iterator fastList<T>::erase(iterator it)
 }
 
 template<typename T>
+bool fastList<T>::empty()
+{
+    return (first == NULL);
+}
+
+template<typename T>
 void fastList<T>::del_elem(element * element)
 {
-    elemReservList->giveBack(element);
+    elemReservList.giveBack(element);
 }
 
 template<typename T>
 typename fastList<T>::element * fastList<T>::new_elem()
 {
-    return (elemReservList->take());
+    return (elemReservList.take());
 }
 
 #endif

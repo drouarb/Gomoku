@@ -9,7 +9,7 @@ PatternManager::PatternManager()
         board[i] = NOPLAYER;
 }
 
-PatternManager::PatternManager(PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
+PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
 {
     board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
@@ -512,9 +512,6 @@ const boardPos_t PatternManager::checkMap[] = {
         -XPBOARD - 0,
         -XPBOARD + 1
 };
-
-
-
 
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
 {

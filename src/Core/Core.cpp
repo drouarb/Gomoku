@@ -169,6 +169,7 @@ void Core::Core::feedRules()
         list.push_back(std::pair<std::string, bool>(rule.second.name, rule.second.on));
     }
     gui->feedRules(list);
+    referee->feedRules(rules);
 }
 
 Core::Core::Core(const std::string &path) {

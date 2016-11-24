@@ -26,6 +26,7 @@ namespace Core
     class Referee : public IReferee
     {
     private:
+    public:
       IBoardOperator				*boardOp;
       std::map<Team, statPlayer>		stats;
       Team					player;
@@ -34,22 +35,24 @@ namespace Core
       
     public:
         Referee();
+        Referee(const Referee & other);
+        ~Referee();
 
-        virtual ~Referee();
+        void initialize();
 
-        virtual void initialize();
+        GameBoard_t getBoardCopy();
 
-        virtual GameBoard_t getBoardCopy();
+        void feedRules(std::map<RuleID, Rule> rules);
 
-        virtual void feedRules(std::map<RuleID, Rule> rules);
+        void setPlayer(Team player);
 
-        virtual void setPlayer(Team player);
+        bool tryPlay(uint8_t x, uint8_t y);
 
-        virtual bool tryPlay(uint8_t x, uint8_t y);
+        Team getWinner() const;
 
-        virtual Team getWinner() const;
+        uint8_t getTeamEat(Team player);
 
-        virtual uint8_t getTeamEat(Team player);
+        Referee * clone();
     };
 }
 

@@ -1,9 +1,16 @@
 #include "Referee.hpp"
+#include <string.h>
 
 Core::Referee::Referee()
 {
   initialize();
 }
+
+
+Core::Referee::Referee(const Referee & other) :
+        boardOp(new BoardOperator(static_cast<const BoardOperator &>(*other.boardOp))), stats(other.stats),
+        player(other.player), winner(other.winner), rRules(other.rRules)
+{ }
 
 Core::Referee::~Referee()
 { }
