@@ -26,7 +26,6 @@ namespace Core
     class Referee : public IReferee
     {
     private:
-    public:
       IBoardOperator				*boardOp;
       std::map<Team, statPlayer>		stats;
       Team					player;
