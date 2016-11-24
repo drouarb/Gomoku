@@ -63,6 +63,13 @@ function fill(ctx) {
 
 function fillPattern(ctx) {
 
+    var c = false;
+
+    if (toto > 0 && game[toto].patterns.length == 1) {
+        toto--;
+        c = true;
+    }
+
     function getPos(startPos) {
         var y = parseInt(startPos / 19);
         var x = parseInt(startPos % 19);
@@ -133,6 +140,11 @@ function fillPattern(ctx) {
     }
     ctx.lineWidth = 1;
     ctx.strokeStyle = '#000000';
+
+    if (c) {
+        toto++;
+    }
+
 }
 
 function load() {
