@@ -8,6 +8,9 @@ echo "<head>
     <title>Report</title>
 </head>
 <body>
+
+<h1>Build failed</h1>
+
 " > report.html
 
 while read file
