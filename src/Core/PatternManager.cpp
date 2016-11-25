@@ -527,8 +527,6 @@ const boardPos_t PatternManager::checkMap[] = {
 
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
 {
-    std::cout << "--- " << (void*)&pm.getPatterns() << std::endl;
-/*
     out << "-- PATTERNS" << std::endl;
     //for (auto& pattern : pm.getPatterns())
     for (auto it = pm.getPatterns().begin(); it != pm.getPatterns().end(); ++it)
@@ -552,6 +550,6 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
             out << " " << (void*)pattern.pattern << "-" << std::to_string(pattern.posOnPattern);
         }
         out << std::endl;
-    }*/
+    }
     return out;
 }
