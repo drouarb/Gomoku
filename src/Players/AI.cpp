@@ -23,6 +23,7 @@ bool AIPlayer::init(Core::IReferee *referee) {
 
 bool AIPlayer::play() {
     AI::MonteCarlo mc(this->referee, this->referee->getPlayer());
+    mc.run();
     return false;
 }
 
