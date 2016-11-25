@@ -320,21 +320,34 @@ void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos
 std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
 {
   std::vector<boardPos_t> tab;
+  boardPos_t		i;
   PLIST<Pattern>	patterns;
   PLIST<Pattern>::iterator	it;
-  Pattern			*pat;
-  int				save;
 
-  patterns = patternM.getPatterns();
-  it = patterns.begin();
-  while (it != patterns.end())
+  if (numberPiece == 1)
     {
-      if (it->lineLength - 2 == numberPiece && it->line[1] == player)
+      i = 0;
+      while (i < BOARDSIZE)
 	{
-	  tab.push_back(it->posOfFirst);
-	  tab.push_back(it->posOfFirst + 4 * it->direction);
+	  tab.push_back(i);
+	  ++i;
 	}
-      ++it;
+    }
+  else if (numberPiece >= 3)
+    {
+      patterns = patternM.getPatterns();
+      it = patterns.begin();
+      while (it != patterns.end())
+	{
+	  if (it->lineLength - 2 == numberPiece && it->line[1] == player)
+	    {
+	      if (it->line[0] == Team::NOPLAYER)
+		tab.push_back(it->posOfFirst);
+	      if (it->line[numberPiece + 1] == Team::NOPLAYER)
+		tab.push_back(it->posOfFirst + 4 * it->direction);
+	    }
+	  ++it;
+	}
     }
   return (tab);
 }
@@ -381,7 +394,21 @@ std::vector<boardPos_t> Core::BoardOperator::getFiveBreakable(Team player)
   return (tab);
 }
 
-boardPos_t Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y)
+uint16_t Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y)
 {
-  return (0);
+  uint16_t	wei = 0;
+  boardPos_t	pos;
+  uint8_t	dir;
+
+  if (x < 1 || x > XBOARD - 1 || y < 1 || y > XBOARD - 1)
+    return (0);
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y - 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x, y - 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y - 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y + 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x, y + 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y + 1))) + 15;
+  return (wei);
 }

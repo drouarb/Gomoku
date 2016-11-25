@@ -39,7 +39,7 @@ namespace Core
 
         virtual std::vector<boardPos_t> getFiveBreakable(Team player) = 0;
 
-      virtual boardPos_t getPercentDensityOnPos(boardPos_t, boardPos_t) = 0;
+        virtual uint16_t getPercentDensityOnPos(boardPos_t, boardPos_t) = 0;
     };
 }
 #endif //GOMOKU_IBOARDOPERATOR_HH

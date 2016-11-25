@@ -24,7 +24,7 @@ fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
 
   // recherche des lignes simple
   player = ref->getPlayer();
-  lenLine = 3;
+  lenLine = 1;
   while (lenLine < 6)
     {
       tmpTab = ref->getBoOp()->getXPossible(lenLine, player);
@@ -79,6 +79,7 @@ fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
   it = finalTab.begin();
   while (it != finalTab.end())
     {
+      //std::cout << "it: " << it->first << std::endl;
       list->push_front(it->first);
       ++it;
     }

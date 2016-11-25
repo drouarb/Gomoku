@@ -54,7 +54,7 @@ namespace Core
       
       std::vector<boardPos_t> getFiveBreakable(Team player);
 
-      boardPos_t getPercentDensityOnPos(boardPos_t, boardPos_t);
+      uint16_t getPercentDensityOnPos(boardPos_t, boardPos_t);
     };
 }
 #endif //GOMOKU_BOARDOPERATOR_HH
