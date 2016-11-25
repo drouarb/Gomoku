@@ -29,11 +29,16 @@ include_directories(tests/include)
 include_directories(include/Players)
 include_directories(include/Gui)
 include_directories(testIntepretor/include)
-add_executable(Gomoku ${GOMOKU} src/main.cpp)
+
+
+add_library(Gomoku_core ${GOMOKU})
+
+add_executable(Gomoku src/main.cpp)
 add_executable(Gomoku_tests ${GOMOKU} tests/main.cpp)
 add_executable(intepretor ${TEST_INTEPRETOR})
-target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
-target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
+target_link_libraries(Gomoku Gomoku_core)
+target_link_libraries(Gomoku_core -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
+target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread Gomoku_core)
 
 FILE(
         GLOB_RECURSE
@@ -47,7 +52,7 @@ FILE(
 
 foreach (test ${GOMOKU_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
-    add_executable(${test_name} ${test} ${GOMOKU})
+    add_executable(${test_name} ${test})
     add_test(${test_name} ${test_name})
-    target_link_libraries(${test_name} -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
+    target_link_libraries(${test_name} Gomoku_core)
 endforeach (test)
