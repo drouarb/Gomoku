@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "taille": 2,
+      "extremites": [
+        10,
+        20,
+        6
+      ]
+    },
+    {
+      "taille": 3,
+      "extremites": [
+        20,
+        //0
+        18,
+        //1
+        16
+        //2
+      ]
+    }
+  ],
+  "exceeded_values": {
+    "points_par_pierre_en_plus": 5,
+    "points_en_plus_en_fonction_des_extremites": [
+      5,
+      0,
+      10
+    ]
+  },
+  "points_par_pierre_mangée": 20
+}
