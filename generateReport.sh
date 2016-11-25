@@ -16,7 +16,7 @@ echo "<head>
 while read file
 do
     DEST="./html/$file.html"
-    ./intepretor -i "$file" -o "$DEST"
+    ./intepretor.out -i "$file" -o "$DEST"
     echo "<a href=\"$DEST\">$file</a><br>" >> report.html
 done < .tmp
 
