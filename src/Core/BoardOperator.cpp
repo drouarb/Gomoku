@@ -334,7 +334,7 @@ std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, T
 	  ++i;
 	}
     }
-  else if (numberPiece >= 3)
+  /*else if (numberPiece >= 3)
     {
       patterns = patternM.getPatterns();
       it = patterns.begin();
@@ -349,7 +349,7 @@ std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, T
 	    }
 	  ++it;
 	}
-    }
+	}*/
   return (tab);
 }
 

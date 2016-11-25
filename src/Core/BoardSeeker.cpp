@@ -151,6 +151,7 @@ boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 	    {
 	      return a->second < b->second;
 	      });*/
+  std::cout << finalTab.begin()->first << std::endl;
   return (finalTab.begin()->first);
 }
 
