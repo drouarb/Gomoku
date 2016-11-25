@@ -65,35 +65,37 @@ function fillPattern(ctx) {
 
     var c = false;
 
-    if (toto > 0 && game[toto].patterns.length == 1) {
+    if (toto == 0) {
+        return;
+    }
+
+    if (toto > 0) {
         toto--;
         c = true;
     }
 
     function getPos(startPos) {
-        var y = parseInt(startPos / 19);
-        var x = parseInt(startPos % 19);
+        var y = parseInt(startPos / 21 - 1);
+        var x = parseInt(startPos % 21 + 1);
         return {y: y, x: x};
     }
 
     function getNextPos(current, dir) {
+        if (dir < 0) {
+            throw "problem dir = " + dir;
+        }
         switch (dir) {
-            case -1:
-                return {y: current.y, x: current.x - 1};
             case 1:
                 return {y: current.y, x: current.x + 1};
-            case 19:
+            case 21:
                 return {y: current.y + 1, x: current.x};
-            case -19:
-                return {y: current.y - 1, x: current.x};
-            case 18:
-                return {y: current.y + 1, x: current.x - 1};
-            case -18:
-                return {y: current.y - 1, x: current.x + 1};
             case 20:
+                return {y: current.y + 1, x: current.x - 1};
+            case 22:
                 return {y: current.y + 1, x: current.x + 1};
-            case -20:
-                return {y: current.y - 1, x: current.x - 1};
+        }
+        if (dir < 0) {
+            throw "problem dir = " + dir;
         }
     }
 
