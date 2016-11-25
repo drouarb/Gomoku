@@ -84,6 +84,8 @@ int AI::TreeNode::getBestAction() const {
             bestActions.push_back(c);
         }
     }
+    if (bestActions.size() == 0)
+        return -1;
     return bestActions.front()->getMove();
 }
 

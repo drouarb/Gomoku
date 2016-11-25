@@ -16,6 +16,7 @@ AI::MonteCarlo::~MonteCarlo() {
 
 void AI::MonteCarlo::run() {
     TreeNode *next;
+    int action;
     std::map<int, double> moveList;
 
     sw.set();
@@ -25,7 +26,9 @@ void AI::MonteCarlo::run() {
             break;
         simulate(next);
     }
-    referee->tryPlay(root->getBestAction());
+    action = root->getBestAction();
+    if (action > 0)
+        referee->tryPlay(action);
 }
 
 void AI::MonteCarlo::simulate(AI::TreeNode *node) {
