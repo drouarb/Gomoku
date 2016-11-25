@@ -7,10 +7,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${DBG}")
 FILE(
         GLOB_RECURSE
         GOMOKU
+        src/AI/*.cpp
         src/Core/*.cpp
         src/Gui/*.cpp
         src/Players/*.cpp
         include/*.hh
+        include/*.hpp
         src/helpers/*.cpp
         tests/src/*.cpp
         tests/include/*.hh

@@ -11,6 +11,8 @@
 #define TEAMOF(i)(i == 0 ? WHITE : BLACK)
 #define TEAMNAME(team)(team == WHITE ? "White" : "Black")
 
+#define MC_EXPLORATION 1
+
 enum GamePlayers : uint8_t
 {
     ONEPLAYER,

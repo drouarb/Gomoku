@@ -9,7 +9,7 @@
 #include "Referee.hpp"
 #include "CoreOberser.hh"
 #include "Human.hh"
-#include "Ai.hh"
+#include "AI.hh"
 
 Core::Core::Core()
 {
@@ -147,7 +147,7 @@ void Core::Core::createPlayerAI(int index)
     destroyPlayer(index);
     std::string name = TEAMNAME(TEAMOF(index));
     name += " A.I.";
-    players[index] = new Players::Ai(name);
+    players[index] = new Players::AIPlayer(name);
     players[index]->init(referee);
 }
 

@@ -56,6 +56,7 @@ public:
     T &             front();
     int             size() const;
     void            clear();
+    bool            isEmpty();
 
 private:
     element *       first;
@@ -246,6 +247,8 @@ bool fastList<T>::empty()
 template<typename T>
 T & fastList<T>::front()
 {
+    if (first == NULL)
+        throw std::out_of_range("Empty fastList");
     return (first->value);
 }
 
@@ -317,6 +320,11 @@ void fastList<T>::dump() const
             break;
         }
     }
+}
+
+template<typename T>
+bool fastList<T>::isEmpty() {
+    return (first == NULL);
 }
 
 #endif

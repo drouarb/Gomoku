@@ -122,12 +122,11 @@ Core::IBoardOperator *Core::Referee::getBoOp() const
   return (boardOp);
 }
 
-Core::IReferee		*Core::Referee::clone()
-{
-  return (new Referee(*this));
-}
-
 Team Core::Referee::getPlayer() const
 {
   return (player);
+}
+
+Core::IReferee *Core::Referee::clone() {
+  return new Referee(*this);
 }

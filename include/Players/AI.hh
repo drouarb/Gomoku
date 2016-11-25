@@ -1,26 +1,24 @@
 #ifndef GOMOKU_AI_HH
 #define GOMOKU_AI_HH
 
-#include "IAi.hh"
+#include "IAI.hh"
 
 namespace Players
 {
-    class Ai : public IAi
+    class AIPlayer : public IAI
     {
     private:
         int score = 0;
     public:
-        Ai(std::string &name);
+        AIPlayer(std::string &name);
 
-        ~Ai();
+        ~AIPlayer();
 
         const std::string &getName() const;
 
         bool play();
 
         bool init(Core::IReferee *referee);
-
-        bool tryPlay(uint8_t x, uint8_t y);
 
         void setIBoardOperator(Core::IBoardOperator *);
         void setScore(int);
