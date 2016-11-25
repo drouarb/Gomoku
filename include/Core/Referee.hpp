@@ -27,10 +27,10 @@ namespace Core
     {
     private:
       IBoardOperator				*boardOp;
-      std::map<Team, statPlayer>		stats;
+      std::map<Team, statPlayer>		*stats;
       Team					player;
       Team					winner;
-      std::map<RuleID, Rule>			rRules;
+      std::map<RuleID, Rule>			*rRules;
       
     public:
         Referee();
@@ -47,9 +47,15 @@ namespace Core
 
         bool tryPlay(uint8_t x, uint8_t y);
 
+        bool tryPlay(boardPos_t pos);
+
         Team getWinner() const;
 
         uint8_t getTeamEat(Team player);
+
+        IBoardOperator *getBoardOperator() const;
+
+        Referee * clone();
     };
 }
 

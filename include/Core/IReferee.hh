@@ -22,6 +22,8 @@ namespace Core
       
         virtual bool tryPlay(uint8_t x, uint8_t y) = 0;
 
+        virtual bool tryPlay(boardPos_t) = 0;
+
         virtual Team getWinner() const = 0 ;
 
         virtual uint8_t getTeamEat(Team player) = 0;

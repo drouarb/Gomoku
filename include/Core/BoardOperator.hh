@@ -26,21 +26,35 @@ namespace Core
          * Do not call from inside the class.
          */
 
-      Team      boardAt(boardPos_t x, boardPos_t y);
+      Team		boardAt(boardPos_t x, boardPos_t y);
 
       bool		checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y);
 
       bool		checkEatPlayer(Team player, boardPos_t x, boardPos_t y);
-      
+
       bool		checkfiveWinBreak(Team player);
 
       bool		checkfiveWinNoBreak(Team player);
       
-      bool		checkBreakable(Team player);
-
       uint8_t		applyEat(Team player, boardPos_t x, boardPos_t y);
       
       void		ForceupdateBoard(Team player, boardPos_t x, boardPos_t y);
+
+      std::vector<std::pair<boardPos_t, boardPos_t>> getXPossible(uint8_t numberPiece, Team player);
+
+      std::vector<std::pair<boardPos_t, boardPos_t>> getFreeXPossible(uint8_t numberPiece, Team player);
+
+      std::vector<std::pair<boardPos_t, boardPos_t>> getX(uint8_t numberPiece, Team player);
+
+      std::vector<std::pair<boardPos_t, boardPos_t>> getFreeX(uint8_t numberPiece, Team player);
+
+      std::vector<std::tuple<boardPos_t, boardPos_t, uint8_t>> getEatPos(Team player);
+      
+      std::vector<std::pair<boardPos_t, boardPos_t>> getFreeDoubleThreePos(Team player);
+      
+      std::vector<std::pair<boardPos_t, boardPos_t>> getFiveBreakable(Team player);
+
+      boardPos_t getPercentDensityOnPos(boardPos_t, boardPos_t);
     };
 }
 #endif //GOMOKU_BOARDOPERATOR_HH

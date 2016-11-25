@@ -270,11 +270,6 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
   return (false);
 }
 
-bool              Core::BoardOperator::checkBreakable(Team player)
-{
-  return (false);
-}
-
 uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
     PLIST<PatternRef>	patterns; //TODO: ref instead of copy
@@ -320,4 +315,58 @@ uint8_t			Core::BoardOperator::applyEat(Team player, boardPos_t x, boardPos_t y)
 void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos_t y)
 {
   patternM.addStone(patternM.getPPos(x, y), player);
+}
+
+std::vector<std::pair<boardPos_t, boardPos_t>> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::pair<boardPos_t, boardPos_t>> Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::pair<boardPos_t , boardPos_t>> Core::BoardOperator::getX(uint8_t numberPiece, Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::pair<boardPos_t, boardPos_t>> Core::BoardOperator::getFreeX(uint8_t numberPiece, Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::tuple<boardPos_t, boardPos_t, uint8_t>> Core::BoardOperator::getEatPos(Team player)
+{
+  std::vector<std::tuple<boardPos_t, boardPos_t, uint8_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::pair<boardPos_t, boardPos_t>> Core::BoardOperator::getFreeDoubleThreePos(Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+std::vector<std::pair<boardPos_t, boardPos_t>> Core::BoardOperator::getFiveBreakable(Team player)
+{
+  std::vector<std::pair<boardPos_t, boardPos_t>> tab;
+
+  return (tab);
+}
+
+boardPos_t Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y)
+{
+  return (0);
 }

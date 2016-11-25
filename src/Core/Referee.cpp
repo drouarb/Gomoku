@@ -20,9 +20,9 @@ void		Core::Referee::initialize()
   player = NOPLAYER;
   winner = NOPLAYER;
   boardOp = new BoardOperator;
-  stats.erase(stats.begin(), stats.end());
-  stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
-  stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
+  stats->erase(stats->begin(), stats->end());
+  stats->insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
+  stats->insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
@@ -51,14 +51,45 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
     return (false);
   if (boardOp->boardAt(x, y) != NOPLAYER)
     return (false);
-  if (rRules[DOUBLE_THREE].on == true) //TODO: this rule does not apply if the player is taking opposite stones
+  if ((*rRules)[DOUBLE_THREE].on == true)
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
       return (false);
-  stats[player].eaten += boardOp->applyEat(player, x, y);
+  (*stats)[player].eaten += boardOp->applyEat(player, x, y);
   boardOp->ForceupdateBoard(player, x, y);
-  if (stats[player].eaten >= EATWIN)
+  if ((*stats)[player].eaten >= EATWIN)
     winner = player;
-  if (rRules[BREAKABLE_FIVE].on == true)
+  if ((*rRules)[BREAKABLE_FIVE].on == true)
+    {
+      if (boardOp->checkfiveWinBreak(player) == true)
+	winner = player;
+    }
+  else
+    {
+      if (boardOp->checkfiveWinNoBreak(player) == true)
+	winner = player;
+    }
+  return (true);
+}
+
+bool		Core::Referee::tryPlay(boardPos_t pos)
+{
+  uint8_t	x;
+  uint8_t	y;
+
+  x = pos % XBOARD;
+  y = pos / XBOARD;
+  if (winner != NOPLAYER)
+    return (false);
+  if (boardOp->boardAt(x, y) != NOPLAYER)
+    return (false);
+  if ((*rRules)[DOUBLE_THREE].on == true)
+    if (boardOp->checkFreeDoubleThree(player, x, y) == true)
+      return (false);
+  (*stats)[player].eaten += boardOp->applyEat(player, x, y);
+  boardOp->ForceupdateBoard(player, x, y);
+  if ((*stats)[player].eaten >= EATWIN)
+    winner = player;
+  if ((*rRules)[BREAKABLE_FIVE].on == true)
     {
       if (boardOp->checkfiveWinBreak(player) == true)
 	winner = player;
@@ -73,7 +104,7 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 
 void		Core::Referee::feedRules(std::map<RuleID, Rule> rules)
 {
-  rRules = rules;
+  (*rRules) = rules;
 }
 
 Team	Core::Referee::getWinner() const
@@ -83,5 +114,10 @@ Team	Core::Referee::getWinner() const
 
 uint8_t	Core::Referee::getTeamEat(Team player)
 {
-  return (stats[player].eaten * 2);
+  return ((*stats)[player].eaten * 2);
+}
+
+Core::IBoardOperator *Core::Referee::getBoardOperator() const
+{
+  return (boardOp);
 }
