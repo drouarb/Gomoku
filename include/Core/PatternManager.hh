@@ -7,7 +7,7 @@
 #include <map>
 #include <iostream>
 
-#define PLIST std::list
+#define PLIST fastList
 #define PMAP std::map
 #define OPPDIR(x) ((x) + 4)
 #define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
@@ -19,6 +19,10 @@ namespace Core
 {
     struct PatternRef
     {
+        PatternRef();
+        PatternRef(Pattern *, uint8_t);
+        ~PatternRef();
+
         Pattern * pattern;
         uint8_t posOnPattern;
     };

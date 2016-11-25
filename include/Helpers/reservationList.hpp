@@ -5,14 +5,14 @@
 
 /**
  * T is the type that the reservation list will contain.
- * reservSize is the number of elements to reserve. Must be greater than 1.
+ * reservSize is the number of elements to reserve each time there are no more elements left. Must be greater than 1.
+ * All elements are freed when and only when the reservation list is destroyed.
  * No mutex. Multithreading will break.
- * No freeing. Only make static/global instances of this class, otherwise memory will leak.
  */
 template <typename T>
 class reservList
 {
-    struct element
+    struct          element
     {
         /**
          *  /!\ Don't change the order of the fields. /!\
@@ -25,17 +25,34 @@ public:
     reservList(int reservationSize);
     ~reservList();
 
+    /**
+     * Gives you a new unused, uninitialized, pre-alloc'd T. Replaces the "new" keyword.
+     */
     T *             take();
+    /**
+     * "Frees" the given T to re-enable it for further use. Replaces the "delete" keyword.
+     * Warning : as opposed to usual freeing, giveBack does not call any destructor method.
+     */
     void            giveBack(T *);
 
 private:
+    struct          blockHeader
+    {
+        blockHeader* next;
+    };
+
     element *       first;
     int             reservSize;
-
+    blockHeader *   blockHeaderList;
+    
     /**
      * Call only when there are no more elements in the list (first must be null).
      */
     void            expand();
+    /**
+     * Recursive freeing of the memory blocks.
+     */
+    void            recFree(blockHeader * elem);
 };
 
 template<typename T>
@@ -43,13 +60,14 @@ reservList<T>::reservList(int reservationSize)
 {
     reservSize = reservationSize;
     first = NULL;
+    blockHeaderList = NULL;
     expand();
 }
 
 template<typename T>
 reservList<T>::~reservList()
 {
-    //No freeing.
+    recFree(blockHeaderList);
 }
 
 template<typename T>
@@ -73,13 +91,32 @@ void reservList<T>::giveBack(T * value)
 template<typename T>
 void reservList<T>::expand()
 {
-    element * block = reinterpret_cast<element *>(malloc(reservSize * sizeof(element)));
-    for (int i = 0; i < reservSize - 1; ++i)
+    void * block = malloc(reservSize * sizeof(element) + sizeof(blockHeader));
+
+    //memory pointer list element
+    blockHeader * ptr = reinterpret_cast<blockHeader *>(block);
+    ptr->next = blockHeaderList;
+    blockHeaderList = ptr;
+    
+    //reservation list elements
+    element * elemBlock = reinterpret_cast<element *>((int8_t*)block + sizeof(blockHeader));
+    int max = reservSize - 1;
+    for (int i = 0; i < max; ++i)
     {
-        block[i].next = &block[i + 1];
+        elemBlock[i].next = elemBlock + (i + 1);
     }
-    block[reservSize - 1].next = NULL;
-    first = &block[0];
+    elemBlock[max].next = NULL;
+    first = elemBlock + (0);
+}
+
+template<typename T>
+void reservList<T>::recFree(blockHeader *elem)
+{
+    if (elem)
+    {
+        recFree(elem->next);
+        free(elem);
+    }
 }
 
 #endif

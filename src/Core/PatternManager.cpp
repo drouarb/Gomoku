@@ -2,6 +2,15 @@
 
 using namespace Core;
 
+PatternRef::PatternRef()
+{ }
+
+PatternRef::~PatternRef()
+{ }
+
+PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(pos)
+{ }
+
 PatternManager::PatternManager()
 {
     board = new char[XPBOARD * XPBOARD];
@@ -147,9 +156,9 @@ void PatternManager::addStone(boardPos_t position, Team team)
         {
             std::cout << "create new 1-stone pattern" << std::endl;
             patterns.push_front(Pattern(team, position));
-            map[position].push_front(PatternRef());
-            map[position].front().posOnPattern = 0;
-            map[position].front().pattern = &patterns.front();
+            map[position].push_front(PatternRef(&patterns.front(), 0));
+            /*map[position].front().posOnPattern = 0;
+            map[position].front().pattern = &patterns.front();*/
         }
     }
 
@@ -246,7 +255,7 @@ void PatternManager::removeStone(boardPos_t position)
         PLIST<PatternRef>::iterator it = list.begin();
         while (it != list.end())
         {
-            size = (uint8_t)list.size();
+            size = (uint8_t)list.size(); //TODO: find alternative
             auto & pattern = *it;
 
             team = pattern.pattern->getTeam();
@@ -389,12 +398,14 @@ void PatternManager::removeFromMap(Pattern *pattern)
     for (boardPos_t pos = pattern->posOfFirst; pos < max; pos += pattern->direction)
     {
         for (PLIST<PatternRef>::iterator it = map[pos].begin(); it != map[pos].end(); ++it)
-            if (it->pattern == pattern)
+        {
+            if ((*it).pattern == pattern)
             {
                 map[pos].erase(it);
                 break;
             }
-        if (map[pos].size() == 0)
+        }
+        if (map[pos].empty())
             map.erase(pos);
     }
 }
@@ -412,9 +423,9 @@ void PatternManager::addToMap(Pattern *pattern)
 
 void PatternManager::addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern)
 {
-    map[position].push_front(PatternRef());
-    map[position].front().pattern = pattern;
-    map[position].front().posOnPattern = posOnPattern;
+    map[position].push_front(PatternRef(pattern, posOnPattern));
+/*    map[position].front().pattern = pattern;
+    map[position].front().posOnPattern = posOnPattern;*/
 }
 
 void PatternManager::addOSExtremities(Pattern *pattern)
@@ -461,12 +472,13 @@ void PatternManager::removeOSExtremities(Pattern *pattern)
 
 void PatternManager::removeOneStone(boardPos_t position)
 {
-    for (auto pat = map[position].begin(); pat != map[position].end(); ++pat)
+    for (auto it = map[position].begin(); it != map[position].end(); ++it)
     {
+        auto pat = &(*it);
         if (pat->pattern->lineLength == 1)
         {
             removeFromList(pat->pattern);
-            map[position].erase(pat);
+            map[position].erase(it);
             break;
         }
     }
@@ -475,7 +487,7 @@ void PatternManager::removeOneStone(boardPos_t position)
 void PatternManager::incFlexibleIterator(PLIST<PatternRef> &list, int prev_size, PLIST<PatternRef>::iterator & prev_it,
                                          PLIST<PatternRef>::iterator & it)
 {
-    if (list.size() < prev_size)
+    if (list.size() < prev_size) //TODO: find alternative
     {
         if (prev_it != list.end())
         {
@@ -515,9 +527,13 @@ const boardPos_t PatternManager::checkMap[] = {
 
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
 {
+    std::cout << "--- " << (void*)&pm.getPatterns() << std::endl;
+/*
     out << "-- PATTERNS" << std::endl;
-    for (auto& pattern : pm.getPatterns())
+    //for (auto& pattern : pm.getPatterns())
+    for (auto it = pm.getPatterns().begin(); it != pm.getPatterns().end(); ++it)
     {
+        auto& pattern = *it;
         out << (void*)&pattern;
         out << "\tlength=" << std::to_string((int)pattern.lineLength);
         out << "\tstartPos=" << pattern.posOfFirst;
@@ -536,6 +552,6 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
             out << " " << (void*)pattern.pattern << "-" << std::to_string(pattern.posOnPattern);
         }
         out << std::endl;
-    }
+    }*/
     return out;
 }

@@ -50,8 +50,6 @@ namespace Core
         Team getWinner() const;
 
         uint8_t getTeamEat(Team player);
-
-        Referee * clone();
     };
 }
 
