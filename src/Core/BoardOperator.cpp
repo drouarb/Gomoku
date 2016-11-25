@@ -202,7 +202,7 @@ bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x,
 	      || (pat->line[pat->lineLength - 1] == player && pat->line[0] == Team::NOPLAYER
 		  && pat->posOfFirst == pos)))
 	return (true);
-      it++;
+      ++it;
     }
   return (false);
 }
@@ -238,7 +238,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 			    || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
 				&& pat->line[pat->lineLength - 1] != NOPLAYER)))
 			nbrNoBreak = -1;
-		  itS++;
+		  ++itS;
 		}
 	      nbrNoBreak++;
 	      if (nbrNoBreak == 5)
@@ -246,7 +246,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 	      ++i;
 	    }
 	}
-      it++;
+      ++it;
     }
   return (false);
 }
@@ -265,7 +265,7 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 	{
 	  return (true);
 	}
-      it++;
+      ++it;
     }
   return (false);
 }
@@ -277,7 +277,7 @@ bool              Core::BoardOperator::checkBreakable(Team player)
 
 uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
-    PLIST<PatternRef>	patterns;
+    PLIST<PatternRef>	patterns; //TODO: ref instead of copy
     PLIST<PatternRef>::iterator it;
     Pattern			*pat;
     int				save;
@@ -307,7 +307,7 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
                 return (1 + pApplyEat(player, pos));
             }
         }
-        it++;
+        ++it;
     }
     return (0);
 }
