@@ -12,6 +12,8 @@ using namespace boost::property_tree;
 
 static BoardEvaluator *instance = NULL;
 
+#define ADD_BY_TEAM(team, point, pattern) (pattern.getTeam() == team ? point : -point)
+
 BoardEvaluator *BoardEvaluator::getInstance() {
     if (!instance) {
         instance = new BoardEvaluator();
@@ -29,18 +31,18 @@ int32_t BoardEvaluator::getValue(const PatternManager *patternManager, IReferee 
     for (auto pattern : patternManager->getPatterns()) {
         if (pattern.lineLength > this->conf->max_values) {
             int exceed_rock = pattern.lineLength - this->conf->max_values;
-            totalValue += this->conf->exceeded_values.points_par_pierre_en_plus * exceed_rock;
+            totalValue += ADD_BY_TEAM(t, this->conf->exceeded_values.points_par_pierre_en_plus * exceed_rock, pattern);
             uint8_t freeExtremity = 0;
-            freeExtremity += (pattern.line[0] == 0 ? 1 : 0);
-            freeExtremity += (pattern.lineLength > 0 && pattern.line[pattern.lineLength - 1] == 0 ? 1 : 0);
-            totalValue += this->conf->exceeded_values.points_en_plus_en_fonction_des_extremites[freeExtremity];
+            freeExtremity += ADD_BY_TEAM(t, (pattern.line[0] == 0 ? 1 : 0), pattern);
+            freeExtremity += ADD_BY_TEAM(t, (pattern.lineLength > 0 && pattern.line[pattern.lineLength - 1] == 0 ? 1 : 0), pattern);
+            totalValue += ADD_BY_TEAM(t, this->conf->exceeded_values.points_en_plus_en_fonction_des_extremites[freeExtremity], pattern);
             continue;
         }
         value_t &value = this->conf->values[pattern.lineLength];
         uint8_t freeExtremity = 0;
-        freeExtremity += (pattern.line[0] == 0 ? 1 : 0);
-        freeExtremity += (pattern.lineLength > 0 && pattern.line[pattern.lineLength - 1] == 0 ? 1 : 0);
-        totalValue += value.extremity[freeExtremity];
+        freeExtremity += ADD_BY_TEAM(t, (pattern.line[0] == 0 ? 1 : 0), pattern);
+        freeExtremity += ADD_BY_TEAM(t, (pattern.lineLength > 0 && pattern.line[pattern.lineLength - 1] == 0 ? 1 : 0), pattern);
+        totalValue += ADD_BY_TEAM(t, value.extremity[freeExtremity], pattern);
     }
     return totalValue;
 }
