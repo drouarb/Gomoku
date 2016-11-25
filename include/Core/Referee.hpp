@@ -53,9 +53,11 @@ namespace Core
 
         uint8_t getTeamEat(Team player);
 
-        IBoardOperator *getBoardOperator() const;
+        IBoardOperator *getBoOp() const;
 
         Referee * clone();
+
+        Team getPlayer() const;
     };
 }
 

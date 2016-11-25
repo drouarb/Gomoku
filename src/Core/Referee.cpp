@@ -117,7 +117,12 @@ uint8_t	Core::Referee::getTeamEat(Team player)
   return ((*stats)[player].eaten * 2);
 }
 
-Core::IBoardOperator *Core::Referee::getBoardOperator() const
+Core::IBoardOperator *Core::Referee::getBoOp() const
 {
   return (boardOp);
+}
+
+Team Core::Referee::getPlayer() const
+{
+  return (player);
 }

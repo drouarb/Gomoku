@@ -27,6 +27,8 @@ namespace Core
         virtual Team getWinner() const = 0 ;
 
         virtual uint8_t getTeamEat(Team player) = 0;
+
+        virtual Team getPlayer() const = 0;
     };
 }
 
