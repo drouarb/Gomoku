@@ -99,6 +99,7 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
       if (boardOp->checkfiveWinNoBreak(player) == true)
 	winner = player;
     }
+  player = (player == Team::WHITE) ? Team::BLACK : Team::WHITE;
   return (true);
 }
 
