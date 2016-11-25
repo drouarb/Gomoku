@@ -14,7 +14,7 @@ BoardSeeker::~BoardSeeker()
 {
 }
 
-fastList<boardPos_t>	BoardSeeker::getPlayPos(IReferee *ref)
+fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
 {
   std::map<boardPos_t, weight_t>		finalTab;
   std::vector<boardPos_t>			tmpTab;
@@ -74,12 +74,12 @@ fastList<boardPos_t>	BoardSeeker::getPlayPos(IReferee *ref)
 	    {
 	      return a->second < b->second;
 	      });*/
-  fastList<boardPos_t> list;
+  fastList<boardPos_t> *list = new fastList<boardPos_t>;
   std::map<boardPos_t, weight_t>::iterator it;
   it = finalTab.begin();
   while (it != finalTab.end())
     {
-      list.push_front(it->first);
+      list->push_front(it->first);
       ++it;
     }
   return (list);

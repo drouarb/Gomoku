@@ -2,6 +2,7 @@
 // Created by drouar_b on 11/25/16.
 //
 
+#include <Core/BoardSeeker.hh>
 #include "AI/MonteCarlo.hh"
 
 AI::MonteCarlo::MonteCarlo(Core::IReferee *referee, Team team) : team(team), root(new TreeNode(referee->clone(), team)),
@@ -24,8 +25,7 @@ void AI::MonteCarlo::run() {
             break;
         simulate(next);
     }
-    //TODO betterTryPlay
-    referee->tryPlay(root->getBestAction(), 0);
+    referee->tryPlay(root->getBestAction());
 }
 
 void AI::MonteCarlo::simulate(AI::TreeNode *node) {
@@ -33,8 +33,8 @@ void AI::MonteCarlo::simulate(AI::TreeNode *node) {
     Core::IReferee *sim = node->getReferee()->clone();
 
     while (sim->getWinner() == NOPLAYER) {
-        //TODO get next move
-        sim->tryPlay(nextMove, nextMove);
+        nextMove = Core::BoardSeeker::getBestPlay(sim);
+        sim->tryPlay(nextMove);
     }
     node->backPropagate(sim->getWinner() == team);
     delete(sim);

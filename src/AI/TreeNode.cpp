@@ -2,23 +2,22 @@
 // Created by drouar_b on 11/25/16.
 //
 
-#include <Core/BoardEvaluator.hh>
 #include <math.h>
 #include <algorithm>
+#include <Core/BoardSeeker.hh>
 #include "AI/TreeNode.hh"
 
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent): plays(0), wins(0), referee(gameState),
                                                                      parent(parent), move(-1), aiTeam(team) {
-    //TODO Get moves
+    moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *parent, int move): plays(0), wins(0),
                                                                                    referee(gameState), parent(parent),
                                                                                    move(move), aiTeam(team) {
-    //TODO better tryplay
-    gameState->tryPlay(move, move);
-    //TODO Get Moves
+    gameState->tryPlay(move);
+    moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
