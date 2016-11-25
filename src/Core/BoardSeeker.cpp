@@ -85,7 +85,6 @@ fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
   it = finalTab.begin();
   while (it != finalTab.end())
     {
-      //std::cout << "it: " << it->first << std::endl;
       list->push_front(it->first);
       ++it;
     }
@@ -102,7 +101,7 @@ boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 
   // recherche des lignes simple
   player = ref->getPlayer();
-  lenLine = 3;
+  lenLine = 1;
   while (lenLine < 6)
     {
       tmpTab = ref->getBoOp()->getXPossible(lenLine, player);
@@ -152,7 +151,7 @@ boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 	    {
 	      return a->second < b->second;
 	      });*/
-  return (finalTab.begin()->second);
+  return (finalTab.begin()->first);
 }
 
 void		BoardSeeker::prepareTab(std::map<boardPos_t, weight_t> *Tab, boardPos_t pos, weight_t weight)
