@@ -62,6 +62,12 @@ fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
       BoardSeeker::prepareTab(&finalTab, tmpTab[i], 2000);
       ++i;
     }
+  /*i = 0;
+  while (i < finalTab.size())
+    {
+      finalTab
+      ++i;
+      }*/
 
   /*struct {
     bool operator()(std::map<boardPos_t, weight_t>::iterator a, std::map<boardPos_t, weight_t>::iterator b)

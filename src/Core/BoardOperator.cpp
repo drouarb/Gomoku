@@ -329,7 +329,8 @@ std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, T
       i = 0;
       while (i < BOARDSIZE)
 	{
-	  tab.push_back(i);
+	  if (patternM.teamAt(PatternManager::getPPos(i % XBOARD, i / XBOARD)) == Team::NOPLAYER)
+	    tab.push_back(i);
 	  ++i;
 	}
     }
@@ -402,13 +403,13 @@ uint16_t Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y)
 
   if (x < 1 || x > XBOARD - 1 || y < 1 || y > XBOARD - 1)
     return (0);
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y - 1))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x, y - 1))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y - 1))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y + 1))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x, y + 1))) + 15;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y + 1))) + 15;
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y - 1)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x, y - 1)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y - 1)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y + 1)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x, y + 1)) != Team::NOPLAYER) ? 16 : 0;
+  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y + 1)) != Team::NOPLAYER) ? 16 : 0;
   return (wei);
 }
