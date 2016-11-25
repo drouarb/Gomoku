@@ -132,9 +132,9 @@ function fillPattern(ctx) {
             ctx.strokeStyle = '#000000';
             put(ctx, res[j].x, res[j].y, res[j].color);
         }
+        ctx.stroke();
         ctx.moveTo(res[0].x * (710 /19) - 3, res[0].y * (710 /19) - 3);
         ctx.lineTo(res[res.length - 1].x * (710 /19) - 3, res[res.length - 1].y * (710 /19) - 3);
-        ctx.stroke();
         ctx.lineWidth = 3;
         ctx.strokeStyle = '#ff0000';
         ctx.stroke();
