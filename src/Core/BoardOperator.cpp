@@ -320,7 +320,23 @@ void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos
 std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
 {
   std::vector<boardPos_t> tab;
+  /*PLIST<PatternRef>	patterns; //TODO: ref instead of copy
+  PLIST<PatternRef>::iterator it;
+  Pattern			*pat;
+  int				save;
 
+  patterns = patternM.getMap()[pos];
+  it = patterns.begin();
+  //std::cout << "applyEat" << std::endl;
+  while (it != patterns.end())
+    {
+      pat = it->pattern;
+      if (pat->lineLength - 2 == 2 && pat->line[1] != player)
+        {
+	}
+      ++it;
+    }
+  */
   return (tab);
 }
 

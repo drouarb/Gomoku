@@ -8,23 +8,13 @@ using namespace Core;
 
 BoardSeeker::BoardSeeker()
 {
-  ref = nullptr;
 }
 
 BoardSeeker::~BoardSeeker()
 {
 }
 
-void	BoardSeeker::feed(Referee *nref)
-{
-  ref = nref;
-}
-
-Team	BoardSeeker::simulate()
-{
-}
-
-std::map<boardPos_t, weight_t>	BoardSeeker::getPlayPos()
+fastList<boardPos_t>	BoardSeeker::getPlayPos(IReferee *ref)
 {
   std::map<boardPos_t, weight_t>		finalTab;
   std::vector<boardPos_t>			tmpTab;
@@ -41,7 +31,7 @@ std::map<boardPos_t, weight_t>	BoardSeeker::getPlayPos()
       i = 0;
       while (i < tmpTab.size())
 	{
-	  prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
+	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
 	  ++i;
 	}
       ++lenLine;
@@ -53,7 +43,7 @@ std::map<boardPos_t, weight_t>	BoardSeeker::getPlayPos()
       i = 0;
       while (i < tmpTab.size())
 	{
-	  prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
+	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
 	  ++i;
 	}
       ++lenLine;
@@ -62,14 +52,14 @@ std::map<boardPos_t, weight_t>	BoardSeeker::getPlayPos()
   i = 0;
   while (i < tmpTab.size())
     {
-      prepareTab(&finalTab, tmpTab[i], 350);
+      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 350);
       ++i;
     }
   tmpTab = ref->getBoOp()->getFiveBreakable(player);
   i = 0;
   while (i < tmpTab.size())
     {
-      prepareTab(&finalTab, tmpTab[i], 2000);
+      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 2000);
       ++i;
     }
 
@@ -84,10 +74,18 @@ std::map<boardPos_t, weight_t>	BoardSeeker::getPlayPos()
 	    {
 	      return a->second < b->second;
 	      });*/
-  return (finalTab);
+  fastList<boardPos_t> list;
+  std::map<boardPos_t, weight_t>::iterator it;
+  it = finalTab.begin();
+  while (it != finalTab.end())
+    {
+      list.push_front(it->first);
+      ++it;
+    }
+  return (list);
 }
 
-std::pair<boardPos_t, weight_t>			BoardSeeker::getBestPlay()
+boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 {
   std::map<boardPos_t, weight_t>		finalTab;
   std::vector<boardPos_t>			tmpTab;
@@ -104,7 +102,7 @@ std::pair<boardPos_t, weight_t>			BoardSeeker::getBestPlay()
       i = 0;
       while (i < tmpTab.size())
 	{
-	  prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
+	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
 	  ++i;
 	}
       ++lenLine;
@@ -116,7 +114,7 @@ std::pair<boardPos_t, weight_t>			BoardSeeker::getBestPlay()
       i = 0;
       while (i < tmpTab.size())
 	{
-	  prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
+	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
 	  ++i;
 	}
       ++lenLine;
@@ -125,14 +123,14 @@ std::pair<boardPos_t, weight_t>			BoardSeeker::getBestPlay()
   i = 0;
   while (i < tmpTab.size())
     {
-      prepareTab(&finalTab, tmpTab[i], 350);
+      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 350);
       ++i;
     }
   tmpTab = ref->getBoOp()->getFiveBreakable(player);
   i = 0;
   while (i < tmpTab.size())
     {
-      prepareTab(&finalTab, tmpTab[i], 2000);
+      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 2000);
       ++i;
     }
 
@@ -147,7 +145,7 @@ std::pair<boardPos_t, weight_t>			BoardSeeker::getBestPlay()
 	    {
 	      return a->second < b->second;
 	      });*/
-  return (std::pair<boardPos_t, weight_t>(finalTab.begin()->first, finalTab.begin()->second));
+  return (finalTab.begin()->second);
 }
 
 void		BoardSeeker::prepareTab(std::map<boardPos_t, weight_t> *Tab, boardPos_t pos, weight_t weight)

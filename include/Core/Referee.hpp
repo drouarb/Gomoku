@@ -55,7 +55,7 @@ namespace Core
 
         IBoardOperator *getBoOp() const;
 
-        Referee * clone();
+        IReferee * clone();
 
         Team getPlayer() const;
     };
