@@ -20,7 +20,7 @@ void		Core::Referee::initialize()
   player = NOPLAYER;
   winner = NOPLAYER;
   boardOp = new BoardOperator;
-  stats->erase(stats->begin(), stats->end());
+  stats = new std::map<Team, statPlayer>;
   stats->insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
   stats->insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
 }
@@ -105,7 +105,7 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
 
 void		Core::Referee::feedRules(std::map<RuleID, Rule> rules)
 {
-  (*rRules) = rules;
+  rRules = new std::map<RuleID, Rule>(rules);
 }
 
 Team	Core::Referee::getWinner() const
