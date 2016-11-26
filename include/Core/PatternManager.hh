@@ -50,6 +50,7 @@ namespace Core
         PMAP<boardPos_t, PLIST<PatternRef> > map;
         GameBoard_t board;
 
+
         bool addMiddle(boardPos_t position, Team team);
         void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
         bool isAligned(PatternRef &, int dir);
@@ -65,7 +66,6 @@ namespace Core
         void addOneStone(Team team, boardPos_t position);
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
-        void incFlexibleIterator(PLIST<PatternRef> & list, int prev_size, PLIST<PatternRef>::iterator & prev_it, PLIST<PatternRef>::iterator & it);
 
     public:
         static const boardPos_t checkMap[];

@@ -1,9 +1,8 @@
 #ifndef PATTERN_HH_
 #define PATTERN_HH_
 
-#define MAX_PATTERN_LENGTH 7
-
 #include "Definitions.hh"
+#include "Helpers/reservationList.hpp"
 
 namespace Core
 {
@@ -52,8 +51,38 @@ namespace Core
         boardPos_t direction; //number to add to get to the next stone in the line
 
     private:
-        void reallocLine();
+        void freeLine();
         void allocLine();
+        
+        static reservList<Team[1]> line1Stock;
+        static reservList<Team[4]> line2Stock;
+        static reservList<Team[5]> line3Stock;
+        static reservList<Team[6]> line4Stock;
+        static reservList<Team[7]> line5Stock;
+        static reservList<Team[12]> line10Stock;
+        static reservList<Team[21]> line19Stock;
+
+        void createLine1();
+        void createLine2();
+        void createLine3();
+        void createLine4();
+        void createLine5();
+        void createLine6to10();
+        void createLine11to19();
+
+        typedef void (Pattern::*createLineFun)();
+        static const createLineFun createLineFunArr[];
+        
+        void delLine1();
+        void delLine2();
+        void delLine3();
+        void delLine4();
+        void delLine5();
+        void delLine6to10();
+        void delLine11to19();
+
+        typedef void (Pattern::*delLineFun)();
+        static const delLineFun delLineFunArr[];
     };
 }
 

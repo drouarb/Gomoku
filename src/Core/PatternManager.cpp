@@ -79,7 +79,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
                         pattern = &pref;
                         break;
                     }
-                    //else if (pref.pattern->getTeam() == team && pref.pattern->direction == checkMap[ACTDIR(i)])
                     else if (isAligned(pref, i))
                     {
                         //found aligned
@@ -108,7 +107,6 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     newlen = 4;
                     removeFromMap(pattern->pattern);
                 }
-                //else if (pattern->pattern->direction == checkMap[ACTDIR(i)])
                 else if (aligned)
                 {
                     std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
@@ -199,7 +197,6 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
                 foundOppPattern = &oppPattern;
                 break;
             }
-            //else if (pattern.pattern->getTeam() == team && oppPattern.pattern->direction == checkMap[ACTDIR(i)])
             else if (isAligned(pattern, i))
             {
                 //found aligned
@@ -225,7 +222,6 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
             newlen += 1;
             removePattern(foundOppPattern->pattern);
         }
-        //else if (foundOppPattern->direction == checkMap[ACTDIR(i)])
         else if (aligned)
         {
             std::cout << "found opp aligned i=" << std::to_string(OPPDIR(i)) << " pos="
@@ -245,7 +241,10 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
 }
 
 /**
- * Here we assume that pref is located on one of the 8 places around the stone being added/
+ * Here we assume that:
+ * - pref is located on one of the 8 places around the stone being added
+ * - the pattern is of the same team
+ * - the pattern is not a 1-stone pattern
  */
 bool PatternManager::isAligned(PatternRef & pref, int dir)
 {
@@ -518,27 +517,8 @@ void PatternManager::removeOneStone(boardPos_t position)
     }
 }
 
-void PatternManager::incFlexibleIterator(PLIST<PatternRef> &list, int prev_size, PLIST<PatternRef>::iterator & prev_it,
-                                         PLIST<PatternRef>::iterator & it)
-{
-    if (list.size() < prev_size) //TODO: find alternative
-    {
-        if (prev_it != list.end())
-        {
-            it = list.begin();
-        }
-        else
-        {
-            it = prev_it;
-            ++it;
-        }
-    }
-    else
-    {
-        prev_it = it;
-        ++it;
-    }
-}
+
+
 
 
 
