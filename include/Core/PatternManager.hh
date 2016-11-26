@@ -54,6 +54,7 @@ namespace Core
         void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
         void removePattern(Pattern * pattern);
         void removeFromList(Pattern * pattern);
+        void removeFromMap(Pattern * pattern, PLIST<PatternRef>::iterator * it_being_used, bool * it_set);
         void removeFromMap(Pattern * pattern);
         void addToMap(Pattern * pattern);
         void addToMap(Pattern * pattern, boardPos_t position, uint8_t posOnPattern);

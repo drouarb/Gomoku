@@ -29,6 +29,7 @@ public:
         ~iterator();
 
         void        operator++();
+        void        operator--();
         bool        operator==(iterator) const;
         bool        operator!=(iterator) const;
         T &         operator*();
@@ -113,6 +114,12 @@ template<typename T>
 void fastList<T>::iterator::operator++()
 {
     elem = elem->next.elem;
+}
+
+template<typename T>
+void fastList<T>::iterator::operator--()
+{
+    elem = elem->prev.elem;
 }
 
 template<typename T>
