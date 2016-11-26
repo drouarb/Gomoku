@@ -52,6 +52,7 @@ namespace Core
 
         bool addMiddle(boardPos_t position, Team team);
         void doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done);
+        bool isAligned(PatternRef &, int dir);
         void removePattern(Pattern * pattern);
         void removeFromList(Pattern * pattern);
         void removeFromMap(Pattern * pattern, PLIST<PatternRef>::iterator * it_being_used, bool * it_set);

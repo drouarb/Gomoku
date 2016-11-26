@@ -67,6 +67,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
     {
         if (!done[i] && map.find(position + checkMap[i]) != map.end())
         {
+            bool aligned = false;
             PatternRef * pattern = NULL;
             for (auto pref : map[position + checkMap[i]])
             {
@@ -78,10 +79,12 @@ void PatternManager::addStone(boardPos_t position, Team team)
                         pattern = &pref;
                         break;
                     }
-                    else if (pref.pattern->getTeam() == team && pref.pattern->direction == checkMap[ACTDIR(i)])
+                    //else if (pref.pattern->getTeam() == team && pref.pattern->direction == checkMap[ACTDIR(i)])
+                    else if (isAligned(pref, i))
                     {
                         //found aligned
                         pattern = &pref;
+                        aligned = true;
                         break;
                     }
                     else
@@ -103,14 +106,15 @@ void PatternManager::addStone(boardPos_t position, Team team)
                     std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //single stone
                     newlen = 4;
-                    removeFromMap(pattern->pattern, NULL, NULL);
+                    removeFromMap(pattern->pattern);
                 }
-                else if (pattern->pattern->direction == checkMap[ACTDIR(i)])
+                //else if (pattern->pattern->direction == checkMap[ACTDIR(i)])
+                else if (aligned)
                 {
                     std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //aligned pattern
                     newlen = pattern->pattern->lineLength + (boardPos_t) 1;
-                    removeFromMap(pattern->pattern, NULL, NULL);
+                    removeFromMap(pattern->pattern);
                 }
                 else
                 {
@@ -182,7 +186,8 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
         return;
 
     //check other side
-    Pattern * foundOppPattern = NULL;
+    bool aligned = false;
+    PatternRef * foundOppPattern = NULL;
     //try to find an aligned one before taking a non-aligned one
     for (auto &oppPattern : map[position + checkMap[OPPDIR(i)]])
     {
@@ -191,40 +196,43 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
             if (oppPattern.pattern->lineLength == 1)
             {
                 //1-stone pattern: only pattern
-                foundOppPattern = oppPattern.pattern;
+                foundOppPattern = &oppPattern;
                 break;
             }
-            else if (pattern.pattern->getTeam() == team && oppPattern.pattern->direction == checkMap[ACTDIR(i)])
+            //else if (pattern.pattern->getTeam() == team && oppPattern.pattern->direction == checkMap[ACTDIR(i)])
+            else if (isAligned(pattern, i))
             {
                 //found aligned
-                foundOppPattern = oppPattern.pattern;
+                foundOppPattern = &oppPattern;
+                aligned = true;
                 break;
             }
             else
             {
                 //non-aligned: keep looking for aligned
-                foundOppPattern = oppPattern.pattern;
+                foundOppPattern = &oppPattern;
             }
         }
     }
     if (foundOppPattern)
     {
         done[OPPDIR(i)] = true;
-        if (foundOppPattern->lineLength == 1)
+        if (foundOppPattern->pattern->lineLength == 1)
         {
             std::cout << "found opp 1 i=" << std::to_string(OPPDIR(i)) << " pos="
                       << std::to_string(position + checkMap[OPPDIR(i)]) << std::endl;
             //single stone
             newlen += 1;
-            removePattern(foundOppPattern);
+            removePattern(foundOppPattern->pattern);
         }
-        else if (foundOppPattern->direction == checkMap[ACTDIR(i)])
+        //else if (foundOppPattern->direction == checkMap[ACTDIR(i)])
+        else if (aligned)
         {
             std::cout << "found opp aligned i=" << std::to_string(OPPDIR(i)) << " pos="
                       << std::to_string(position + checkMap[OPPDIR(i)]) << std::endl;
             //aligned oppPattern
-            newlen += foundOppPattern->lineLength - 2;
-            removePattern(foundOppPattern);
+            newlen += foundOppPattern->pattern->lineLength - 2;
+            removePattern(foundOppPattern->pattern);
         }
         else
         {
@@ -234,6 +242,14 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
             newlen += 1;
         }
     }
+}
+
+/**
+ * Here we assume that pref is located on one of the 8 places around the stone being added/
+ */
+bool PatternManager::isAligned(PatternRef & pref, int dir)
+{
+    return (pref.pattern->line[pref.posOnPattern] == pref.pattern->getTeam() && pref.pattern->direction == checkMap[ACTDIR(dir)]);
 }
 
 void PatternManager::removeStone(boardPos_t position)
