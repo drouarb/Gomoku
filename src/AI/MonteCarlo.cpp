@@ -33,11 +33,13 @@ void AI::MonteCarlo::run() {
 
 void AI::MonteCarlo::simulate(AI::TreeNode *node) {
     int nextMove;
+    int count = 0;
     Core::IReferee *sim = node->getReferee()->clone();
 
-    while (sim->getWinner() == NOPLAYER) {
+    while (sim->getWinner() == NOPLAYER && count < 300) {
         nextMove = Core::BoardSeeker::getBestPlay(sim);
         sim->tryPlay(nextMove);
+        count++;
     }
     node->backPropagate(sim->getWinner() == team);
     delete(sim);
