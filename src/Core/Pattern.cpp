@@ -38,8 +38,9 @@ bool Pattern::operator==(const Pattern & other)
 void Pattern::set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)
 {
     Team team = getTeam();
+
     lineLength = length;
-    reallocLine();
+
     this->posOfFirst = posOfFirst;
     this->direction = direction;
     line[0] = first;
@@ -63,20 +64,169 @@ void Pattern::breatAt(uint8_t posOnPattern)
     }
 }
 
-void Pattern::reallocLine()
+void Pattern::freeLine()
 {
-    //TODO: preallocation (static array of 21 vectors)
-    free(line);
-    allocLine();
+    //free(line);
+    (this->*delLineFunArr[lineLength])();
 }
 
 void Pattern::allocLine()
 {
-    //TODO: preallocation
-    line = (Team *)malloc(lineLength);
+    //line = (Team *)malloc(lineLength);
+    (this->*createLineFunArr[lineLength])();
 }
 
 Team Pattern::getTeam()
 {
     return (line[lineLength > 1]);
 }
+
+
+
+
+/*
+ * Line reservation lists.
+ */
+
+reservList<Team[1]> Pattern::line1Stock = reservList<Team[1]>(1024);
+reservList<Team[4]> Pattern::line2Stock = reservList<Team[4]>(1024);
+reservList<Team[5]> Pattern::line3Stock = reservList<Team[5]>(1024);
+reservList<Team[6]> Pattern::line4Stock = reservList<Team[6]>(1024);
+reservList<Team[7]> Pattern::line5Stock = reservList<Team[7]>(1024);
+reservList<Team[12]> Pattern::line10Stock = reservList<Team[12]>(256);
+reservList<Team[21]> Pattern::line19Stock = reservList<Team[21]>(128);
+
+/*
+ * Line creation.
+ */
+
+void Pattern::createLine1()
+{
+    line = reinterpret_cast<Team*>(line1Stock.take());
+}
+
+void Pattern::createLine2()
+{
+    line = reinterpret_cast<Team*>(line2Stock.take());
+}
+
+void Pattern::createLine3()
+{
+    line = reinterpret_cast<Team*>(line3Stock.take());
+}
+
+void Pattern::createLine4()
+{
+    line = reinterpret_cast<Team*>(line4Stock.take());
+}
+
+void Pattern::createLine5()
+{
+    line = reinterpret_cast<Team*>(line5Stock.take());
+}
+
+void Pattern::createLine6to10()
+{
+    line = reinterpret_cast<Team*>(line10Stock.take());
+}
+
+void Pattern::createLine11to19()
+{
+    line = reinterpret_cast<Team*>(line19Stock.take());
+}
+
+const Pattern::createLineFun Pattern::createLineFunArr[22] = {
+        NULL,
+        &Pattern::createLine1,
+        NULL,
+        NULL,
+        &Pattern::createLine2,
+        &Pattern::createLine3,
+        &Pattern::createLine4,
+        &Pattern::createLine5,
+        &Pattern::createLine6to10,
+        &Pattern::createLine6to10,
+        &Pattern::createLine6to10,
+        &Pattern::createLine6to10,
+        &Pattern::createLine6to10,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19,
+        &Pattern::createLine11to19
+};
+
+/*
+ * Line destruction.
+ */
+
+void Pattern::delLine1()
+{
+    typedef Team t[1];
+    line1Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine2()
+{
+    typedef Team t[4];
+    line2Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine3()
+{
+    typedef Team t[5];
+    line3Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine4()
+{
+    typedef Team t[6];
+    line4Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine5()
+{
+    typedef Team t[7];
+    line5Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine6to10()
+{
+    typedef Team t[12];
+    line10Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+void Pattern::delLine11to19()
+{
+    typedef Team t[21];
+    line19Stock.giveBack(reinterpret_cast<t*>(line));
+}
+
+const Pattern::delLineFun Pattern::delLineFunArr[22] = {
+        NULL,
+        &Pattern::delLine1,
+        NULL,
+        NULL,
+        &Pattern::delLine2,
+        &Pattern::delLine3,
+        &Pattern::delLine4,
+        &Pattern::delLine5,
+        &Pattern::delLine6to10,
+        &Pattern::delLine6to10,
+        &Pattern::delLine6to10,
+        &Pattern::delLine6to10,
+        &Pattern::delLine6to10,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19,
+        &Pattern::delLine11to19
+};

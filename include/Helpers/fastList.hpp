@@ -193,7 +193,7 @@ typename fastList<T>::iterator fastList<T>::begin()
 template<typename T>
 const typename fastList<T>::iterator fastList<T>::end() const
 {
-    return (iterator(NULL));
+    return (iterator((element*)NULL));
 }
 
 template<typename T>
@@ -330,7 +330,8 @@ void fastList<T>::dump() const
 }
 
 template<typename T>
-bool fastList<T>::isEmpty() {
+bool fastList<T>::isEmpty()
+{
     return (first == NULL);
 }
 
