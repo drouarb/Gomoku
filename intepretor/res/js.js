@@ -8,6 +8,7 @@ var ctx = c.getContext("2d");
 var ctx_pattern = c_pattern.getContext("2d");
 var toto = 1;
 var log = document.getElementById("log");
+var currentPatterns = null;
 
 
 const numbershift = 37;
@@ -74,6 +75,7 @@ function fillPattern(ctx) {
         c = true;
     }
 
+
     function getPos(startPos) {
         var y = parseInt(startPos / 21 - 1);
         var x = parseInt(startPos % 21 + 1);
@@ -99,11 +101,13 @@ function fillPattern(ctx) {
         }
     }
 
-
     function generatePos(pattern) {
         var res = [];
         var pos = getPos(pattern.startPos);
         for (var i = 0; i < pattern.length; ++i) {
+            /*if (pattern[i].enable == false) {
+                continue;
+            }*/
             var c = pattern.line.charAt(i);
             var color;
             if (c == '0') {
@@ -118,25 +122,26 @@ function fillPattern(ctx) {
             res.push({x: pos.x, y: pos.y, color: color});
             pos = getNextPos(pos, pattern.dir);
         }
-        console.log(res);
         return res;
     }
 
-    var turn = game[toto].patterns;
+    var turn = currentPatterns;
 
     for (var i = 0; i < turn.length - 1; ++i) {
         ctx.strokeStyle = '#000000';
-        console.log("pattern[" + i + "] : ", turn[i]);
+        if (turn[i].enable == false) {
+            continue;
+        }
         var res = generatePos(turn[i]);
         for (var j = 0; j < res.length; ++j) {
             ctx.strokeStyle = '#000000';
             put(ctx, res[j].x, res[j].y, res[j].color);
         }
         ctx.stroke();
-        ctx.moveTo(res[0].x * (710 /19) - 3, res[0].y * (710 /19) - 3);
-        ctx.lineTo(res[res.length - 1].x * (710 /19) - 3, res[res.length - 1].y * (710 /19) - 3);
+        ctx.moveTo(res[0].x * (710 / 19) - 3, res[0].y * (710 / 19) - 3);
+        ctx.lineTo(res[res.length - 1].x * (710 / 19) - 3, res[res.length - 1].y * (710 / 19) - 3);
         ctx.lineWidth = 3;
-        ctx.strokeStyle = '#ff0000';
+        ctx.strokeStyle = '#0000ff';
         ctx.stroke();
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#000000';
@@ -150,10 +155,31 @@ function fillPattern(ctx) {
 
 }
 
+function addPatternCheckBox(patterns) {
+    var res = "<form class='form-horizontal'>"
+    for (var i = 0; i < patterns.length - 1; ++i) {
+        currentPatterns[i].enable = true;
+        res += '<div class="form-group">' +
+            '<div class="col-sm-offset-2 col-sm-10">' +
+            '<div class="checkbox">' +
+            '<label>' +
+            '<input type="checkbox" checked="checked" onchange="currentPatterns[' + i + '].enable = !currentPatterns[' + i + '].enable;     e(ctx_pattern); fillPattern(ctx_pattern);">' + patterns[i].line +
+            '</label>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+    }
+    res += "</form>";
+    var elementById = document.getElementById('checkList');
+    elementById.innerHTML = res;
+}
+
 function load() {
     e(ctx);
     fill(ctx);
     e(ctx_pattern);
+    currentPatterns = game[toto - 1].patterns;
+    addPatternCheckBox(currentPatterns);
     fillPattern(ctx_pattern);
 }
 
