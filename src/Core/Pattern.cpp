@@ -38,9 +38,9 @@ bool Pattern::operator==(const Pattern & other)
 void Pattern::set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)
 {
     Team team = getTeam();
-
+    freeLine();
     lineLength = length;
-
+    allocLine();
     this->posOfFirst = posOfFirst;
     this->direction = direction;
     line[0] = first;
