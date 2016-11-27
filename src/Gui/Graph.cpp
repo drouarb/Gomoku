@@ -63,6 +63,7 @@ typeButton Graph::loop()
         {
             this->quit();
             mainObs->setStop(true);
+            return (DEFAULT);
         }
         if (event.type == SDL_MOUSEBUTTONUP)
         {
@@ -153,14 +154,13 @@ t_size Graph::getSizePicture(const std::string &name)
 void Graph::init(ICoreObserver *coreObserver)
 {
 
-    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080,
-                                     SDL_WINDOW_SHOWN);
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
-        SDL_DestroyWindow(this->fenetre);
         SDL_Quit();
         throw (GraphicException("init fail", SDL_GetError()));
     }
+    this->fenetre = SDL_CreateWindow("Desktop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080,
+                                     SDL_WINDOW_SHOWN);
     TTF_Init();
     this->pRenderer = SDL_CreateRenderer(this->fenetre, -1, SDL_RENDERER_ACCELERATED);
     if (!this->pRenderer)
@@ -189,7 +189,6 @@ void Graph::init(ICoreObserver *coreObserver)
     auto t = Clock::now();
     while (getObs()->getStop() == false)
     {
-        loop();
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
         {
             popupString();
@@ -198,6 +197,7 @@ void Graph::init(ICoreObserver *coreObserver)
             t = Clock::now();
         }
         SDL_Delay(10);
+        loop();
     }
 
 }
