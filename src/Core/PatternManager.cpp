@@ -75,6 +75,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
 
     bool done[9] = { false, false, false, false, false, false, false, false, false };
     bool found = false;
+    int newpatterns = 0;
     for (int i = 1; i <= 8; i++)
     {
         if (!done[i] && map.find(position + checkMap[i]) != map.end())
@@ -130,6 +131,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 {
                     std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //new pattern
+                    newpatterns++;
                     patterns.push_front(Pattern(team, 4, teamAt(position + checkMap[i] * (boardPos_t) 2),
                                                 teamAt(position + checkMap[OPPDIR(i)]),
                                                 position + checkMap[i] * (boardPos_t) 2,
@@ -160,7 +162,10 @@ void PatternManager::addStone(boardPos_t position, Team team)
 
                 target->set(newlen, firstTeam, teamAt(firstPos + (newlen - (boardPos_t)1) * dir), firstPos, dir);
                 removeOSExtremities(target);
-                addToMap(target);
+
+                //new patterns are added to the map afterwards
+                if (!newpattern)
+                    addToMap(target);
             }
         }
     }
@@ -174,12 +179,20 @@ void PatternManager::addStone(boardPos_t position, Team team)
         }
     }
 
+    //add new patterns to map
+    auto it = patterns.begin();
+    for (int i = 0; i < newpatterns; ++i)
+    {
+        addToMap(&*it);
+        ++it;
+    }
+
     std::cout << *this << std::endl;
 }
 
 bool PatternManager::addMiddle(boardPos_t position, Team team)
 {
-    if (map.find(position) != map.end())
+    if (map.find(position) != map.end()) //TODO: optimize
     {
         for (auto pref : map[position])
         {
@@ -192,6 +205,9 @@ bool PatternManager::addMiddle(boardPos_t position, Team team)
 
 void PatternManager::doOppPattern(boardPos_t position, int i, Team team, PatternRef &pattern, boardPos_t &newlen, bool *done)
 {
+    if (i > 4)
+        return;
+    i = OPPDIR(i);
     if (done[i])
         return;
 
@@ -199,7 +215,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     bool aligned = false;
     PatternRef * foundOppPattern = NULL;
     //try to find an aligned one before taking a non-aligned one
-    for (auto &oppPattern : map[position + checkMap[OPPDIR(i)]])
+    for (auto &oppPattern : map[position + checkMap[i]])
     {
         if (oppPattern.pattern->line[oppPattern.posOnPattern] == team)
         {
@@ -225,27 +241,27 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     }
     if (foundOppPattern)
     {
-        done[OPPDIR(i)] = true;
+        done[i] = true;
         if (foundOppPattern->pattern->lineLength == 1)
         {
-            std::cout << "found opp 1 i=" << std::to_string(OPPDIR(i)) << " pos="
-                      << std::to_string(position + checkMap[OPPDIR(i)]) << std::endl;
+            std::cout << "found opp 1 i=" << std::to_string(i) << " pos="
+                      << std::to_string(position + checkMap[i]) << std::endl;
             //single stone
             newlen += 1;
             removePattern(foundOppPattern->pattern);
         }
         else if (aligned)
         {
-            std::cout << "found opp aligned i=" << std::to_string(OPPDIR(i)) << " pos="
-                      << std::to_string(position + checkMap[OPPDIR(i)]) << std::endl;
+            std::cout << "found opp aligned i=" << std::to_string(i) << " pos="
+                      << std::to_string(position + checkMap[i]) << std::endl;
             //aligned oppPattern
             newlen += foundOppPattern->pattern->lineLength - 2;
             removePattern(foundOppPattern->pattern);
         }
         else
         {
-            std::cout << "found opp non-aligned i=" << std::to_string(OPPDIR(i)) << " pos="
-                      << std::to_string(position + checkMap[OPPDIR(i)]) << std::endl;
+            std::cout << "found opp non-aligned i=" << std::to_string(i) << " pos="
+                      << std::to_string(position + checkMap[i]) << std::endl;
             //found stone is part of a pattern, but not an entire pattern
             newlen += 1;
         }
