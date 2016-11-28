@@ -1,5 +1,5 @@
-#ifndef CORE_DEFINITIONS_HH_
-#define CORE_DEFINITIONS_HH_
+#ifndef CORE_DEFINITIONS_HPP_
+#define CORE_DEFINITIONS_HPP_
 
 #include <stddef.h>
 #include <iostream>
@@ -46,5 +46,15 @@ static const std::map<RuleID, std::string> RuleToString = {
 
 typedef char* GameBoard_t;
 typedef int16_t boardPos_t;
+typedef int32_t weight_t;
+
+inline Team	operator!(Team team)
+{
+  if (team == Team::WHITE)
+    return (Team::BLACK);
+  else if (team == Team::BLACK)
+    return (Team::WHITE);
+  return (Team::NOPLAYER);
+}
 
 #endif

@@ -9,12 +9,10 @@
 #include <tuple>
 #include <map>
 #include <algorithm>
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "Referee.hpp"
 #include "BoardOperator.hh"
 #include "Helpers/fastList.hpp"
-
-typedef uint16_t weight_t;
 
 namespace Core
 {

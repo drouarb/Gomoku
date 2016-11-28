@@ -369,99 +369,228 @@ void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos
   patternM.addStone(patternM.getPPos(x, y), player);
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player)
+void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
-  boardPos_t		i;
-  PLIST<Pattern>	patterns;
+  PLIST<Pattern>		patterns;
   PLIST<Pattern>::iterator	it;
+  boardPos_t			i;
 
+  patterns = patternM.getPatterns();
+  it = patterns.begin();
   if (numberPiece == 1)
     {
       i = 0;
       while (i < BOARDSIZE)
 	{
-	  if (patternM.teamAt(PatternManager::getPPos(i % XBOARD, i / XBOARD)) == Team::NOPLAYER)
-	    tab.push_back(i);
+	  if (patternM.teamAt(i) == Team::NOPLAYER)
+	    (*tab)[i] += w;
 	  ++i;
 	}
     }
-  /*else if (numberPiece >= 3)
+  else if (numberPiece == 2)
     {
-      patterns = patternM.getPatterns();
-      it = patterns.begin();
+      while (it != patterns.end())
+	{
+	  if (it->lineLength == 1 && it->line[0] == player)
+	    {
+	      int x;
+	      int y = -1;
+	      while (y < 2)
+		{
+		  x = -1;
+		  while (x < 2)
+		    {
+		      i = it->posOfFirst + (y * XBOARD) + (x);
+		      if (i != it->posOfFirst && patternM.teamAt(i) == Team::NOPLAYER)
+			(*tab)[i] += w;
+		      ++x;
+		    }
+		  ++y;
+		}
+	    }
+	  ++it;
+	}
+    }
+  else
+    {
       while (it != patterns.end())
 	{
 	  if (it->lineLength - 2 == numberPiece && it->line[1] == player)
 	    {
 	      if (it->line[0] == Team::NOPLAYER)
-		tab.push_back(it->posOfFirst);
-	      if (it->line[numberPiece + 1] == Team::NOPLAYER)
-		tab.push_back(it->posOfFirst + 4 * it->direction);
+		(*tab)[it->posOfFirst] += w;
+	      if (it->line[it->lineLength - 1] == Team::NOPLAYER)
+		(*tab)[it->posOfFirst + (numberPiece + 1) * it->direction] += w;
 	    }
 	  ++it;
 	}
-	}*/
-  return (tab);
+    }
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player)
+void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
 
-  return (tab);
+  patterns = patternM.getPatterns();
+  it = patterns.begin();
+  if (numberPiece == 2)
+    {
+      while (it != patterns.end())
+	{
+	  if (it->lineLength == 1 && it->line[0] == player)
+	    {
+	      int x;
+	      int y = -1;
+	      int xo;
+	      int yo = 1;
+	      while (y < 2)
+		{
+		  x = -1;
+		  xo = 1;
+		  while (x < 2)
+		    {
+		      i = it->posOfFirst + (y * XBOARD) + (x);
+		      if (i != it->posOfFirst && patternM.teamAt(i) == Team::NOPLAYER
+			  && patternM.teamAt(it->posOfFirst + yo * XBOARD + xo) == Team::NOPLAYER)
+			{
+			  if (pattermM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == Team::NOPLAYER)
+			    (*tab)[i] += w;
+			  else if (pattermM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == player)
+			    (*tab)[i] += 2 * w;
+			}
+			(*tab)[i] += w;
+		      --xo;
+		      ++x;
+		    }
+		  --yo;
+		  ++y;
+		}
+	    }
+	  ++it;
+	}
+    }
+  else if (numberPiece >= 3)
+    {
+      while (it != patterns.end())
+	{
+	  if (it->lineLength - 2 == numberPiece && it->line[1] == player
+	      && it->line[0] > Team::NOPLAYER && it->line[it->lineLength - 1] > Team::NOPLAYER)
+	    {
+	      if (patternM.teamAt(it->posOfFirst - it->direction) == Team::NOPLAYER)
+		tab[it->posOfFirst] += w;
+	      else if (patternM.teamAt(it->posOfFirst - it->direction) == player)
+		tab[it->posOfFirst] += w * 2;
+	      if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == Team::NOPLAYER)
+		tab[it->posOfFirst] += w;
+	      else if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == player)
+		tab[it->posOfFirst] += w * 2;
+	    }
+	  ++it;
+	}
+    }
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getX(uint8_t numberPiece, Team player)
+void Core::BoardOperator::getX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
-
-  return (tab);
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getFreeX(uint8_t numberPiece, Team player)
+void Core::BoardOperator::getFreeX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
-
-  return (tab);
 }
 
-std::vector<std::pair<boardPos_t, uint8_t>> Core::BoardOperator::getEatPos(Team player)
+void Core::BoardOperator::getEatPos(Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<std::pair<boardPos_t, uint8_t>> tab;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
 
-  return (tab);
+  patterns = patternM.getPatterns();
+  it = patterns.begin();
+  while (it != patterns.end())
+    {
+      if (it->lineLength - 2 == 2 && it->line[1] == !player)
+	{
+	  if (it->line[0] == player && it->line[3] == Team::NOPLAYER)
+	    (*tab)[it->posOfFirst + 3 * it->direction] +=w;
+	  else if (it->line[3] == player && it->line[0] == Team::NOPLAYER)
+	    (*tab)[it->posOfFirst] += w;
+	}
+      ++it;
+    }
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getFreeDoubleThreePos(Team player)
+void Core::BoardOperator::getFreeDoubleThreePos(Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
-
-  return (tab);
 }
 
-std::vector<boardPos_t> Core::BoardOperator::getFiveBreakable(Team player)
+void Core::BoardOperator::getFiveBreakable(Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  std::vector<boardPos_t> tab;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
+  PLIST<PatternRef>	patSecond;
+  PLIST<PatternRef>::iterator itS;
+  Pattern			*pat;
+  boardPos_t			i;
 
-  return (tab);
+  patterns = patternM.getPatterns();
+  it = patterns.begin();
+  while (it != patterns.end())
+    {
+      if (it->lineLength - 2 == 5 && it->line[1] == player)
+	{
+	  i = 1;
+	  while (i < it->lineLength - 1)
+	    {
+	      patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
+	      itS = patSecond.begin();
+	      while (itS != patSecond.end())
+		{
+		  pat = itS->pattern;
+		  if (pat->lineLength - 2 == 2 && pat->line[1] == player
+		      && pat->line[0] == Team::NOPLAYER
+		      && pat->line[pat->lineLength - 1] == Team::NOPLAYER)
+		    {
+		      tab[pat->posOfFirst] += w;
+		      tab[pat->posOfFirst + 3 * pat->direction] += w;
+		    }
+		  ++itS;
+		}
+	      ++i;
+	    }
+	}
+      ++it;
+    }
 }
 
-uint16_t Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y)
+void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std::vector<boardPos_t> *tab, weight_t w)
 {
-  uint16_t	wei = 0;
-  boardPos_t	pos;
-  uint8_t	dir;
+  int range = 0;
+  int repX;
 
-  if (x < 1 || x > XBOARD - 1 || y < 1 || y > XBOARD - 1)
-    return (0);
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y - 1)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x, y - 1)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y - 1)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x - 1, y + 1)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x, y + 1)) != Team::NOPLAYER) ? 16 : 0;
-  wei += (patternM.teamAt(PatternManager::getPPos(x + 1, y + 1)) != Team::NOPLAYER) ? 16 : 0;
-  return (wei);
+  repX = x;
+  while (range <= DENSITYRANGE)
+    {
+      x = repX - range;
+      while (x <= repX + range)
+	{
+	  if (patternM.teamAt(y * XBOARD + x) > Team::NOPLAYER)
+	    tab[y * XBOARD + x] += w;
+	  ++x;
+	}
+      ++y;
+      ++range;
+    }
+  --range;
+  while (range >= 0)
+    {
+      x = repX - range;
+      while (x <= repX + range)
+	{
+	  if (patternM.teamAt(y * XBOARD + x) > Team::NOPLAYER)
+	    tab[y * XBOARD + x] += w;
+	  ++x;
+	}
+      ++y;
+      --range;
+    }
 }

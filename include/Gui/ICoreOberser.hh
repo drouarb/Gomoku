@@ -1,7 +1,7 @@
 #ifndef ICOREOBSERVER_HH_
 #define ICOREOBSERVER_HH_
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include <string>
 
 namespace GUI

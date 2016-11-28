@@ -6,7 +6,7 @@
 #define GOMOKU_MONTECARLO_HH
 
 #include <vector>
-#include <Core/Definitions.hh>
+#include <Core/Definitions.hpp>
 #include <Helpers/Stopwatch.hh>
 #include "TreeNode.hh"
 

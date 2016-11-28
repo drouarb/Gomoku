@@ -5,7 +5,7 @@
 #ifndef GOMOKU_CORE_HH
 #define GOMOKU_CORE_HH
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "IGUI.hh"
 #include "IPlayer.hh"
 #include "IReferee.hh"
