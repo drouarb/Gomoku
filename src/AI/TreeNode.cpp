@@ -72,7 +72,7 @@ AI::TreeNode *AI::TreeNode::getBestChild() {
         if (c->aiTeam != referee->getPlayer())
             wins = plays - wins;
 
-        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent->getPlays()) / plays));
+        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent ? parent->getPlays() : 0) / plays));
     }
     //Find max value & return associated child
     return childs[(values.begin() - std::max_element(values.begin(), values.end()))];
