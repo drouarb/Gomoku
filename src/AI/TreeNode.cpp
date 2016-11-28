@@ -51,11 +51,12 @@ AI::TreeNode *AI::TreeNode::getSimulationNode() {
             childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves));
             return childs.back();
         } catch (std::exception) {
+            childs.pop_back();
             if (childs.size())
-                return this->getBestChild();
+                return this->getBestChild()->getSimulationNode();
         }
     } else if (childs.size())
-        return this->getBestChild();
+        return this->getBestChild()->getSimulationNode();
     return NULL;
 }
 
@@ -74,8 +75,7 @@ AI::TreeNode *AI::TreeNode::getBestChild() {
 
         values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent ? parent->getPlays() : 0) / plays));
     }
-    //Find max value & return associated child
-    return childs[(values.begin() - std::max_element(values.begin(), values.end()))];
+    return childs[(std::max_element(values.begin(), values.end()) - values.begin())];
 }
 
 int AI::TreeNode::getBestAction() const {
