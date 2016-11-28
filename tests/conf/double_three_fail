@@ -27,5 +27,5 @@ put 11 10 black true
 put 10 10 white true
 put 9 10 black true
 //Must fail, double three enable
-put 10 9 white false
+put 10 9 white true
 end 0 0 noone
