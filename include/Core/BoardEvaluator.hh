@@ -47,8 +47,9 @@ namespace Core {
         conf_t *conf;
 
     public:
+        BoardEvaluator();
+
         void parseFrom(const std::string &path);
-        inline int32_t getValue(const PatternManager *patternManager, IReferee *referee) const;
         inline int32_t getValue(const PatternManager *patternManager, IReferee *referee, Team t) const;
 
         static inline BoardEvaluator *getInstance();

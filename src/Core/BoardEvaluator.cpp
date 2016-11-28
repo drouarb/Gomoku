@@ -21,11 +21,6 @@ BoardEvaluator *BoardEvaluator::getInstance() {
     return instance;
 }
 
-int32_t BoardEvaluator::getValue(const PatternManager *patternManager, IReferee *referee) const {
-    ;
-    return 0;
-}
-
 int32_t BoardEvaluator::getValue(const PatternManager *patternManager, IReferee *referee, Team t) const {
     int32_t totalValue = referee->getTeamEat(t) * this->conf->points_par_pierre_mangee;
     for (auto pattern : patternManager->getPatterns()) {
@@ -66,7 +61,11 @@ void BoardEvaluator::parseFrom(const std::string &path) {
 
                     value_t *val = &conf->values[len];
 
-                    this->conf->max_values = (this->conf->max_values < len ? len : this->conf->max_values);
+                    if (this->conf->max_values < len) {
+                        this->conf->max_values = len;
+                    } else {
+                        this->conf->max_values = this->conf->max_values;
+                    }
 
                     val->size = len;
                     uint8_t c = 0;
@@ -86,5 +85,9 @@ void BoardEvaluator::parseFrom(const std::string &path) {
                     c++;
                 }
     conf->points_par_pierre_mangee = root.get_child("points_par_pierre_mangée").get_value<int>();
+}
+
+BoardEvaluator::BoardEvaluator() {
+    this->conf = new conf_t;
 }
 
