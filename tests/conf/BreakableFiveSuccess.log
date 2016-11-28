@@ -1,0 +1,26 @@
+//Play started the 2016-11-28
+set 1
+put 9 9 white true
+put 9 10 black true
+put 10 10 white true
+put 7 6 black true
+put 11 11 white true
+put 5 17 black true
+put 12 12 white true
+put 7 15 black true
+put 9 8 white true
+put 11 17 black true
+put 13 13 white true
+put 14 1 black true
+put 8 8 white true
+put 11 2 black true
+put 10 8 white true
+put 12 2 black true
+put 11 8 white true
+put 10 1 black true
+put 12 8 white true
+put 7 1 black true
+put 13 8 white true
+put 12 4 black true
+put 14 8 white true
+end 0 0 white
