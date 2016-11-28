@@ -32,7 +32,7 @@ namespace AI {
         int wins;
         int move;
         TreeNode *parent;
-        fastList<boardPos_t> *moves;
+        std::list<boardPos_t> *moves;
         std::vector<TreeNode *> childs;
         Core::IReferee *referee;
     };

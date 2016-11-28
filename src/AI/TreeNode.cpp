@@ -9,7 +9,8 @@
 
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent): plays(0), wins(0), referee(gameState),
                                                                      parent(parent), move(-1), aiTeam(team) {
-    moves = Core::BoardSeeker::getPlayPos(referee);
+    //TODO trouve_b swap list
+    //moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
@@ -17,7 +18,8 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *paren
                                                                                    referee(gameState), parent(parent),
                                                                                    move(move), aiTeam(team) {
     gameState->tryPlay(move);
-    moves = Core::BoardSeeker::getPlayPos(referee);
+    //TODO trouve_b swap list
+    //moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
@@ -31,7 +33,7 @@ AI::TreeNode::~TreeNode() {
 }
 
 AI::TreeNode *AI::TreeNode::getSimulationNode() {
-    if (!moves->isEmpty()) {
+    if (moves->size()) {
         childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves->front()));
         moves->pop_front();
         return childs.back();
