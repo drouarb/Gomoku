@@ -232,7 +232,7 @@ bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x,
   while (it != patterns->end())
     {
       pat = it->pattern;
-      if (((pat->lineLength - 2) == 2 && pat->line[1] != player)
+      if (((pat->lineLength) == 2 + 2 && pat->line[1] != player)
 	  && ((pat->line[0] == player && pat->line[pat->lineLength - 1] == Team::NOPLAYER
 	       && pat->posOfFirst + 3 * pat->direction == pos)
 	      || (pat->line[pat->lineLength - 1] == player && pat->line[0] == Team::NOPLAYER
@@ -256,7 +256,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
   it = patterns.begin();
   while (it != patterns.end())
   {
-      if (it->lineLength - 2 >= 5 && it->line[1] == player)
+      if (it->lineLength >= 5 + 2 && it->line[1] == player)
       {
           i = 1;
           nbrNoBreak = 0;
@@ -276,7 +276,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
                   while (itS != patSecond->end())
                   {
                       pat = itS->pattern;
-                      if (pat->lineLength - 2 == 2 && pat->line[1] == player
+                      if (pat->lineLength == 2 + 2 && pat->line[1] == player
                           && ((pat->line[0] != player && pat->line[0] != NOPLAYER
                                && pat->line[pat->lineLength - 1] == NOPLAYER)
                               || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
@@ -306,7 +306,7 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
   it = patterns.begin();
   while (it != patterns.end())
     {
-      if (it->lineLength - 2 >= 5 && it->line[1] == player)
+      if (it->lineLength >= 5 + 2 && it->line[1] == player)
 	{
 	  return (true);
 	}
@@ -335,7 +335,7 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
     while (it != patterns->end())
     {
         pat = it->pattern;
-        if (pat->lineLength - 2 == 2 && pat->line[1] != player)
+        if (pat->lineLength == 2 + 2 && pat->line[1] != player)
         {
             //std::cout << "applyEat : pat2 find" << std::endl;
             //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
