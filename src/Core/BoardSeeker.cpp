@@ -34,18 +34,18 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
       tab.push_back(0);
       ++i;
     }
-  ref->getBoOp()->getXPossible(2, ref->getPlayer(), &tab, 0);
+  //ref->getBoOp()->getXPossible(2, ref->getPlayer(), &tab, 0);
   ref->getBoOp()->getXPossible(3, ref->getPlayer(), &tab, 30);
   ref->getBoOp()->getXPossible(4, ref->getPlayer(), &tab, 200);
   ref->getBoOp()->getXPossible(5, ref->getPlayer(), &tab, 1000);
-  ref->getBoOp()->getXPossible(2, !ref->getPlayer(), &tab, 5);
+  //ref->getBoOp()->getXPossible(2, !ref->getPlayer(), &tab, 5);
   ref->getBoOp()->getXPossible(3, !ref->getPlayer(), &tab, 25);
   ref->getBoOp()->getXPossible(4, !ref->getPlayer(), &tab, 150);
   ref->getBoOp()->getXPossible(5, !ref->getPlayer(), &tab, 950);
-  ref->getBoOp()->getFreeXPossible(2, ref->getPlayer(), &tab, 20);
+  //ref->getBoOp()->getFreeXPossible(2, ref->getPlayer(), &tab, 20);
   ref->getBoOp()->getFreeXPossible(3, ref->getPlayer(), &tab, 300);
   ref->getBoOp()->getFreeXPossible(4, ref->getPlayer(), &tab, 600);
-  ref->getBoOp()->getFreeXPossible(2, !ref->getPlayer(), &tab, 10);
+  //ref->getBoOp()->getFreeXPossible(2, !ref->getPlayer(), &tab, 10);
   ref->getBoOp()->getFreeXPossible(3, !ref->getPlayer(), &tab, 350);
   ref->getBoOp()->getFreeXPossible(4, !ref->getPlayer(), &tab, 500);
   ref->getBoOp()->getEatPos(ref->getPlayer(), &tab, 400);// savoir combien j'ai mangé
@@ -65,7 +65,10 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
   while (i < BOARDSIZE)
     {
       if (tab[i] > 0)
-	list->push_back(std::pair<boardPos_t, weight_t>(i, tab[i]));
+	{
+	  list->push_back(std::pair<boardPos_t, weight_t>(i, tab[i]));
+	  std::cout << "pos: " << i << " = " << tab[i] << std::endl;
+	}
       ++i;
     }
   list->sort(comparePair);
