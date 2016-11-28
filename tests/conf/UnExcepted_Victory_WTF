@@ -1,0 +1,22 @@
+//Play started the 2016-11-28
+set 1
+set 0
+put 9 9 white true
+put 8 9 black true
+put 8 10 white true
+put 9 10 black true
+put 10 8 white true
+put 11 7 black true
+put 7 11 white true
+put 6 12 black true
+put 9 11 white true
+put 10 12 black true
+put 7 9 white true
+put 6 8 black true
+put 7 10 white true
+put 6 10 black true
+put 7 10 white true
+put 8 10 black true
+put 7 12 white true
+//No 5 rock, noone win
+end 0 0 noone
