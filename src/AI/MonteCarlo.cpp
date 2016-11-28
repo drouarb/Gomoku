@@ -15,9 +15,9 @@ AI::MonteCarlo::~MonteCarlo() {
 }
 
 void AI::MonteCarlo::run() {
-    TreeNode *next;
+    int c = 0;
     int action;
-    std::map<int, double> moveList;
+    TreeNode *next;
 
     sw.set();
     while (sw.elapsedMs() < 1000) {
@@ -25,20 +25,30 @@ void AI::MonteCarlo::run() {
         if ((next = root->getSimulationNode()) == NULL)
             break;
         simulate(next);
+        c++;
     }
     action = root->getBestAction();
+    std::cout << "Simulations: " << c << ", Action: " << action << std::endl;
     if (action > 0)
         referee->tryPlay(action);
 }
 
 void AI::MonteCarlo::simulate(AI::TreeNode *node) {
-    int nextMove;
     int count = 0;
+    bool play;
     Core::IReferee *sim = node->getReferee()->clone();
+    std::list<std::pair<boardPos_t, weight_t>> *moves;
 
     while (sim->getWinner() == NOPLAYER && count < 300) {
-        nextMove = Core::BoardSeeker::getBestPlay(sim);
-        sim->tryPlay(nextMove);
+        play = false;
+        moves = Core::BoardSeeker::getPlayPos(sim);
+        while (moves->size() > 0 && !(play = sim->tryPlay(moves->front().first)))
+            moves->pop_front();
+        delete(moves);
+        if (!play) {
+            node->backPropagate(0);
+            return;
+        }
         count++;
     }
     node->backPropagate(sim->getWinner() == team);

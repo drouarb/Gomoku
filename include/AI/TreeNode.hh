@@ -12,7 +12,7 @@ namespace AI {
     class TreeNode {
     public:
         TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent = NULL);
-        TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent, int move);
+        TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent, std::list<std::pair<boardPos_t, weight_t>> *moves);
         ~TreeNode();
 
         TreeNode *getSimulationNode();
@@ -32,9 +32,9 @@ namespace AI {
         int wins;
         int move;
         TreeNode *parent;
-        std::list<boardPos_t> *moves;
-        std::vector<TreeNode *> childs;
         Core::IReferee *referee;
+        std::vector<TreeNode *> childs;
+        std::list<std::pair<boardPos_t, weight_t>> *moves;
     };
 }
 
