@@ -40,7 +40,8 @@ namespace Core
 
         PLIST<Pattern> & getPatterns();
         const PLIST<Pattern> & getPatterns() const;
-        PMAP<boardPos_t, PLIST<PatternRef> > getMap() const;
+        const PMAP<boardPos_t, PLIST<PatternRef> > & getMap() const;
+        const PLIST<PatternRef> * patternsAt(boardPos_t pos) const;
         void addStone(boardPos_t position, Team team);
         void removeStone(boardPos_t position);
         Team teamAt(boardPos_t position);

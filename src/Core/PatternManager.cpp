@@ -45,9 +45,21 @@ const PLIST<Pattern>& PatternManager::getPatterns() const
     return (patterns);
 }
 
-PMAP<boardPos_t, PLIST<PatternRef> > PatternManager::getMap() const
+const PMAP<boardPos_t, PLIST<PatternRef> > & PatternManager::getMap() const
 {
     return (map);
+}
+
+const PLIST<PatternRef> * PatternManager::patternsAt(boardPos_t pos) const
+{
+    try
+    {
+        return (&map.at(pos));
+    }
+    catch (std::out_of_range)
+    {
+        return (NULL);
+    }
 }
 
 boardPos_t PatternManager::getPPos(boardPos_t x, boardPos_t y)
@@ -556,7 +568,7 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
         out << std::endl;
     }
     out << "-- MAP" << std::endl;
-    for (auto entry : pm.getMap())
+    for (auto& entry : pm.getMap())
     {
         out << entry.first;
         for (auto pattern : entry.second)

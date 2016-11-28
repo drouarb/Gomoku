@@ -26,8 +26,11 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, board
 int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
 {
     int nbFreeThree = 0;
-    auto map = patternM.getMap();
-    for (auto patref : map[pos])
+    const auto & map = patternM.getMap();
+    const PLIST<PatternRef> * list = patternM.patternsAt(pos);
+    if (list == NULL)
+        return (0);
+    for (auto patref : *list)
     {
         if (patref.pattern->lineLength == 5)
         {
@@ -59,44 +62,59 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
                 }
             }
         }
+    }
 
-        //look on all 8 directions for an aligned free 2-stone pattern, and a blank spot on the opposite side
-        //do directions two by two, starting with the mutual condition that both sides of the center must be blank
-        //this condition being checked, when a 2-stone pattern is found, you only have to check the furthest extremity to know if it is a free pattern
-        int i = 5;
-        while (i <= 8)
+    //look on all 8 directions for an aligned free 2-stone pattern, and a blank spot on the opposite side
+    //do directions two by two, starting with the mutual condition that both sides of the center must be blank
+    //this condition being checked, when a 2-stone pattern is found, you only have to check the furthest extremity to know if it is a free pattern
+    int i = 5;
+    while (i <= 8)
+    {
+        boardPos_t dir = PatternManager::checkMap[i];
+        if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
         {
-            boardPos_t dir = PatternManager::checkMap[i];
-            if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
+            const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
+            if (list2)
             {
-                for (auto patref : map[pos + dir])
+                for (auto patref : *list2)
                 {
                     if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
                         patref.pattern->direction == dir &&
                         patref.pattern->line[patref.pattern->lineLength - 1] == NOPLAYER)
                     {
-                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst + (boardPos_t)1 * patref.pattern->direction, patref.pattern->posOfFirst + (boardPos_t)2 * patref.pattern->direction, pos, pos, dir))
-                            return (2);
-                        nbFreeThree++;
-                        break;
-                    }
-                }
-                for (auto patref : map[pos - dir])
-                {
-                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
-                        patref.pattern->direction == dir &&
-                        patref.pattern->line[0] == NOPLAYER)
-                    {
-                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst + (boardPos_t)1 * patref.pattern->direction, patref.pattern->posOfFirst + (boardPos_t)2 * patref.pattern->direction, pos, pos, dir))
+                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
+                                                           (boardPos_t) 1 * patref.pattern->direction,
+                                                   patref.pattern->posOfFirst +
+                                                   (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
                             return (2);
                         nbFreeThree++;
                         break;
                     }
                 }
             }
-            i++;
+            list2 = patternM.patternsAt(pos - dir);
+            if (list2)
+            {
+                for (auto patref : *list2)
+                {
+                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
+                        patref.pattern->direction == dir &&
+                        patref.pattern->line[0] == NOPLAYER)
+                    {
+                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
+                                                           (boardPos_t) 1 * patref.pattern->direction,
+                                                   patref.pattern->posOfFirst +
+                                                   (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
+                            return (2);
+                        nbFreeThree++;
+                        break;
+                    }
+                }
+            }
         }
+        i++;
     }
+
     return (nbFreeThree);
 }
 
@@ -113,8 +131,10 @@ bool Core::BoardOperator::findAnotherDoubleThree(Team player, boardPos_t pos1, b
 
 bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir)
 {
-    auto map = patternM.getMap();
-    for (auto patref : map[pos])
+    const PLIST<PatternRef> * list = patternM.patternsAt(pos);
+    if (list == NULL)
+        return (false);
+    for (auto patref : *list)
     {
         if (patref.pattern->lineLength == 5)
         {
@@ -140,19 +160,23 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
                 }
             }
         }
+    }
 
-        //look on all 8 directions for an aligned free 2-stone pattern, and a blank spot on the opposite side
-        //do directions two by two, starting with the mutual condition that both sides of the center must be blank
-        //this condition being checked, when a 2-stone pattern is found, you only have to check the furthest extremity to know if it is a free pattern
-        int i = 5;
-        while (i <= 8)
+    //look on all 8 directions for an aligned free 2-stone pattern, and a blank spot on the opposite side
+    //do directions two by two, starting with the mutual condition that both sides of the center must be blank
+    //this condition being checked, when a 2-stone pattern is found, you only have to check the furthest extremity to know if it is a free pattern
+    int i = 5;
+    while (i <= 8)
+    {
+        boardPos_t dir = PatternManager::checkMap[i];
+        if (dir != ommittedDir)
         {
-            boardPos_t dir = PatternManager::checkMap[i];
-            if (dir != ommittedDir)
+            if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
             {
-                if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
+                const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
+                if (list2)
                 {
-                    for (auto patref : map[pos + dir])
+                    for (auto patref : *list2)
                     {
                         if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
                             patref.pattern->direction == dir &&
@@ -161,7 +185,11 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
                             return (true);
                         }
                     }
-                    for (auto patref : map[pos - dir])
+                }
+                list2 = patternM.patternsAt(pos - dir);
+                if (list2)
+                {
+                    for (auto patref : *list2)
                     {
                         if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
                             patref.pattern->direction == dir &&
@@ -172,9 +200,10 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
                     }
                 }
             }
-            i++;
         }
+        i++;
     }
+
     return (false);
 }
 
@@ -186,14 +215,21 @@ bool Core::BoardOperator::isFreeAndMine(Pattern *pat, Team me)
 
 bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x, boardPos_t y)
 {
-  PLIST<PatternRef>	patterns;
+  const PLIST<PatternRef>	* patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
     boardPos_t pos = patternM.getPPos(x, y);
-  patterns = patternM.getMap()[pos];
-  it = patterns.begin();
-  while (it != patterns.end())
+    try
+    {
+        patterns = &patternM.getMap().at(pos);
+    }
+    catch (std::out_of_range)
+    {
+        return (false);
+    }
+  it = patterns->begin();
+  while (it != patterns->end())
     {
       pat = it->pattern;
       if (((pat->lineLength - 2) == 2 && pat->line[1] != player)
@@ -209,45 +245,54 @@ bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x,
 
 bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 {
-  PLIST<Pattern>	patterns;
   PLIST<Pattern>::iterator	it;
-  PLIST<PatternRef>	patSecond;
+  const PLIST<PatternRef>	* patSecond;
   PLIST<PatternRef>::iterator itS;
   Pattern			*pat;
   int				nbrNoBreak;
   int				i;
 
-  patterns = patternM.getPatterns();
+  PLIST<Pattern> & patterns = patternM.getPatterns();
   it = patterns.begin();
   while (it != patterns.end())
-    {
+  {
       if (it->lineLength - 2 >= 5 && it->line[1] == player)
-	{
-	  i = 1;
-	  nbrNoBreak = 0;
-	  while (i < it->lineLength - 1)
-	    {
-	      patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
-	      itS = patSecond.begin();
-	      while (itS != patSecond.end())
-		{
-		    pat = itS->pattern;
-		    if (pat->lineLength - 2 == 2 && pat->line[1] == player
-			&& ((pat->line[0] != player && pat->line[0] != NOPLAYER
-			     && pat->line[pat->lineLength - 1] == NOPLAYER)
-			    || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
-				&& pat->line[pat->lineLength - 1] != NOPLAYER)))
-			nbrNoBreak = -1;
-		  ++itS;
-		}
-	      nbrNoBreak++;
-	      if (nbrNoBreak == 5)
-		return (true);
-	      ++i;
-	    }
-	}
+      {
+          i = 1;
+          nbrNoBreak = 0;
+          while (i < it->lineLength - 1)
+          {
+              try
+              {
+                  patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
+              }
+              catch (std::out_of_range)
+              {
+                  patSecond = NULL;
+              }
+              if (patSecond)
+              {
+                  itS = patSecond->begin();
+                  while (itS != patSecond->end())
+                  {
+                      pat = itS->pattern;
+                      if (pat->lineLength - 2 == 2 && pat->line[1] == player
+                          && ((pat->line[0] != player && pat->line[0] != NOPLAYER
+                               && pat->line[pat->lineLength - 1] == NOPLAYER)
+                              || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
+                                  && pat->line[pat->lineLength - 1] != NOPLAYER)))
+                          nbrNoBreak = -1;
+                      ++itS;
+                  }
+              }
+              nbrNoBreak++;
+              if (nbrNoBreak == 5)
+                  return (true);
+              ++i;
+          }
+      }
       ++it;
-    }
+  }
   return (false);
 }
 
@@ -272,15 +317,22 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 
 uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
-    PLIST<PatternRef>	patterns; //TODO: ref instead of copy
+    const PLIST<PatternRef> * patterns;
     PLIST<PatternRef>::iterator it;
     Pattern			*pat;
     int				save;
 
-    patterns = patternM.getMap()[pos];
-    it = patterns.begin();
+    try
+    {
+        patterns = &patternM.getMap().at(pos);
+    }
+    catch (std::out_of_range)
+    {
+        return (0);
+    }
+    it = patterns->begin();
     //std::cout << "applyEat" << std::endl;
-    while (it != patterns.end())
+    while (it != patterns->end())
     {
         pat = it->pattern;
         if (pat->lineLength - 2 == 2 && pat->line[1] != player)
