@@ -14,11 +14,18 @@ BoardSeeker::~BoardSeeker()
 {
 }
 
-fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
+static bool comparePair(std::pair<boardPos_t, weight_t>& pos1, std::pair<boardPos_t, weight_t>& pos2)
+{
+  if (pos1.second < pos2.second)
+    return (true);
+  return (false);
+}
+
+std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *ref)
 {
   std::vector<boardPos_t>	tab;
   unsigned int			i;
-  fastList<boardPos_t> *list = new fastList<boardPos_t>;
+  std::list<std::pair<boardPos_t, weight_t>>	*list = new std::list<std::pair<boardPos_t, weight_t>>;
 
   i = 0;
   tab.reserve(BOARDSIZE);
@@ -53,15 +60,24 @@ fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
       ref->getBoOp()->getPercentDensityOnPos(0, 0, &tab, 1);
       ++i;
     }
+  i = 0;
+  //list.reserve(40);
+  while (i < BOARDSIZE)
+    {
+      if (tab[i] > 0)
+	list->push_back(std::pair<boardPos_t, weight_t>(i, tab[i]));
+      ++i;
+    }
+  list->sort(comparePair);
   return (list);
 }
 
 boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 {
-  fastList<boardPos_t> *list;
+  /*fastList<boardPos_t> *list;
 
   list = BoardSeeker::getPlayPos(ref);
-  return (list->begin().elem->value);
+  return (list->begin().elem->value);*/
 }
 
 void		BoardSeeker::prepareTab(std::map<boardPos_t, weight_t> *Tab, boardPos_t pos, weight_t weight)

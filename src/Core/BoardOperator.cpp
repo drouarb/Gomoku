@@ -264,7 +264,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
           {
               try
               {
-                  patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
+		patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
               }
               catch (std::out_of_range)
               {
@@ -431,6 +431,7 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
 {
   PLIST<Pattern>		patterns;
   PLIST<Pattern>::iterator	it;
+  boardPos_t			i;
 
   patterns = patternM.getPatterns();
   it = patterns.begin();
@@ -454,9 +455,9 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
 		      if (i != it->posOfFirst && patternM.teamAt(i) == Team::NOPLAYER
 			  && patternM.teamAt(it->posOfFirst + yo * XBOARD + xo) == Team::NOPLAYER)
 			{
-			  if (pattermM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == Team::NOPLAYER)
+			  if (patternM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == Team::NOPLAYER)
 			    (*tab)[i] += w;
-			  else if (pattermM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == player)
+			  else if (patternM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == player)
 			    (*tab)[i] += 2 * w;
 			}
 			(*tab)[i] += w;
@@ -478,13 +479,13 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
 	      && it->line[0] > Team::NOPLAYER && it->line[it->lineLength - 1] > Team::NOPLAYER)
 	    {
 	      if (patternM.teamAt(it->posOfFirst - it->direction) == Team::NOPLAYER)
-		tab[it->posOfFirst] += w;
+		(*tab)[it->posOfFirst] += w;
 	      else if (patternM.teamAt(it->posOfFirst - it->direction) == player)
-		tab[it->posOfFirst] += w * 2;
+		(*tab)[it->posOfFirst] += w * 2;
 	      if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == Team::NOPLAYER)
-		tab[it->posOfFirst] += w;
+		(*tab)[it->posOfFirst] += w;
 	      else if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == player)
-		tab[it->posOfFirst] += w * 2;
+		(*tab)[it->posOfFirst] += w * 2;
 	    }
 	  ++it;
 	}
@@ -527,7 +528,7 @@ void Core::BoardOperator::getFiveBreakable(Team player, std::vector<boardPos_t> 
 {
   PLIST<Pattern>		patterns;
   PLIST<Pattern>::iterator	it;
-  PLIST<PatternRef>	patSecond;
+  const PLIST<PatternRef>	*patSecond;
   PLIST<PatternRef>::iterator itS;
   Pattern			*pat;
   boardPos_t			i;
@@ -541,17 +542,18 @@ void Core::BoardOperator::getFiveBreakable(Team player, std::vector<boardPos_t> 
 	  i = 1;
 	  while (i < it->lineLength - 1)
 	    {
-	      patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
-	      itS = patSecond.begin();
-	      while (itS != patSecond.end())
+	      patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
+	      //patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
+	      itS = patSecond->begin();
+	      while (itS != patSecond->end())
 		{
 		  pat = itS->pattern;
 		  if (pat->lineLength - 2 == 2 && pat->line[1] == player
 		      && pat->line[0] == Team::NOPLAYER
 		      && pat->line[pat->lineLength - 1] == Team::NOPLAYER)
 		    {
-		      tab[pat->posOfFirst] += w;
-		      tab[pat->posOfFirst + 3 * pat->direction] += w;
+		      (*tab)[pat->posOfFirst] += w;
+		      (*tab)[pat->posOfFirst + 3 * pat->direction] += w;
 		    }
 		  ++itS;
 		}
@@ -574,7 +576,7 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       while (x <= repX + range)
 	{
 	  if (patternM.teamAt(y * XBOARD + x) > Team::NOPLAYER)
-	    tab[y * XBOARD + x] += w;
+	    (*tab)[y * XBOARD + x] += w;
 	  ++x;
 	}
       ++y;
@@ -587,7 +589,7 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       while (x <= repX + range)
 	{
 	  if (patternM.teamAt(y * XBOARD + x) > Team::NOPLAYER)
-	    tab[y * XBOARD + x] += w;
+	    (*tab)[y * XBOARD + x] += w;
 	  ++x;
 	}
       ++y;
