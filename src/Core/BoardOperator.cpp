@@ -11,7 +11,7 @@ Core::BoardOperator::~BoardOperator()
 
 Team Core::BoardOperator::boardAt(boardPos_t x, boardPos_t y)
 {
-    return (patternM.teamAt(PatternManager::getPPos(x, y)));
+  return (patternM.teamAt(patternM.getPPos(x, y)));
 }
 
 bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y)
