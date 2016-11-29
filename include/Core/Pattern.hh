@@ -1,7 +1,7 @@
 #ifndef PATTERN_HH_
 #define PATTERN_HH_
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "Helpers/reservationList.hpp"
 
 namespace Core

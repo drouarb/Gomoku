@@ -1,7 +1,7 @@
 #ifndef CORE_RULE_HH_
 #define CORE_RULE_HH_
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include <string>
 
 namespace Core

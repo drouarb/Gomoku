@@ -8,7 +8,7 @@
 
 #include <cstdio>
 #include <fstream>
-#include <Core/Definitions.hh>
+#include <Core/Definitions.hpp>
 
 namespace Core {
 

@@ -1,7 +1,7 @@
 #ifndef IPLAYEROBSERVER_HH_
 #define IPLAYEROBSERVER_HH_
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "IHuman.hh"
 #include <string>
 

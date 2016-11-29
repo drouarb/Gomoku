@@ -2,7 +2,7 @@
 #define IGUI_HH_
 
 #include "IPlayer.hh"
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "ICoreOberser.hh"
 #include "IPlayerObserver.hh"
 #include "IButton.hpp"

@@ -7,40 +7,57 @@
 #include <Core/BoardSeeker.hh>
 #include "AI/TreeNode.hh"
 
-AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent): plays(0), wins(0), referee(gameState),
-                                                                     parent(parent), move(-1), aiTeam(team) {
-    //TODO trouve_b swap list
-    //moves = Core::BoardSeeker::getPlayPos(referee);
+AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) : plays(0), wins(0),
+                                                                                 referee(gameState),
+                                                                                 parent(parent), move(-1),
+                                                                                 aiTeam(team) {
+    this->moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
-AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *parent, int move): plays(0), wins(0),
-                                                                                   referee(gameState), parent(parent),
-                                                                                   move(move), aiTeam(team) {
-    gameState->tryPlay(move);
-    //TODO trouve_b swap list
-    //moves = Core::BoardSeeker::getPlayPos(referee);
+AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *parent,
+                       std::list<std::pair<boardPos_t, weight_t>> *moves) : plays(0), wins(0), referee(gameState),
+                                                                            parent(parent), aiTeam(team) {
+    boardPos_t move;
+    bool play = false;
+
+    do {
+        move = moves->front().first;
+        moves->pop_front();
+    } while (!(play = referee->tryPlay(move)) && moves->size());
+    if (!play) {
+        delete(referee);
+        throw new std::domain_error("No more moves");
+    }
+
+    this->move = move;
+    referee->tryPlay(move);
+    this->moves = Core::BoardSeeker::getPlayPos(referee);
     childs.reserve(moves->size());
 }
 
 
 AI::TreeNode::~TreeNode() {
     for (auto c : childs) {
-        delete(c);
+        delete (c);
     }
-    delete(moves);
-    delete(referee);
+    delete (moves);
+    delete (referee);
 }
 
 AI::TreeNode *AI::TreeNode::getSimulationNode() {
     if (moves->size()) {
-        childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves->front()));
-        moves->pop_front();
-        return childs.back();
+        try {
+            childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves));
+            return childs.back();
+        } catch (std::exception) {
+            childs.pop_back();
+            if (childs.size())
+                return this->getBestChild()->getSimulationNode();
+        }
     } else if (childs.size())
-        return this->getBestChild();
-    else
-        return NULL;
+        return this->getBestChild()->getSimulationNode();
+    return NULL;
 }
 
 AI::TreeNode *AI::TreeNode::getBestChild() {
@@ -56,10 +73,9 @@ AI::TreeNode *AI::TreeNode::getBestChild() {
         if (c->aiTeam != referee->getPlayer())
             wins = plays - wins;
 
-        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent->getPlays()) / plays));
+        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent ? parent->getPlays() : 0) / plays));
     }
-    //Find max value & return associated child
-    return childs[(values.begin() - std::max_element(values.begin(), values.end()))];
+    return childs[(std::max_element(values.begin(), values.end()) - values.begin())];
 }
 
 int AI::TreeNode::getBestAction() const {
@@ -88,6 +104,7 @@ int AI::TreeNode::getBestAction() const {
     }
     if (bestActions.size() == 0)
         return -1;
+    //TODO Random choose ???
     return bestActions.front()->getMove();
 }
 

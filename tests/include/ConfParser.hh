@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <Core/Definitions.hh>
+#include <Core/Definitions.hpp>
 #include <vector>
 #include <stack>
 #include <queue>

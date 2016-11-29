@@ -1,8 +1,11 @@
 #ifndef GOMOKU_BOARDOPERATOR_HH
 #define GOMOKU_BOARDOPERATOR_HH
 
+#include <vector>
 #include "IBoardOperator.hh"
 #include "PatternManager.hh"
+
+#define DENSITYRANGE 2
 
 namespace Core
 {
@@ -40,21 +43,21 @@ namespace Core
       
       void		ForceupdateBoard(Team player, boardPos_t x, boardPos_t y);
 
-      std::vector<boardPos_t> getXPossible(uint8_t numberPiece, Team player);
+      void		getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w);
 
-      std::vector<boardPos_t> getFreeXPossible(uint8_t numberPiece, Team player);
+      void		getFreeXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w);
 
-      std::vector<boardPos_t> getX(uint8_t numberPiece, Team player);
+      void		getX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w);
 
-      std::vector<boardPos_t> getFreeX(uint8_t numberPiece, Team player);
+      void		getFreeX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w);
 
-      std::vector<std::pair<boardPos_t, uint8_t>> getEatPos(Team player);
+      void		getEatPos(Team player, std::vector<boardPos_t> *tab, weight_t w);
       
-      std::vector<boardPos_t> getFreeDoubleThreePos(Team player);
+      void		getFreeDoubleThreePos(Team player, std::vector<boardPos_t> *tab, weight_t w);
       
-      std::vector<boardPos_t> getFiveBreakable(Team player);
+      void		getFiveBreakable(Team player, std::vector<boardPos_t> *tab, weight_t w);
 
-      uint16_t getPercentDensityOnPos(boardPos_t, boardPos_t);
+      void		getPercentDensityOnPos(boardPos_t, boardPos_t, std::vector<boardPos_t> *tab, weight_t w);
     };
 }
 #endif //GOMOKU_BOARDOPERATOR_HH

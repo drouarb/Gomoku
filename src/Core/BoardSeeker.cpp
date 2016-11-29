@@ -14,145 +14,73 @@ BoardSeeker::~BoardSeeker()
 {
 }
 
-fastList<boardPos_t>	*BoardSeeker::getPlayPos(IReferee *ref)
+static bool comparePair(std::pair<boardPos_t, weight_t>& pos1, std::pair<boardPos_t, weight_t>& pos2)
 {
-  std::map<boardPos_t, weight_t>		finalTab;
-  std::vector<boardPos_t>			tmpTab;
-  int						lenLine;
-  unsigned int					i;
-  Team						player;
+  if (pos1.second < pos2.second)
+    return (true);
+  return (false);
+}
 
-  // recherche des lignes simple
-  player = ref->getPlayer();
-  lenLine = 1;
-  while (lenLine < 6)
-    {
-      tmpTab = ref->getBoOp()->getXPossible(lenLine, player);
-      i = 0;
-      while (i < tmpTab.size())
-	{
-	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
-	  ++i;
-	}
-      ++lenLine;
-    }
-  lenLine = 3;
-  while (lenLine < 6)
-    {
-      tmpTab = ref->getBoOp()->getFreeXPossible(lenLine, player);
-      i = 0;
-      while (i < tmpTab.size())
-	{
-	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
-	  ++i;
-	}
-      ++lenLine;
-    }
-  tmpTab = ref->getBoOp()->getFreeDoubleThreePos(player);
+std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *ref)
+{
+  std::vector<boardPos_t>	tab;
+  unsigned int			i;
+  std::list<std::pair<boardPos_t, weight_t>>	*list = new std::list<std::pair<boardPos_t, weight_t>>;
+
   i = 0;
-  while (i < tmpTab.size())
+  tab.reserve(BOARDSIZE);
+  while (i < BOARDSIZE)
     {
-      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 350);
+      tab.push_back(0);
       ++i;
     }
-  tmpTab = ref->getBoOp()->getFiveBreakable(player);
+  //ref->getBoOp()->getXPossible(2, ref->getPlayer(), &tab, 0);
+  ref->getBoOp()->getXPossible(3, ref->getPlayer(), &tab, 30);
+  ref->getBoOp()->getXPossible(4, ref->getPlayer(), &tab, 200);
+  ref->getBoOp()->getXPossible(5, ref->getPlayer(), &tab, 1000);
+  //ref->getBoOp()->getXPossible(2, !ref->getPlayer(), &tab, 5);
+  ref->getBoOp()->getXPossible(3, !ref->getPlayer(), &tab, 25);
+  ref->getBoOp()->getXPossible(4, !ref->getPlayer(), &tab, 150);
+  ref->getBoOp()->getXPossible(5, !ref->getPlayer(), &tab, 950);
+  //ref->getBoOp()->getFreeXPossible(2, ref->getPlayer(), &tab, 20);
+  ref->getBoOp()->getFreeXPossible(3, ref->getPlayer(), &tab, 300);
+  ref->getBoOp()->getFreeXPossible(4, ref->getPlayer(), &tab, 600);
+  //ref->getBoOp()->getFreeXPossible(2, !ref->getPlayer(), &tab, 10);
+  ref->getBoOp()->getFreeXPossible(3, !ref->getPlayer(), &tab, 350);
+  ref->getBoOp()->getFreeXPossible(4, !ref->getPlayer(), &tab, 500);
+  ref->getBoOp()->getEatPos(ref->getPlayer(), &tab, 400);// savoir combien j'ai mangé
+  ref->getBoOp()->getEatPos(!ref->getPlayer(), &tab, 300);// savoir combien j'ai mangé
+  ref->getBoOp()->getFreeDoubleThreePos(ref->getPlayer(), &tab, 200);
+  ref->getBoOp()->getFreeDoubleThreePos(!ref->getPlayer(), &tab, 199);
+  ref->getBoOp()->getFiveBreakable(ref->getPlayer(), &tab, 1);
+  ref->getBoOp()->getFiveBreakable(!ref->getPlayer(), &tab, 500);
   i = 0;
-  while (i < tmpTab.size())
+  while (i < BOARDSIZE)
     {
-      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 2000);
+      ref->getBoOp()->getPercentDensityOnPos(0, 0, &tab, 1);
       ++i;
     }
-  /*i = 0;
-  while (i < finalTab.size())
+  i = 0;
+  //list.reserve(40);
+  while (i < BOARDSIZE)
     {
-      finalTab
+      if (tab[i] > 0)
+	{
+	  list->push_back(std::pair<boardPos_t, weight_t>(i, tab[i]));
+	  std::cout << "pos: " << i << " = " << tab[i] << std::endl;
+	}
       ++i;
-      }*/
-
-  /*struct {
-    bool operator()(std::map<boardPos_t, weight_t>::iterator a, std::map<boardPos_t, weight_t>::iterator b)
-    {
-      return a->second < b->second;
     }
-    } value_comparer;*/
-
-  /*std::sort(finalTab.begin(), finalTab.end(), [](std::map<boardPos_t, weight_t>::iterator a, std::map<boardPos_t, weight_t>::iterator b)
-	    {
-	      return a->second < b->second;
-	      });*/
-  fastList<boardPos_t> *list = new fastList<boardPos_t>;
-  std::map<boardPos_t, weight_t>::iterator it;
-  it = finalTab.begin();
-  while (it != finalTab.end())
-    {
-      list->push_front(it->first);
-      ++it;
-    }
+  list->sort(comparePair);
   return (list);
 }
 
 boardPos_t					BoardSeeker::getBestPlay(IReferee *ref)
 {
-  std::map<boardPos_t, weight_t>		finalTab;
-  std::vector<boardPos_t>			tmpTab;
-  int						lenLine;
-  unsigned int					i;
-  Team						player;
+  /*fastList<boardPos_t> *list;
 
-  // recherche des lignes simple
-  player = ref->getPlayer();
-  lenLine = 1;
-  while (lenLine < 6)
-    {
-      tmpTab = ref->getBoOp()->getXPossible(lenLine, player);
-      i = 0;
-      while (i < tmpTab.size())
-	{
-	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
-	  ++i;
-	}
-      ++lenLine;
-    }
-  lenLine = 3;
-  while (lenLine < 6)
-    {
-      tmpTab = ref->getBoOp()->getFreeXPossible(lenLine, player);
-      i = 0;
-      while (i < tmpTab.size())
-	{
-	  BoardSeeker::prepareTab(&finalTab, tmpTab[i], lenLine * lenLine * lenLine * lenLine);
-	  ++i;
-	}
-      ++lenLine;
-    }
-  tmpTab = ref->getBoOp()->getFreeDoubleThreePos(player);
-  i = 0;
-  while (i < tmpTab.size())
-    {
-      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 350);
-      ++i;
-    }
-  tmpTab = ref->getBoOp()->getFiveBreakable(player);
-  i = 0;
-  while (i < tmpTab.size())
-    {
-      BoardSeeker::prepareTab(&finalTab, tmpTab[i], 2000);
-      ++i;
-    }
-
-  /*struct {
-    bool operator()(std::map<boardPos_t, weight_t>::iterator a, std::map<boardPos_t, weight_t>::iterator b)
-    {
-    return a->second < b->second;
-    }
-  } value_comparer;*/
-
-  /*std::sort(finalTab.begin(), finalTab.end(), [](std::map<boardPos_t, weight_t>::iterator a, std::map<boardPos_t, weight_t>::iterator b)
-	    {
-	      return a->second < b->second;
-	      });*/
-  std::cout << finalTab.begin()->first << std::endl;
-  return (finalTab.begin()->first);
+  list = BoardSeeker::getPlayPos(ref);
+  return (list->begin().elem->value);*/
 }
 
 void		BoardSeeker::prepareTab(std::map<boardPos_t, weight_t> *Tab, boardPos_t pos, weight_t weight)

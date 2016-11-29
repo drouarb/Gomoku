@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <tuple>
-#include "Definitions.hh"
+#include "Definitions.hpp"
 
 namespace Core
 {
@@ -24,22 +24,22 @@ namespace Core
         virtual uint8_t applyEat(Team player, boardPos_t x, boardPos_t y) = 0;
 
         virtual void ForceupdateBoard(Team player, boardPos_t x, boardPos_t y) = 0;
+ 
+        virtual void getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getXPossible(uint8_t numberPiece, Team player) = 0;
+        virtual void getFreeXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getFreeXPossible(uint8_t numberPiece, Team player) = 0;
+        virtual void getX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getX(uint8_t numberPiece, Team player) = 0;
+        virtual void getFreeX(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getFreeX(uint8_t numberPiece, Team player) = 0;
+        virtual void getEatPos(Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<std::pair<boardPos_t, uint8_t>> getEatPos(Team player) = 0;
+        virtual void getFreeDoubleThreePos(Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getFreeDoubleThreePos(Team player) = 0;
+        virtual void getFiveBreakable(Team player, std::vector<boardPos_t> *tab, weight_t w) = 0;
 
-        virtual std::vector<boardPos_t> getFiveBreakable(Team player) = 0;
-
-        virtual uint16_t getPercentDensityOnPos(boardPos_t, boardPos_t) = 0;
+        virtual void getPercentDensityOnPos(boardPos_t, boardPos_t, std::vector<boardPos_t> *tab, weight_t w) = 0;
     };
 }
 #endif //GOMOKU_IBOARDOPERATOR_HH

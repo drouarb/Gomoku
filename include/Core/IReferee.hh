@@ -1,7 +1,7 @@
 #ifndef IREFEREE_HH_
 # define IREFEREE_HH_
 
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "IBoardOperator.hh"
 #include "BoardOperator.hh"
 #include "Rule.hh"

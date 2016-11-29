@@ -4,7 +4,7 @@
 #include <vector>
 #include <tuple>
 #include <map>
-#include "Definitions.hh"
+#include "Definitions.hpp"
 #include "IReferee.hh"
 #include "IBoardOperator.hh"
 #include "BoardOperator.hh"
