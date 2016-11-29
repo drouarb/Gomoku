@@ -20,11 +20,12 @@ enum GamePlayers : uint8_t
     TWOAIS
 };
 
-enum Team : uint8_t
+enum Team : int8_t
 {
-    NOPLAYER  = 0x00,
-    WHITE     = 0x01,
-    BLACK     = 0x02
+    BORDER    = -0x01,
+    NOPLAYER  =  0x00,
+    WHITE     =  0x01,
+    BLACK     =  0x02
 };
 
 enum RuleID : uint8_t

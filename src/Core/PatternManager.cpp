@@ -19,12 +19,14 @@ PatternManager::PatternManager()
         board[i] = NOPLAYER;
 }
 
-PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
+PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns())
 {
     board = reinterpret_cast<GameBoard_t>(boardRl.take());
     //board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
+    for (Pattern & pattern : patterns)
+        addToMap(&pattern);
 }
 
 PatternManager::~PatternManager()

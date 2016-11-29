@@ -264,7 +264,7 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
           {
               try
               {
-		patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
+                  patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
               }
               catch (std::out_of_range)
               {
