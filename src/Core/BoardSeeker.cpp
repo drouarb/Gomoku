@@ -63,21 +63,18 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
   ref->getBoOp()->getFiveBreakable(!ref->getPlayer(), &tab, 500);
   i = XPBOARD + 1;
   std::cout << "checkdensity" << std::endl;
+  std::cout << "addtolist" << std::endl;
+  //list.reserve(40);
   while (i < PBOARDSIZE - XPBOARD - 1)
     {
       if (i % XPBOARD > 0 && i % XPBOARD < XPBOARD - 1 && i / XPBOARD > 0 && i / XPBOARD < XPBOARD - 1)
-	ref->getBoOp()->getPercentDensityOnPos(i % XPBOARD, i / XPBOARD, &tab, 1);
-      ++i;
-    }
-  i = 0;
-  std::cout << "addtolist" << std::endl;
-  //list.reserve(40);
-  while (i < PBOARDSIZE)
-    {
-      if (tab[i] > 0 && i % XPBOARD > 0 && i % XPBOARD < XPBOARD - 1 && i / XPBOARD > 0 && i / XPBOARD < XPBOARD - 1) 
 	{
-	  list->push_back(std::pair<boardPos_t, weight_t>(i - XPBOARD - 2 * (i / XPBOARD), tab[i]));
-	  std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) << " = " << tab[i] << std::endl;
+	  ref->getBoOp()->getPercentDensityOnPos(i % XPBOARD, i / XPBOARD, &tab, 1);
+	  if (tab[i] > 0)
+	    {
+	      list->push_back(std::pair<boardPos_t, weight_t>(i - XPBOARD - 2 * (i / XPBOARD), tab[i]));
+	      std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) << " = " << tab[i] << std::endl;
+	    }
 	}
       ++i;
     }
