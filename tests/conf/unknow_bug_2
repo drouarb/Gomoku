@@ -20,4 +20,4 @@ put 12 10 white true
 put 12 9 black true
 put 9 9 white true
 put 12 7 black true
-end 0 0 black
+end 0 0 noone
