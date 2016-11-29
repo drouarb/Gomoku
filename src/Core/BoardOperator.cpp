@@ -339,7 +339,7 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
         {
             //std::cout << "applyEat : pat2 find" << std::endl;
             //std::cout << "line:[" << pat->line[0] << pat->line[1] << pat->line[2] << pat->line[3] << "]" << std::endl;
-            //std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XPBOARD << std::endl;
+            //std::cout << "posFirst:" << pat->posOfFirst << " ,last:" << pat->posOfFirst + 3 * pat->direction << " , me:" << x + y *XBOARD << std::endl;
             if ((pat->line[0] == player && pat->posOfFirst + 3 * pat->direction == pos)
                 || (pat->line[0] == player && pat->posOfFirst == pos)
                 || (pat->line[pat->lineLength - 1] == player
@@ -380,7 +380,7 @@ void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::ve
   if (numberPiece == 1)
     {
       i = 0;
-      while (i < XPBOARDSIZE)
+      while (i < BOARDSIZE)
 	{
 	  if (patternM.teamAt(i) == Team::NOPLAYER)
 	    (*tab)[i] += w;
@@ -400,7 +400,7 @@ void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::ve
 		  x = -1;
 		  while (x < 2)
 		    {
-		      i = it->posOfFirst + (y * XPBOARD) + (x);
+		      i = it->posOfFirst + (y * XBOARD) + (x);
 		      if (i != it->posOfFirst && patternM.teamAt(i) == Team::NOPLAYER)
 			(*tab)[i] += w;
 		      ++x;
@@ -451,13 +451,13 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
 		  xo = 1;
 		  while (x < 2)
 		    {
-		      i = it->posOfFirst + (y * XPBOARD) + (x);
+		      i = it->posOfFirst + (y * XBOARD) + (x);
 		      if (i != it->posOfFirst && patternM.teamAt(i) == Team::NOPLAYER
-			  && patternM.teamAt(it->posOfFirst + yo * XPBOARD + xo) == Team::NOPLAYER)
+			  && patternM.teamAt(it->posOfFirst + yo * XBOARD + xo) == Team::NOPLAYER)
 			{
-			  if (patternM.teamAt(it->posOfFirst * 2 * y * XPBOARD + 2 * x) == Team::NOPLAYER)
+			  if (patternM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == Team::NOPLAYER)
 			    (*tab)[i] += w;
-			  else if (patternM.teamAt(it->posOfFirst * 2 * y * XPBOARD + 2 * x) == player)
+			  else if (patternM.teamAt(it->posOfFirst * 2 * y * XBOARD + 2 * x) == player)
 			    (*tab)[i] += 2 * w;
 			}
 			(*tab)[i] += w;
@@ -578,18 +578,6 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       x = repX - range;
       while (x <= repX + range)
 	{
-	  if (i == 179)
-	    {
-	      if (x + y * XPBOARD == 180)
-		{
-		  int j = 0;
-		  while (j < XPBOARDSIZE)
-		    {
-		      if (patternM.teamAt(j) > 0)
-		      ++j;
-		    }
-		}
-	    }
 	  if ((y * XPBOARD + x) > 0 && (y * XPBOARD + x) < XPBOARDSIZE - 1 &&
 	      patternM.teamAt(y * XPBOARD + x) > Team::NOPLAYER)
 	    {
