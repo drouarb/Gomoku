@@ -6,7 +6,6 @@
 #include <map>
 #include "Definitions.hpp"
 #include "IReferee.hh"
-#include "IBoardOperator.hh"
 #include "BoardOperator.hh"
 
 #define EATWIN 5
@@ -26,7 +25,7 @@ namespace Core
     class Referee : public IReferee
     {
     private:
-      IBoardOperator				*boardOp;
+      BoardOperator				boardOp;
       std::map<Team, statPlayer>    stats;
       Team					player;
       Team					winner;
@@ -53,7 +52,7 @@ namespace Core
 
         uint8_t getTeamEat(Team player);
 
-        IBoardOperator *getBoOp() const;
+        BoardOperator *getBoOp();
 
         IReferee *clone();
 

@@ -20,13 +20,13 @@ namespace Players
 
         bool init(Core::IReferee *referee);
 
-        void setIBoardOperator(Core::IBoardOperator *);
+        void setIBoardOperator(Core::BoardOperator *);
         void setScore(int);
         int getScore();
 
     private:
         std::string name;
-        Core::IBoardOperator *boardOperator;
+        Core::BoardOperator *boardOperator;
         Core::IReferee *referee;
     };
 }

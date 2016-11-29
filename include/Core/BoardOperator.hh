@@ -2,14 +2,13 @@
 #define GOMOKU_BOARDOPERATOR_HH
 
 #include <vector>
-#include "IBoardOperator.hh"
 #include "PatternManager.hh"
 
 #define DENSITYRANGE 2
 
 namespace Core
 {
-  class BoardOperator : public IBoardOperator
+  class BoardOperator
     {
     private:
       PatternManager	patternM;

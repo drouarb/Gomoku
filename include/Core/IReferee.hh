@@ -2,7 +2,6 @@
 # define IREFEREE_HH_
 
 #include "Definitions.hpp"
-#include "IBoardOperator.hh"
 #include "BoardOperator.hh"
 #include "Rule.hh"
 
@@ -31,7 +30,7 @@ namespace Core
 
         virtual Team getPlayer() const = 0;
 
-        virtual IBoardOperator *getBoOp() const = 0;
+        virtual BoardOperator *getBoOp() = 0;
 
         virtual IReferee	*clone() = 0;
     };

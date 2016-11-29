@@ -27,7 +27,7 @@ bool AIPlayer::play() {
     return false;
 }
 
-void AIPlayer::setIBoardOperator(Core::IBoardOperator *op) {
+void AIPlayer::setIBoardOperator(Core::BoardOperator *op) {
     this->boardOperator = op;
 }
 
