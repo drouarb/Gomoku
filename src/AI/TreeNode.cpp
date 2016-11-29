@@ -27,7 +27,7 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *paren
     } while (!(play = referee->tryPlay(move)) && moves->size());
     if (!play) {
         delete(referee);
-        throw new std::domain_error("No more moves");
+        throw std::domain_error("No more moves");
     }
 
     this->move = move;
@@ -51,7 +51,6 @@ AI::TreeNode *AI::TreeNode::getSimulationNode() {
             childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves));
             return childs.back();
         } catch (std::exception) {
-            childs.pop_back();
             if (childs.size())
                 return this->getBestChild()->getSimulationNode();
         }

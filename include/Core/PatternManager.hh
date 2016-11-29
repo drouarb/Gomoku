@@ -13,6 +13,7 @@
 #define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
 
 #define XPBOARD (XBOARD + 2)
+#define XPBOARDSIZE (XPBOARD * XPBOARD)
 #define PBOARDDIFF 20
 
 namespace Core
