@@ -13,7 +13,7 @@ PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(
 
 PatternManager::PatternManager()
 {
-    board = new char[XPBOARD * XPBOARD];
+    board = new char[XPBOARD * XPBOARD]; //TODO: prealloc
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
 }
@@ -22,7 +22,7 @@ PatternManager::PatternManager(const PatternManager & other) : patterns(other.ge
 {
     board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
-        board[i] = NOPLAYER;
+        board[i] = other.board[i];
 }
 
 PatternManager::~PatternManager()
@@ -350,7 +350,8 @@ void PatternManager::removeStone(boardPos_t position)
                     else if (halfSize == 1)
                     {
                         //only the extremity
-                        addOSLastExtremity(pattern.pattern);
+                        std::cout << "2nd half: add OS" << std::endl;
+                        addOSLastExtremity(pattern.pattern); //TODO: make 1-stone pattern only if no other pattern on this cell
                     }
                     //else: no second half to create
 
@@ -388,8 +389,8 @@ void PatternManager::removeStone(boardPos_t position)
                     else
                     {
                         //destroy pattern
-		                std::cout << "1st half: erased" << std::endl;
-                        addOSFirstExtremity(pattern.pattern);
+		                std::cout << "1st half: erased, add OS" << std::endl;
+                        addOSFirstExtremity(pattern.pattern); //TODO: make 1-stone pattern only if no other pattern on this cell
                         removeFromList(pattern.pattern);
                     }
                 }
