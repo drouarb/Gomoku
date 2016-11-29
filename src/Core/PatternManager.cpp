@@ -303,7 +303,7 @@ void PatternManager::removeStone(boardPos_t position)
             team = pattern.pattern->getTeam();
             if (pattern.pattern->line[pattern.posOnPattern] != team)
             {
-                //removed extremity of line (not interrupted, since interruption is always empty value)
+                //removed extremity of line
                 pattern.pattern->line[pattern.posOnPattern] = NOPLAYER;
             }
             else
@@ -324,17 +324,15 @@ void PatternManager::removeStone(boardPos_t position)
                         //second half of pattern: create new pattern
                         if (halfSize == 2)
                         {
-                            //1 stone left
-                            PLIST<PatternRef> & singleStoneList = map[position + pattern.pattern->direction];
-                            if (singleStoneList.end() == singleStoneList.begin())
+                            //1 stone left + extremity
+                            if (nbPatternsAt(position + pattern.pattern->direction) == 0)
                             {
-                                //if stone is not part of any other pattern, create new 1-stone pattern
-			                    std::cout << "2nd half: 1 stone" << std::endl;
-                                //1 stone means that extremity is lost
-                                addOSLastExtremity(pattern.pattern);
+                                //if the 1 stone is not part of any other pattern, create new 1-stone pattern
+                                std::cout << "2nd half: 1 stone" << std::endl;
                                 patterns.push_front(Pattern(team, position + pattern.pattern->direction));
                                 addToMap(&patterns.front());
                             }
+                            addOSLastExtremity(pattern.pattern);
                         }
                         else
                         {
@@ -499,7 +497,9 @@ void PatternManager::addOSExtremities(Pattern *pattern)
 
 void PatternManager::addOSFirstExtremity(Pattern *pattern)
 {
-    if (pattern->line[0] != pattern->getTeam() && pattern->line[0] != NOPLAYER)
+    std::cout << "-- " << pattern->posOfFirst << " => " << nbPatternsAt(pattern->posOfFirst) << std::endl;
+    if (pattern->line[0] > NOPLAYER &&
+        (pattern->posOfFirst) == 0)
     {
         addOneStone(pattern->line[0], pattern->posOfFirst);
     }
@@ -507,10 +507,18 @@ void PatternManager::addOSFirstExtremity(Pattern *pattern)
 
 void PatternManager::addOSLastExtremity(Pattern *pattern)
 {
-    if (pattern->line[pattern->lineLength - 1] != pattern->getTeam() && pattern->line[pattern->lineLength - 1] != NOPLAYER)
+    std::cout << "-- " << pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1) << " => " << nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) << std::endl;
+    if (pattern->line[pattern->lineLength - 1] > NOPLAYER &&
+        nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) == 0)
     {
         addOneStone(pattern->line[pattern->lineLength - 1], pattern->posOfFirst + (pattern->lineLength - (boardPos_t)1) * pattern->direction);
     }
+}
+
+int PatternManager::nbPatternsAt(boardPos_t pos)
+{
+    auto patterns = patternsAt(pos);
+    return (patterns ? patterns->size() : 0);
 }
 
 void PatternManager::addOneStone(Team team, boardPos_t position)

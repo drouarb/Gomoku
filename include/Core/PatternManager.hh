@@ -65,6 +65,7 @@ namespace Core
         void addOSExtremities(Pattern * pattern);
         void addOSFirstExtremity(Pattern * pattern);
         void addOSLastExtremity(Pattern * pattern);
+        int nbPatternsAt(boardPos_t);
         void addOneStone(Team team, boardPos_t position);
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
