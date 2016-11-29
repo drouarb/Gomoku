@@ -118,7 +118,6 @@ void Core::Core::setRule(const std::string &rulename, bool on)
     }
 
     feedRules();
-
 }
 
 void Core::Core::destroyPlayer(int index)

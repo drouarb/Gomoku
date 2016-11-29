@@ -103,9 +103,9 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
   return (true);
 }
 
-void		Core::Referee::feedRules(std::map<RuleID, Rule> rules)
+void		Core::Referee::feedRules(std::map<RuleID, Rule> & rules)
 {
-  rRules = new std::map<RuleID, Rule>(rules);
+  rRules = &rules;
 }
 
 Team	Core::Referee::getWinner() const

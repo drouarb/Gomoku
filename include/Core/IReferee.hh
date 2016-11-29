@@ -17,7 +17,7 @@ namespace Core
 
         virtual GameBoard_t getBoardCopy() = 0;
 
-        virtual void feedRules(std::map<RuleID, Rule>) = 0;
+        virtual void feedRules(std::map<RuleID, Rule> &) = 0;
       
         virtual void setPlayer(Team player) = 0;
       

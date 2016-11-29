@@ -30,7 +30,7 @@ namespace Core
       std::map<Team, statPlayer>		*stats;
       Team					player;
       Team					winner;
-      std::map<RuleID, Rule>			*rRules;
+      std::map<RuleID, Rule> *			rRules;
       
     public:
         Referee();
@@ -41,7 +41,7 @@ namespace Core
 
         GameBoard_t getBoardCopy();
 
-        void feedRules(std::map<RuleID, Rule> rules);
+        void feedRules(std::map<RuleID, Rule> & rules);
 
         void setPlayer(Team player);
 
