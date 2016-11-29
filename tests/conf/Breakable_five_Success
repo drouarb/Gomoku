@@ -1,4 +1,5 @@
 //Play started the 2016-11-28
+set 1
 put 7 8 white true
 put 8 10 black true
 put 8 8 white true
