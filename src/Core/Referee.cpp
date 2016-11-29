@@ -19,8 +19,10 @@ void		Core::Referee::initialize()
 {
   player = NOPLAYER;
   winner = NOPLAYER;
+    stats.clear();
   stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
   stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
+    boardOp = BoardOperator();
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
