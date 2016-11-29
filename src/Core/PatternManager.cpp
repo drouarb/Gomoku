@@ -13,21 +13,25 @@ PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(
 
 PatternManager::PatternManager()
 {
-    board = new char[XPBOARD * XPBOARD]; //TODO: prealloc
+    board = reinterpret_cast<GameBoard_t>(boardRl.take());
+    //board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
 }
 
 PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns()), map(other.getMap())
 {
-    board = new char[XPBOARD * XPBOARD];
+    board = reinterpret_cast<GameBoard_t>(boardRl.take());
+    //board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
 }
 
 PatternManager::~PatternManager()
 {
-    delete board;
+    typedef Team t[PBOARDSIZE];
+    boardRl.giveBack(reinterpret_cast<t*>(board));
+    //delete board;
 }
 
 PLIST<PatternRef>& PatternManager::operator[](boardPos_t pos)
@@ -559,6 +563,8 @@ void PatternManager::removeOneStone(boardPos_t position)
 
 
 
+
+reservList<Team[PBOARDSIZE]> PatternManager::boardRl = reservList<Team[PBOARDSIZE]>(128);
 
 const boardPos_t PatternManager::checkMap[] = {
         0,

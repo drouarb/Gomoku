@@ -578,7 +578,7 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       x = repX - range;
       while (x <= repX + range)
 	{
-	  if ((y * XPBOARD + x) > 0 && (y * XPBOARD + x) < XPBOARDSIZE - 1 &&
+	  if ((y * XPBOARD + x) > 0 && (y * XPBOARD + x) < PBOARDSIZE - 1 &&
 	      patternM.teamAt(y * XPBOARD + x) > Team::NOPLAYER)
 	    {
 	      (*tab)[y * XPBOARD + x] += w;
@@ -594,7 +594,7 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       x = repX - range;
       while (x <= repX + range)
 	{
-	  if ((y * XPBOARD + x) > 0 && (y * XPBOARD + x) < XPBOARDSIZE - 1 &&
+	  if ((y * XPBOARD + x) > 0 && (y * XPBOARD + x) < PBOARDSIZE - 1 &&
 	      patternM.teamAt(y * XPBOARD + x) > Team::NOPLAYER)
 	    {
 	      (*tab)[y * XPBOARD + x] += w;

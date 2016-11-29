@@ -27,7 +27,7 @@ namespace Core
     {
     private:
       IBoardOperator				*boardOp;
-      std::map<Team, statPlayer>		*stats;
+      std::map<Team, statPlayer>    stats;
       Team					player;
       Team					winner;
       std::map<RuleID, Rule> *			rRules;

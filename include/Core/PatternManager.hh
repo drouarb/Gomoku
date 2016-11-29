@@ -3,6 +3,7 @@
 
 #include "Pattern.hh"
 #include "Helpers/fastList.hpp"
+#include "Helpers/reservationList.hpp"
 #include <list>
 #include <map>
 #include <iostream>
@@ -13,7 +14,7 @@
 #define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
 
 #define XPBOARD (XBOARD + 2)
-#define XPBOARDSIZE (XPBOARD * XPBOARD)
+#define PBOARDSIZE (XPBOARD * XPBOARD)
 #define PBOARDDIFF 20
 
 namespace Core
@@ -69,6 +70,8 @@ namespace Core
         void addOneStone(Team team, boardPos_t position);
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
+
+        static reservList<Team[PBOARDSIZE]> boardRl;
 
     public:
         static const boardPos_t checkMap[];

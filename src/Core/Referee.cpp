@@ -20,16 +20,15 @@ void		Core::Referee::initialize()
   player = NOPLAYER;
   winner = NOPLAYER;
   boardOp = new BoardOperator;
-  stats = new std::map<Team, statPlayer>;
-  stats->insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
-  stats->insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
+  stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
+  stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
 {
   GameBoard_t	newBoard;
 
-    newBoard = new char[BOARDSIZE];
+    newBoard = new Team[BOARDSIZE];
     for (int y = 0; y < XBOARD; y++)
     {
         for (int x = 0; x < XBOARD; x++)
@@ -54,9 +53,9 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   if ((*rRules)[DOUBLE_THREE].on == true)
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
       return (false);
-  (*stats)[player].eaten += boardOp->applyEat(player, x, y);
+  stats[player].eaten += boardOp->applyEat(player, x, y);
   boardOp->ForceupdateBoard(player, x, y);
-  if ((*stats)[player].eaten >= EATWIN)
+  if (stats[player].eaten >= EATWIN)
     winner = player;
   if ((*rRules)[BREAKABLE_FIVE].on == true)
     {
@@ -85,9 +84,9 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
   if ((*rRules)[DOUBLE_THREE].on == true)
     if (boardOp->checkFreeDoubleThree(player, x, y) == true)
       return (false);
-  (*stats)[player].eaten += boardOp->applyEat(player, x, y);
+  stats[player].eaten += boardOp->applyEat(player, x, y);
   boardOp->ForceupdateBoard(player, x, y);
-  if ((*stats)[player].eaten >= EATWIN)
+  if (stats[player].eaten >= EATWIN)
     winner = player;
   if ((*rRules)[BREAKABLE_FIVE].on == true)
     {
@@ -115,7 +114,7 @@ Team	Core::Referee::getWinner() const
 
 uint8_t	Core::Referee::getTeamEat(Team player)
 {
-  return ((*stats)[player].eaten * 2);
+  return (stats[player].eaten * 2);
 }
 
 Core::IBoardOperator *Core::Referee::getBoOp() const

@@ -44,7 +44,7 @@ static const std::map<RuleID, std::string> RuleToString = {
         {TIME_50MS, "Timed AI: 50 ms"}
 };
 
-typedef char* GameBoard_t;
+typedef Team * GameBoard_t;
 typedef int16_t boardPos_t;
 typedef int32_t weight_t;
 
