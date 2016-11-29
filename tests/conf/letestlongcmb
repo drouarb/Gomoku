@@ -1,0 +1,14 @@
+//Play started the 2016-11-29
+put 9 9 white true
+put 8 8 black true
+put 10 10 white true
+put 8 9 black true
+put 11 11 white true
+put 10 12 white true
+put 9 12 white true
+put 9 11 white true
+put 11 9 white true
+put 8 12 black true
+put 12 8 white true
+put 7 13 black true
+end 0 0 black
