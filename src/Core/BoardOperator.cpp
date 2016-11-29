@@ -380,7 +380,7 @@ void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::ve
   if (numberPiece == 1)
     {
       i = XPBOARD + 1;
-      while (i < XPBOARDSIZE - XPBOARD - 1)
+      while (i < PBOARDSIZE - XPBOARD - 1)
 	{
 	  if (patternM.teamAt(i) == Team::NOPLAYER)
 	    (*tab)[i] += w;
