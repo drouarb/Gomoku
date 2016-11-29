@@ -503,9 +503,9 @@ void PatternManager::addOSExtremities(Pattern *pattern)
 
 void PatternManager::addOSFirstExtremity(Pattern *pattern)
 {
-    std::cout << "-- " << pattern->posOfFirst << " => " << nbPatternsAt(pattern->posOfFirst) << std::endl;
+    std::cout << "extr:first" << std::endl;
     if (pattern->line[0] > NOPLAYER &&
-        (pattern->posOfFirst) == 0)
+        nbPatternsAt(pattern->posOfFirst) == 0)
     {
         addOneStone(pattern->line[0], pattern->posOfFirst);
     }
@@ -513,7 +513,7 @@ void PatternManager::addOSFirstExtremity(Pattern *pattern)
 
 void PatternManager::addOSLastExtremity(Pattern *pattern)
 {
-    std::cout << "-- " << pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1) << " => " << nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) << std::endl;
+    std::cout << "extr:last" << std::endl;
     if (pattern->line[pattern->lineLength - 1] > NOPLAYER &&
         nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) == 0)
     {
@@ -529,6 +529,7 @@ int PatternManager::nbPatternsAt(boardPos_t pos)
 
 void PatternManager::addOneStone(Team team, boardPos_t position)
 {
+    std::cout << "add one stone" << std::endl;
     patterns.push_front(Pattern(team, position));
     addToMap(&patterns.front(), position, 0);
 }
