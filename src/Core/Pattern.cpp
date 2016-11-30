@@ -30,7 +30,10 @@ Pattern::Pattern() : line(NULL)
 { }
 
 Pattern::~Pattern()
-{ }
+{
+    //if (line)
+    //    freeLine();
+}
 
 bool Pattern::operator==(const Pattern & other)
 {
@@ -44,8 +47,8 @@ bool Pattern::operator==(const Pattern & other)
 
 Pattern & Pattern::operator=(const Pattern &other)
 {
-    if (line)
-        freeLine();
+    //if (line)
+    //    freeLine();
     lineLength = other.lineLength;
     posOfFirst = other.posOfFirst;
     direction = other.direction;
@@ -101,20 +104,17 @@ Team Pattern::getTeam()
     return (line[lineLength > 1]);
 }
 
-
-
-
 /*
  * Line reservation lists.
  */
 
-reservList<Team[1]> Pattern::line1Stock = reservList<Team[1]>(1024);
-reservList<Team[4]> Pattern::line2Stock = reservList<Team[4]>(1024);
-reservList<Team[5]> Pattern::line3Stock = reservList<Team[5]>(1024);
-reservList<Team[6]> Pattern::line4Stock = reservList<Team[6]>(1024);
-reservList<Team[7]> Pattern::line5Stock = reservList<Team[7]>(1024);
-reservList<Team[12]> Pattern::line10Stock = reservList<Team[12]>(256);
-reservList<Team[21]> Pattern::line19Stock = reservList<Team[21]>(128);
+reservList<Pattern::line_s<1>> Pattern::line1Stock = reservList<Pattern::line_s<1>>(1024);
+reservList<Pattern::line_s<4>> Pattern::line2Stock = reservList<Pattern::line_s<4>>(1024);
+reservList<Pattern::line_s<5>> Pattern::line3Stock = reservList<Pattern::line_s<5>>(1024);
+reservList<Pattern::line_s<6>> Pattern::line4Stock = reservList<Pattern::line_s<6>>(1024);
+reservList<Pattern::line_s<7>> Pattern::line5Stock = reservList<Pattern::line_s<7>>(1024);
+reservList<Pattern::line_s<12>> Pattern::line10Stock = reservList<Pattern::line_s<12>>(256);
+reservList<Pattern::line_s<21>> Pattern::line19Stock = reservList<Pattern::line_s<21>>(128);
 
 /*
  * Line creation.
@@ -186,44 +186,37 @@ const Pattern::createLineFun Pattern::createLineFunArr[22] = {
 
 void Pattern::delLine1()
 {
-    typedef Team t[1];
-    line1Stock.giveBack(reinterpret_cast<t*>(line));
+    line1Stock.giveBack(reinterpret_cast<line_s<1>*>(line));
 }
 
 void Pattern::delLine2()
 {
-    typedef Team t[4];
-    line2Stock.giveBack(reinterpret_cast<t*>(line));
+    line2Stock.giveBack(reinterpret_cast<line_s<4>*>(line));
 }
 
 void Pattern::delLine3()
 {
-    typedef Team t[5];
-    line3Stock.giveBack(reinterpret_cast<t*>(line));
+    line3Stock.giveBack(reinterpret_cast<line_s<5>*>(line));
 }
 
 void Pattern::delLine4()
 {
-    typedef Team t[6];
-    line4Stock.giveBack(reinterpret_cast<t*>(line));
+    line4Stock.giveBack(reinterpret_cast<line_s<6>*>(line));
 }
 
 void Pattern::delLine5()
 {
-    typedef Team t[7];
-    line5Stock.giveBack(reinterpret_cast<t*>(line));
+    line5Stock.giveBack(reinterpret_cast<line_s<7>*>(line));
 }
 
 void Pattern::delLine6to10()
 {
-    typedef Team t[12];
-    line10Stock.giveBack(reinterpret_cast<t*>(line));
+    line10Stock.giveBack(reinterpret_cast<line_s<12>*>(line));
 }
 
 void Pattern::delLine11to19()
 {
-    typedef Team t[21];
-    line19Stock.giveBack(reinterpret_cast<t*>(line));
+    line19Stock.giveBack(reinterpret_cast<line_s<21>*>(line));
 }
 
 const Pattern::delLineFun Pattern::delLineFunArr[22] = {

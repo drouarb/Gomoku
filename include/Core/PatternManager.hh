@@ -71,7 +71,12 @@ namespace Core
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);
 
-        static reservList<Team[PBOARDSIZE]> boardRl;
+        struct line_s
+        {
+            ~line_s() { }
+            Team arr[PBOARDSIZE];
+        };
+        static reservList<line_s> boardRl;
 
     public:
         static const boardPos_t checkMap[];

@@ -31,8 +31,7 @@ PatternManager::PatternManager(const PatternManager & other) : patterns(other.ge
 
 PatternManager::~PatternManager()
 {
-    typedef Team t[PBOARDSIZE];
-    boardRl.giveBack(reinterpret_cast<t*>(board));
+    boardRl.giveBack(reinterpret_cast<line_s*>(board));
     //delete board;
 }
 
@@ -567,7 +566,7 @@ void PatternManager::removeOneStone(boardPos_t position)
 
 
 
-reservList<Team[PBOARDSIZE]> PatternManager::boardRl = reservList<Team[PBOARDSIZE]>(128);
+reservList<PatternManager::line_s> PatternManager::boardRl = reservList<PatternManager::line_s>(128);
 
 const boardPos_t PatternManager::checkMap[] = {
         0,

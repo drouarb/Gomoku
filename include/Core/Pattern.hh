@@ -54,16 +54,23 @@ namespace Core
         boardPos_t direction; //number to add to get to the next stone in the line
 
     private:
+        template<int size>
+        struct line_s
+        {
+            ~line_s() { }
+            Team arr[size];
+        };
+        
         void freeLine();
         void allocLine();
         
-        static reservList<Team[1]> line1Stock;
-        static reservList<Team[4]> line2Stock;
-        static reservList<Team[5]> line3Stock;
-        static reservList<Team[6]> line4Stock;
-        static reservList<Team[7]> line5Stock;
-        static reservList<Team[12]> line10Stock;
-        static reservList<Team[21]> line19Stock;
+        static reservList<line_s<1>> line1Stock;
+        static reservList<line_s<4>> line2Stock;
+        static reservList<line_s<5>> line3Stock;
+        static reservList<line_s<6>> line4Stock;
+        static reservList<line_s<7>> line5Stock;
+        static reservList<line_s<12>> line10Stock;
+        static reservList<line_s<21>> line19Stock;
 
         void createLine1();
         void createLine2();
