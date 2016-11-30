@@ -137,6 +137,7 @@ void GUI::testGUI::showError(const std::string &e) {
         if (this->assertion) {
             this->assertion = false;
         } else {
+            this->refresh();
             std::cerr << "Assertion failed" << this->last << std::endl;
             std::exit(-1);
         }
