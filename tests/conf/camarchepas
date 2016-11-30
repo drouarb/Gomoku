@@ -12,7 +12,7 @@ put 9 6 black true
 put 9 10 white true
 put 6 9 black true
 put 9 11 white true
-put 7 8 black true
+put 7 8 black false
 put 6 7 white true
 put 5 8 black true
 put 7 10 white true
@@ -27,4 +27,4 @@ put 5 10 white true
 put 11 13 black true
 put 9 8 white true
 put 7 9 black true
-end 0 0 noone
+end 0 0 white
