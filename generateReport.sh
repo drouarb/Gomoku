@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-find ./logs/ > .tmp
+find ./logs/ | sort > .tmp
 mkdir html
 mkdir html/logs
 
@@ -9,7 +9,7 @@ echo "<head>
 </head>
 <body>
 
-<h1>Build failed</h1>
+<h1>All builds</h1>
 
 " > report.html
 
