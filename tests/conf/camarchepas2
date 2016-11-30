@@ -21,7 +21,7 @@ put 9 7 white true
 put 6 12 black true
 put 6 13 white true
 put 10 11 white true
-put 9 9 black true
+put 9 9 black false
 put 11 9 white true
 put 13 13 black true
 end 0 0 noone
