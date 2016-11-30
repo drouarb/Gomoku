@@ -41,4 +41,4 @@ put 6 4 white true
 put 8 10 black true
 put 6 5 white true
 put 7 11 black true
-end 0 0 black
+end 0 0 white
