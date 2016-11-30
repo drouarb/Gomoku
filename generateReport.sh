@@ -24,12 +24,12 @@ do
 
     if [ "$(cat $DEST | grep Error)" = "" ]
     then
-       echo "<img src="$BLUE" alt="Succès > Sortie de console" tooltip="Succès > Sortie de console" style="width: 16px; height: 16px; " class="icon-blue icon-sm" title="Succès > Sortie de console">" >> report.html
+       echo '<img src="'$BLUE'" alt="Succès > Sortie de console" tooltip="Succès > Sortie de console" style="width: 16px; height: 16px; " class="icon-blue icon-sm" title="Succès > Sortie de console">' >> report.html
     else
-       echo "<img src="$RED" alt="Succès > Sortie de console" tooltip="Succès > Sortie de console" style="width: 16px; height: 16px; " class="icon-blue icon-sm" title="Succès > Sortie de console">" >> report.html
+       echo '<img src="'$RED'" alt="Succès > Sortie de console" tooltip="Succès > Sortie de console" style="width: 16px; height: 16px; " class="icon-blue icon-sm" title="Succès > Sortie de console">' >> report.html
     fi
 
-    echo "<a href=\"$DEST\">filename</a><br>" >> report.html
+    echo "<a href=\"$DEST\">$filename</a><br>" >> report.html
 done < .tmp
 
 echo '</body>' >> report.html
