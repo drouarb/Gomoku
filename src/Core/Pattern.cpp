@@ -19,6 +19,13 @@ Pattern::Pattern(Team team, boardPos_t pos) : lineLength(1), posOfFirst(pos)
     direction = 1;
 }
 
+Pattern::Pattern(const Pattern & other) : lineLength(other.lineLength), posOfFirst(other.posOfFirst), direction(other.direction)
+{
+    allocLine();
+    for (int i = 0; i < lineLength; ++i)
+        line[i] = other.line[i];
+}
+
 Pattern::Pattern() : line(NULL)
 { }
 
@@ -33,6 +40,19 @@ bool Pattern::operator==(const Pattern & other)
         if (line[i] != other.line[i])
             return (false);
     return (true);
+}
+
+Pattern & Pattern::operator=(const Pattern &other)
+{
+    if (line)
+        freeLine();
+    lineLength = other.lineLength;
+    posOfFirst = other.posOfFirst;
+    direction = other.direction;
+    allocLine();
+    for (int i = 0; i < lineLength; ++i)
+        line[i] = other.line[i];
+    return (*this);
 }
 
 void Pattern::set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)

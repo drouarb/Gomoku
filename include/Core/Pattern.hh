@@ -26,11 +26,14 @@ namespace Core
          */
         Pattern(Team team, boardPos_t pos);
 
+        Pattern(const Pattern &);
+
         Pattern();
 
         ~Pattern();
 
         bool operator==(const Pattern &);
+        Pattern &operator=(const Pattern &);
 
         void set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction);
         /**
