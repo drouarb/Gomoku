@@ -71,7 +71,8 @@ void GUI::testGUI::endGame(const std::string &winner_name) {
         (winner_name == "White" && this->winner == Team::WHITE)) {
         return;
     }
-    std::cerr << "Victory condition not respected : " << this->confParser->getEnd() << std::endl;
+    std::cerr << "Error: Victory condition not respected : " << this->confParser->getEnd() << std::endl;
+    show("Error: Victory condition not respected");
     exit(-1);
 }
 
