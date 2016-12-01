@@ -230,13 +230,11 @@ void Graph::unregisterPlayer(Players::IPlayer *player)
 void Graph::feedBoard(const GameBoard_t &board)
 {
     this->board = board;
-    refresh();
 }
 
 void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
 {
     this->rules = rules;
-    refresh();
 }
 
 void Graph::setCurrentPlayer(Players::IPlayer *player)
