@@ -20,7 +20,7 @@ void AI::MonteCarlo::run() {
     TreeNode *next;
 
     sw.set();
-    while (sw.elapsedMs() < 1000 && c < 1) {
+    while (sw.elapsedMs() < 1000) {
         //TODO thread
         if ((next = root->getSimulationNode()) == NULL)
             break;
