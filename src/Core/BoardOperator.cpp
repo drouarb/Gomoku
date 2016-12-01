@@ -1,6 +1,6 @@
 #include "BoardOperator.hh"
 
-Core::BoardOperator::BoardOperator()
+Core::BoardOperator::BoardOperator() : patternM()
 { }
 
 Core::BoardOperator::BoardOperator(const BoardOperator & other) : patternM(other.patternM)

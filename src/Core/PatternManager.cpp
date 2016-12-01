@@ -11,7 +11,7 @@ PatternRef::~PatternRef()
 PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(pos)
 { }
 
-PatternManager::PatternManager()
+PatternManager::PatternManager() : map(), patterns()
 {
     board = reinterpret_cast<GameBoard_t>(boardRl.take());
     //board = new char[XPBOARD * XPBOARD];
@@ -42,6 +42,7 @@ PatternManager & PatternManager::operator=(const PatternManager & other)
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
     patterns = other.patterns;
+    map.clear();
     for (Pattern & pattern : patterns)
         addToMap(&pattern);
     return (*this);
@@ -242,7 +243,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
                 foundOppPattern = &oppPattern;
                 break;
             }
-            else if (isAligned(pattern, i))
+            else if (isAligned(oppPattern, i))
             {
                 //found aligned
                 foundOppPattern = &oppPattern;
