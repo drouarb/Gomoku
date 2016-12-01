@@ -87,6 +87,7 @@ void Graph::showError(const std::string &str)
 
 void Graph::refresh()
 {
+    mainObs->actualMenu();
     SDL_RenderPresent(this->pRenderer);
     SDL_RenderClear(this->pRenderer);
 }
@@ -192,7 +193,6 @@ void Graph::init(ICoreObserver *coreObserver)
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
         {
             popupString();
-            mainObs->actualMenu();
             refresh();
             t = Clock::now();
         }
@@ -211,7 +211,7 @@ void Graph::registerPlayer(Players::IPlayer *player)
 {
     std::cout << "register player " << (void *) player << std::endl;
     PlayerObserver *po = new PlayerObserver();
-    po->setPlayer(dynamic_cast<Players::IHumain *>(player));
+    po->setPlayer(player);
     if (players[0] == NULL)
         players[0] = po;
     else
@@ -230,11 +230,13 @@ void Graph::unregisterPlayer(Players::IPlayer *player)
 void Graph::feedBoard(const GameBoard_t &board)
 {
     this->board = board;
+    refresh();
 }
 
 void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
 {
     this->rules = rules;
+    refresh();
 }
 
 void Graph::setCurrentPlayer(Players::IPlayer *player)
@@ -296,7 +298,6 @@ void Graph::prompt()
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > SHOWTIME)
         {
-            mainObs->actualMenu();
             refresh();
             t = Clock::now();
         }

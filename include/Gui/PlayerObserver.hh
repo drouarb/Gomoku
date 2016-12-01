@@ -11,7 +11,7 @@ namespace GUI
         PlayerObserver();
         ~PlayerObserver();
 
-        void setPlayer(Players::IHumain * player);
+        void setPlayer(Players::IPlayer * player);
         Players::IPlayer * getPlayer() const;
         void sendPlay(uint8_t x, uint8_t y);
 

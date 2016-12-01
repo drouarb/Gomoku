@@ -148,6 +148,7 @@ void Core::Core::createPlayerAI(int index)
     name += " A.I.";
     players[index] = new Players::AIPlayer(name);
     players[index]->init(referee);
+    gui->registerPlayer(players[index]);
 }
 
 void Core::Core::letPlayerPlay(int index)

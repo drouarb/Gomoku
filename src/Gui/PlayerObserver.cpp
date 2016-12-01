@@ -8,7 +8,7 @@ PlayerObserver::PlayerObserver() : player(NULL)
 PlayerObserver::~PlayerObserver()
 { }
 
-void PlayerObserver::setPlayer(Players::IHumain *player)
+void PlayerObserver::setPlayer(Players::IPlayer *player)
 {
     this->player = player;
 }
