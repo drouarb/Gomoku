@@ -45,8 +45,8 @@ function e(ctx) {
     ctx.fill();
     log.innerHTML = "";
     var r = "";
-    for (var i = 0; i < game[toto].log.length; ++i) {
-        r += game[toto].log[i] + "<br>";
+    for (var i = 0; i < game[toto + 1].log.length; ++i) {
+        r += game[toto + 1].log[i] + "<br>";
     }
     log.innerHTML = r;
     return;
