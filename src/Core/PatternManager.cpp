@@ -242,7 +242,7 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
                 foundOppPattern = &oppPattern;
                 break;
             }
-            else if (isAligned(pattern, i))
+            else if (isAligned(oppPattern, i))
             {
                 //found aligned
                 foundOppPattern = &oppPattern;
@@ -293,6 +293,9 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
  */
 bool PatternManager::isAligned(PatternRef & pref, int dir)
 {
+    std::cout << "isAligned? " << std::to_string(pref.pattern->posOfFirst) << " " << std::to_string(pref.pattern->direction)
+                                                                                  << " " << std::to_string(pref.pattern->lineLength)
+                                                                                         << " dir=" << std::to_string(dir) << std::endl;
     return (pref.pattern->line[pref.posOnPattern] == pref.pattern->getTeam() && pref.pattern->direction == checkMap[ACTDIR(dir)]);
 }
 
