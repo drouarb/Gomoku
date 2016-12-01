@@ -39,6 +39,5 @@ put 11 8 white true
 put 12 9 black true
 put 14 8 white true
 put 12 10 black true
-//Why can we not play here ?
-put 14 7 white true
+put 14 7 white false
 end 0 0 noone
