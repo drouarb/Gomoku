@@ -24,7 +24,9 @@ void AI::MonteCarlo::run() {
         //TODO thread
         if ((next = root->getSimulationNode()) == NULL)
             break;
+        std::cout << "SIMULATION=============================================" << std::endl;
         simulate(next);
+        std::cout << "END_SIMULATION=============================================" << std::endl;
         c++;
     }
     action = root->getBestAction();

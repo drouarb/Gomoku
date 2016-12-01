@@ -36,6 +36,8 @@ namespace Core
         PatternManager(const PatternManager &); //copy constructor
         ~PatternManager();
 
+        PatternManager & operator=(const PatternManager &);
+
         PLIST<PatternRef> & operator[](boardPos_t);
 
         static boardPos_t getPPos(boardPos_t x, boardPos_t y);
@@ -46,7 +48,7 @@ namespace Core
         const PLIST<PatternRef> * patternsAt(boardPos_t pos) const;
         void addStone(boardPos_t position, Team team);
         void removeStone(boardPos_t position);
-        Team teamAt(boardPos_t position);
+        Team teamAt(boardPos_t position) const;
 
     private:
         PLIST<Pattern> patterns;

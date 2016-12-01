@@ -31,8 +31,8 @@ Pattern::Pattern() : line(NULL)
 
 Pattern::~Pattern()
 {
-    //if (line)
-    //    freeLine();
+    if (line)
+        freeLine();
 }
 
 bool Pattern::operator==(const Pattern & other)
@@ -47,8 +47,8 @@ bool Pattern::operator==(const Pattern & other)
 
 Pattern & Pattern::operator=(const Pattern &other)
 {
-    //if (line)
-    //    freeLine();
+    if (line)
+        freeLine();
     lineLength = other.lineLength;
     posOfFirst = other.posOfFirst;
     direction = other.direction;

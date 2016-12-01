@@ -35,6 +35,18 @@ PatternManager::~PatternManager()
     //delete board;
 }
 
+PatternManager & PatternManager::operator=(const PatternManager & other)
+{
+    boardRl.giveBack(reinterpret_cast<line_s*>(board));
+    board = reinterpret_cast<GameBoard_t>(boardRl.take());
+    for (int i = 0; i < XPBOARD * XPBOARD; ++i)
+        board[i] = other.board[i];
+    patterns = other.patterns;
+    for (Pattern & pattern : patterns)
+        addToMap(&pattern);
+    return (*this);
+}
+
 PLIST<PatternRef>& PatternManager::operator[](boardPos_t pos)
 {
   return (map[pos]);
@@ -407,7 +419,7 @@ void PatternManager::removeStone(boardPos_t position)
     std::cout << *this << std::endl;
 }
 
-Team PatternManager::teamAt(boardPos_t pos)
+Team PatternManager::teamAt(boardPos_t pos) const
 {
     return ((Team)board[pos]);
 }
