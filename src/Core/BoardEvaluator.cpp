@@ -29,19 +29,19 @@ BoardEvaluator *BoardEvaluator:: getInstance() {
     return instance;
 }
 
-int32_t BoardEvaluator::getValue(Referee & referee, Team t) const {
+int32_t BoardEvaluator::getValue(IReferee * referee, Team t) const {
 
-    if (referee.getWinner() > NOPLAYER)
+    if (referee->getWinner() > NOPLAYER)
     {
-        return (WIN_VALUE(t, referee.getWinner()));
+        return (WIN_VALUE(t, referee->getWinner()));
     }
 
     int32_t totalValue = 0;
 
-    totalValue += conf->pierres_mangees[referee.getTeamEat(t)]
-                - conf->pierres_mangees[referee.getTeamEat(OPPTEAM(t))];
+    totalValue += conf->pierres_mangees[referee->getTeamEat(t)]
+                - conf->pierres_mangees[referee->getTeamEat(OPPTEAM(t))];
 
-    for (auto & pattern : referee.getBoOp()->getPatternManager().getPatterns()) {
+    for (auto & pattern : referee->getBoOp()->getPatternManager().getPatterns()) {
         totalValue += ADD_BY_TEAM(t,
                                   conf->values[pattern.lineLength].extremity[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
                                   pattern);
@@ -98,56 +98,52 @@ BoardEvaluator::BoardEvaluator() {
     this->parseFrom("AI_conf.json");
 }
 
-std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMoves(Referee & referee) const
+std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMoves(IReferee * referee) const
 {
     auto * vect = new std::vector<std::pair<boardPos_t, weight_t>>();
 
-    if (referee.getBoOp()->getPatternManager().getPatterns().empty())
+    if (referee->getBoOp()->getPatternManager().getPatterns().empty())
     {
         vect->push_back(std::pair<boardPos_t, weight_t>(9 * XBOARD + 9, 1));
         return (vect);
     }
-
     vect->reserve(32);
 
-    std::cout << "before " << std::to_string(referee.getPlayer()) << " " << std::to_string(referee.getTeamEat(referee.getPlayer())) << std::endl;
+    std::cout << "before " << std::to_string(referee->getPlayer()) << " " << std::to_string(referee->getTeamEat(referee->getPlayer())) << std::endl;
     boardPos_t playPos;
     for (boardPos_t y = 0; y < 19; ++y)
     {
         for (boardPos_t x = 0; x < 19; ++x)
         {
-            if (notMiddleOfNowhere(referee, PatternManager::getPPos(x, y)) && referee.tryPlay(x, y))
+            if (notMiddleOfNowhere(referee, PatternManager::getPPos(x, y)) && referee->tryPlay(x, y))
             {
-                vect->push_back(std::pair<boardPos_t, weight_t>(y * XBOARD + x, getValue(referee, referee.getPlayer())));
-                referee.undoLastMove();
+                vect->push_back(std::pair<boardPos_t, weight_t>(y * XBOARD + x, getValue(referee, referee->getPlayer())));
+                referee->undoLastMove();
             }
         }
     }
-    std::cout << "after " << std::to_string(referee.getPlayer()) << " " << std::to_string(referee.getTeamEat(referee.getPlayer())) << std::endl;
+    std::cout << "after " << std::to_string(referee->getPlayer()) << " " << std::to_string(referee->getTeamEat(referee->getPlayer())) << std::endl;
 
     std::sort(vect->begin(), vect->end(), cmpWeightVect);
 
     return (vect);
 }
 
-bool BoardEvaluator::notMiddleOfNowhere(Referee & referee, boardPos_t pos) const
+bool BoardEvaluator::notMiddleOfNowhere(IReferee * referee, boardPos_t pos) const
 {
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[1]))
         return (true);
-
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[1]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[2]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[2]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[3]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[3]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[4]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[4]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[5]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[5]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[6]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[6]))
+    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[7]))
         return (true);
-    if (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[7]))
-        return (true);
-    return (referee.getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[8]));
+    return (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[8]));
 }

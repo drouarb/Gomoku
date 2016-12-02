@@ -33,6 +33,9 @@ namespace Core
         virtual BoardOperator *getBoOp() = 0;
 
         virtual IReferee	*clone() = 0;
+
+        virtual void undoLastMove() = 0;
+
     };
 }
 

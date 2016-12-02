@@ -42,13 +42,13 @@ namespace Core {
         BoardEvaluator();
 
         void parseFrom(const std::string &path);
-        int32_t getValue(Referee & referee, Team t) const;
-        std::vector<std::pair<boardPos_t, weight_t>> * getInterestingMoves(Referee &) const;
+        int32_t getValue(IReferee * referee, Team t) const;
+        std::vector<std::pair<boardPos_t, weight_t>> * getInterestingMoves(IReferee *) const;
 
         static BoardEvaluator *getInstance();
 
     private:
-        bool notMiddleOfNowhere(Referee &, boardPos_t) const;
+        bool notMiddleOfNowhere(IReferee *, boardPos_t) const;
     };
 
 
