@@ -9,8 +9,10 @@ Core::Referee::Referee()
 
 Core::Referee::Referee(const Referee & other) :
         boardOp(other.boardOp), stats(other.stats),
-        player(other.player), winner(other.winner), rRules(other.rRules)
-{ }
+        player(other.player), winner(other.winner), rRules(other.rRules),
+	lastMove(other.lastMove), nbrPlay(other.nbrPlay)
+{
+}
 
 Core::Referee::~Referee()
 { }
@@ -19,10 +21,12 @@ void		Core::Referee::initialize()
 {
   player = NOPLAYER;
   winner = NOPLAYER;
-    stats.clear();
+  stats.clear();
+  nbrPlay = 0;
+  lastMove = 0;
   stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
   stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
-    boardOp = BoardOperator();
+  boardOp = BoardOperator();
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
@@ -68,6 +72,8 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
       if (boardOp.checkfiveWinNoBreak(player) == true)
 	winner = player;
     }
+  lastMove = x + y * XBOARD;
+  ++nbrPlay;
   return (true);
 }
 
@@ -99,7 +105,9 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
       if (boardOp.checkfiveWinNoBreak(player) == true)
 	winner = player;
     }
+  lastMove = pos;
   player = (player == Team::WHITE) ? Team::BLACK : Team::WHITE;
+  ++nbrPlay;
   return (true);
 }
 
@@ -128,6 +136,16 @@ Team Core::Referee::getPlayer() const
   return (player);
 }
 
+boardPos_t Core::Referee::getLastMove() const
+{
+  return (lastMove);
+}
+
 Core::IReferee *Core::Referee::clone() {
   return new Referee(*this);
+}
+
+uint16_t Core::Referee::getNbrPlay() const
+{
+  return (nbrPlay);
 }

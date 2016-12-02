@@ -30,6 +30,8 @@ namespace Core
       Team					player;
       Team					winner;
       std::map<RuleID, Rule> *			rRules;
+      boardPos_t				lastMove;
+      uint16_t					nbrPlay;
       
     public:
         Referee();
@@ -57,6 +59,10 @@ namespace Core
         IReferee *clone();
 
         Team getPlayer() const;
+
+      boardPos_t getLastMove() const;
+
+      uint16_t getNbrPlay() const;
     };
 }
 
