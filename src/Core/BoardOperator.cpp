@@ -460,7 +460,7 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
 			  else if (patternM.teamAt(it->posOfFirst * 2 * y * XPBOARD + 2 * x) == player)
 			    (*tab)[i] += 2 * w;
 			}
-			(*tab)[i] += w;
+		      //(*tab)[i] += w;
 		      --xo;
 		      ++x;
 		    }
@@ -475,17 +475,17 @@ void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std
     {
       while (it != patterns.end())
 	{
-	  if (it->lineLength - 2 == numberPiece && it->line[1] == player
-	      && it->line[0] > Team::NOPLAYER && it->line[it->lineLength - 1] > Team::NOPLAYER)
+	  if (it->lineLength - 1 == numberPiece && it->line[1] == player
+	      && it->line[0] == Team::NOPLAYER && it->line[it->lineLength - 1] == Team::NOPLAYER)
 	    {
 	      if (patternM.teamAt(it->posOfFirst - it->direction) == Team::NOPLAYER)
 		(*tab)[it->posOfFirst] += w;
 	      else if (patternM.teamAt(it->posOfFirst - it->direction) == player)
 		(*tab)[it->posOfFirst] += w * 2;
 	      if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == Team::NOPLAYER)
-		(*tab)[it->posOfFirst] += w;
+		(*tab)[it->posOfFirst + (numberPiece + 1) * it->direction] += w;
 	      else if (patternM.teamAt(it->posOfFirst + (numberPiece + 2) * it->direction) == player)
-		(*tab)[it->posOfFirst] += w * 2;
+		(*tab)[it->posOfFirst + (numberPiece + 1) * it->direction] += w * 2;
 	    }
 	  ++it;
 	}

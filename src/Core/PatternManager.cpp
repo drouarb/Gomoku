@@ -87,7 +87,7 @@ boardPos_t PatternManager::getPPos(boardPos_t x, boardPos_t y)
 
 void PatternManager::addStone(boardPos_t position, Team team)
 {
-  std::cout << "addStone " << std::to_string(position) <<  " " << std::to_string(team) << std::endl;
+  //std::cout << "addStone " << std::to_string(position) <<  " " << std::to_string(team) << std::endl;
 
     board[position] = team;
 
@@ -133,21 +133,21 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 boardPos_t newlen;
                 if (pattern->pattern->lineLength == 1)
                 {
-                    std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+		  //std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //single stone
                     newlen = 4;
                     removeFromMap(pattern->pattern);
                 }
                 else if (aligned)
                 {
-                    std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+		  //std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //aligned pattern
                     newlen = pattern->pattern->lineLength + (boardPos_t) 1;
                     removeFromMap(pattern->pattern);
                 }
                 else
                 {
-                    std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+		  //std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //new pattern
                     newpatterns++;
                     patterns.push_front(Pattern(team, 4, teamAt(position + checkMap[i] * (boardPos_t) 2),
@@ -191,7 +191,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
     {
         if (!found)
         {
-            std::cout << "create new 1-stone pattern" << std::endl;
+	  //std::cout << "create new 1-stone pattern" << std::endl;
             patterns.push_front(Pattern(team, position));
             map[position].push_front(PatternRef(&patterns.front(), 0));
         }
@@ -205,7 +205,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
         ++it;
     }
 
-    std::cout << *this << std::endl;
+    //std::cout << *this << std::endl;
 }
 
 bool PatternManager::addMiddle(boardPos_t position, Team team)
@@ -262,24 +262,24 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
         done[i] = true;
         if (foundOppPattern->pattern->lineLength == 1)
         {
-            std::cout << "found opp 1 i=" << std::to_string(i) << " pos="
-                      << std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp 1 i=" << std::to_string(i) << " pos="
+	  //<< std::to_string(position + checkMap[i]) << std::endl;
             //single stone
             newlen += 1;
             removePattern(foundOppPattern->pattern);
         }
         else if (aligned)
         {
-            std::cout << "found opp aligned i=" << std::to_string(i) << " pos="
-                      << std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp aligned i=" << std::to_string(i) << " pos="
+	  //          << std::to_string(position + checkMap[i]) << std::endl;
             //aligned oppPattern
             newlen += foundOppPattern->pattern->lineLength - 2;
             removePattern(foundOppPattern->pattern);
         }
         else
         {
-            std::cout << "found opp non-aligned i=" << std::to_string(i) << " pos="
-                      << std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp non-aligned i=" << std::to_string(i) << " pos="
+	  //          << std::to_string(position + checkMap[i]) << std::endl;
             //found stone is part of a pattern, but not an entire pattern
             newlen += 1;
         }
@@ -299,7 +299,7 @@ bool PatternManager::isAligned(PatternRef & pref, int dir)
 
 void PatternManager::removeStone(boardPos_t position)
 {
-  std::cout << "removeStone " << std::to_string(position) << std::endl;
+  //std::cout << "removeStone " << std::to_string(position) << std::endl;
 
     board[position] = NOPLAYER;
 
@@ -326,7 +326,7 @@ void PatternManager::removeStone(boardPos_t position)
             }
             else
             {
-	            std::cout << "pattern: start=" << std::to_string(pattern.pattern->posOfFirst) << " len=" << std::to_string(pattern.pattern->lineLength) << " dir=" << std::to_string(pattern.pattern->direction) << std::endl;
+	      //std::cout << "pattern: start=" << std::to_string(pattern.pattern->posOfFirst) << " len=" << std::to_string(pattern.pattern->lineLength) << " dir=" << std::to_string(pattern.pattern->direction) << std::endl;
 
                 removeFromMap(pattern.pattern, &it, &it_set);
                 if (pattern.pattern->lineLength == 1)
@@ -346,7 +346,7 @@ void PatternManager::removeStone(boardPos_t position)
                             if (nbPatternsAt(position + pattern.pattern->direction) == 0)
                             {
                                 //if the 1 stone is not part of any other pattern, create new 1-stone pattern
-                                std::cout << "2nd half: 1 stone" << std::endl;
+			      //std::cout << "2nd half: 1 stone" << std::endl;
                                 patterns.push_front(Pattern(team, position + pattern.pattern->direction));
                                 addToMap(&patterns.front());
                             }
@@ -355,7 +355,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //new multiple-stone pattern (starting at position, since pattern dir is always positive)
-			                std::cout << "2nd half: multiple stones" << std::endl;
+			  //        std::cout << "2nd half: multiple stones" << std::endl;
                             patterns.push_front(Pattern(team, halfSize + (uint8_t) 1, NOPLAYER,
                                                         pattern.pattern->line[pattern.pattern->lineLength -
                                                                               (uint8_t) 1],
@@ -366,7 +366,7 @@ void PatternManager::removeStone(boardPos_t position)
                     else if (halfSize == 1)
                     {
                         //only the extremity
-                        std::cout << "2nd half: add OS" << std::endl;
+		      //std::cout << "2nd half: add OS" << std::endl;
                         addOSLastExtremity(pattern.pattern); //TODO: make 1-stone pattern only if no other pattern on this cell
                     }
                     //else: no second half to create
@@ -383,13 +383,13 @@ void PatternManager::removeStone(boardPos_t position)
                             if (singleStoneList.begin() != singleStoneList.end())
                             {
                                 //only one stone, and it is part of another pattern
-			                    std::cout << "1st half: erased" << std::endl;
+			      //std::cout << "1st half: erased" << std::endl;
                                 removeFromList(pattern.pattern);
                             }
                             else
                             {
                                 //change pattern
-			                    std::cout << "1st half: change pattern" << std::endl;
+			        //            std::cout << "1st half: change pattern" << std::endl;
                                 pattern.pattern->breatAt(pattern.posOnPattern);
                                 addToMap(pattern.pattern);
                             }
@@ -397,7 +397,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //change pattern
-			                std::cout << "1st half: change pattern" << std::endl;
+			  //      std::cout << "1st half: change pattern" << std::endl;
                             pattern.pattern->breatAt(pattern.posOnPattern);
                             addToMap(pattern.pattern);
                         }
@@ -405,7 +405,7 @@ void PatternManager::removeStone(boardPos_t position)
                     else
                     {
                         //destroy pattern
-		                std::cout << "1st half: erased, add OS" << std::endl;
+		      //    std::cout << "1st half: erased, add OS" << std::endl;
                         addOSFirstExtremity(pattern.pattern); //TODO: make 1-stone pattern only if no other pattern on this cell
                         removeFromList(pattern.pattern);
                     }
@@ -417,7 +417,7 @@ void PatternManager::removeStone(boardPos_t position)
             //incFlexibleIterator(list, size, prev_it, it);
         }
     }
-    std::cout << *this << std::endl;
+    //std::cout << *this << std::endl;
 }
 
 Team PatternManager::teamAt(boardPos_t pos) const
@@ -515,7 +515,7 @@ void PatternManager::addOSExtremities(Pattern *pattern)
 
 void PatternManager::addOSFirstExtremity(Pattern *pattern)
 {
-    std::cout << "extr:first" << std::endl;
+  //std::cout << "extr:first" << std::endl;
     if (pattern->line[0] > NOPLAYER &&
         nbPatternsAt(pattern->posOfFirst) == 0)
     {
@@ -525,7 +525,7 @@ void PatternManager::addOSFirstExtremity(Pattern *pattern)
 
 void PatternManager::addOSLastExtremity(Pattern *pattern)
 {
-    std::cout << "extr:last" << std::endl;
+  //std::cout << "extr:last" << std::endl;
     if (pattern->line[pattern->lineLength - 1] > NOPLAYER &&
         nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) == 0)
     {
@@ -541,7 +541,7 @@ int PatternManager::nbPatternsAt(boardPos_t pos)
 
 void PatternManager::addOneStone(Team team, boardPos_t position)
 {
-    std::cout << "add one stone" << std::endl;
+  //std::cout << "add one stone" << std::endl;
     patterns.push_front(Pattern(team, position));
     addToMap(&patterns.front(), position, 0);
 }

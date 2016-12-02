@@ -56,8 +56,8 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
   ref->getBoOp()->getEatPos(ref->getPlayer(), &tab, 400);// savoir combien j'ai mangé
   ref->getBoOp()->getEatPos(!ref->getPlayer(), &tab, 300);// savoir combien j'ai mangé
   //std::cout << "check doublethree free" << std::endl;
-  ref->getBoOp()->getFreeDoubleThreePos(ref->getPlayer(), &tab, 200);
-  ref->getBoOp()->getFreeDoubleThreePos(!ref->getPlayer(), &tab, 199);
+  //ref->getBoOp()->getFreeDoubleThreePos(ref->getPlayer(), &tab, 200);
+  //ref->getBoOp()->getFreeDoubleThreePos(!ref->getPlayer(), &tab, 199);
   //std::cout << "check five breakable" << std::endl;
   ref->getBoOp()->getFiveBreakable(ref->getPlayer(), &tab, 1);
   ref->getBoOp()->getFiveBreakable(!ref->getPlayer(), &tab, 500);
@@ -69,11 +69,12 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
     {
       if (i % XPBOARD > 0 && i % XPBOARD < XPBOARD - 1 && i / XPBOARD > 0 && i / XPBOARD < XPBOARD - 1)
 	{
-	  ref->getBoOp()->getPercentDensityOnPos(i % XPBOARD, i / XPBOARD, &tab, 1);
+	  //ref->getBoOp()->getPercentDensityOnPos(i % XPBOARD, i / XPBOARD, &tab, 1);
 	  if (tab[i] > 0)
 	    {
 	      list->push_back(std::pair<boardPos_t, weight_t>(i - XPBOARD - 2 * (i / XPBOARD) + 3, tab[i]));
-	      //std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) + 3 << " = " << tab[i] << std::endl;
+	      if (tab[i] > 20)
+		std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) + 3 << " = " << tab[i] << std::endl;
 	    }
 	}
       ++i;
