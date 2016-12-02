@@ -48,7 +48,7 @@ namespace Core {
         static BoardEvaluator *getInstance();
 
     private:
-        bool notMiddleOfNowhere(IReferee *, boardPos_t) const;
+        bool notMiddleOfNowhere(const PatternManager &, boardPos_t) const;
     };
 
 

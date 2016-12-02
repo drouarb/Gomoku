@@ -110,15 +110,12 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     vect->reserve(32);
 
     boardPos_t playPos;
-    for (boardPos_t y = 0; y < 19; ++y)
+    for (int i = 0; i < BOARDSIZE; ++i)
     {
-        for (boardPos_t x = 0; x < 19; ++x)
+        if (notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), PatternManager::getPPos(i % 19, i / 19)) && referee->tryPlay(i % 19, i / 19))
         {
-            if (notMiddleOfNowhere(referee, PatternManager::getPPos(x, y)) && referee->tryPlay(x, y))
-            {
-                vect->push_back(std::pair<boardPos_t, weight_t>(y * XBOARD + x, getValue(referee, referee->getPlayer())));
-                referee->undoLastMove();
-            }
+            vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, referee->getPlayer())));
+            referee->undoLastMove();
         }
     }
 
@@ -127,21 +124,21 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     return (vect);
 }
 
-bool BoardEvaluator::notMiddleOfNowhere(IReferee * referee, boardPos_t pos) const
+bool BoardEvaluator::notMiddleOfNowhere(const PatternManager & pm, boardPos_t pos) const
 {
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[1]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[1]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[2]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[2]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[3]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[3]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[4]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[4]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[5]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[5]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[6]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[6]))
         return (true);
-    if (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[7]))
+    if (pm.onePatternAt(pos + PatternManager::checkMap[7]))
         return (true);
-    return (referee->getBoOp()->getPatternManager().onePatternAt(pos + PatternManager::checkMap[8]));
+    return (pm.onePatternAt(pos + PatternManager::checkMap[8]));
 }
