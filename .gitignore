@@ -176,7 +176,7 @@ Gomoku
 launch.sh
 debug.sh
 make.sh
-.log
+*.log
 
 
 generated/*.cpp
