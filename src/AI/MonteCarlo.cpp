@@ -11,7 +11,7 @@ AI::MonteCarlo::MonteCarlo(Core::IReferee *referee, Team team) : team(team), roo
 }
 
 AI::MonteCarlo::~MonteCarlo() {
-
+    delete (root);
 }
 
 void AI::MonteCarlo::run() {
