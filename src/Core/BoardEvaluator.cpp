@@ -109,7 +109,6 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     }
     vect->reserve(32);
 
-    std::cout << "before " << std::to_string(referee->getPlayer()) << " " << std::to_string(referee->getTeamEat(referee->getPlayer())) << std::endl;
     boardPos_t playPos;
     for (boardPos_t y = 0; y < 19; ++y)
     {
@@ -122,7 +121,6 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
             }
         }
     }
-    std::cout << "after " << std::to_string(referee->getPlayer()) << " " << std::to_string(referee->getTeamEat(referee->getPlayer())) << std::endl;
 
     std::sort(vect->begin(), vect->end(), cmpWeightVect);
 
