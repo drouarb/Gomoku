@@ -37,6 +37,8 @@ Pattern::~Pattern()
 
 bool Pattern::operator==(const Pattern & other)
 {
+    if (lineLength == 1 && (other.lineLength == 1 && other.line[0] == line[0]))
+        return (true);
     if (lineLength != other.lineLength || posOfFirst != other.posOfFirst || direction != other.direction)
         return (false);
     for (int i = 0; i < lineLength; ++i)

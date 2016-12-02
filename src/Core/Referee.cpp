@@ -1,5 +1,6 @@
 #include "Referee.hpp"
 #include <string.h>
+#include <Core/BoardEvaluator.hh>
 
 Core::Referee::Referee()
 {
@@ -46,11 +47,12 @@ GameBoard_t	Core::Referee::getBoardCopy()
 
 void		Core::Referee::setPlayer(Team nplayer)
 {
-  player = nplayer;
+    player = nplayer;
 }
 
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
+    boardOp.clearLastMove();
   if (winner != NOPLAYER)
     return (false);
   if (boardOp.boardAt(x, y) != NOPLAYER)
@@ -82,7 +84,8 @@ bool		Core::Referee::tryPlay(boardPos_t pos)
   uint8_t	x;
   uint8_t	y;
 
-  x = pos % XBOARD;
+    boardOp.clearLastMove();
+    x = pos % XBOARD;
   y = pos / XBOARD;
   if (winner != NOPLAYER)
     return (false);
@@ -143,6 +146,18 @@ boardPos_t Core::Referee::getLastMove() const
 
 Core::IReferee *Core::Referee::clone() {
   return new Referee(*this);
+}
+
+void Core::Referee::undoLastMove()
+{
+    winner = NOPLAYER;
+    stats[player].eaten -= boardOp.getLastTakenStones().size() / 2;
+    for (auto pos : boardOp.getLastTakenStones())
+    {
+        boardOp.ForceupdateBoard(OPPTEAM(getPlayer()), pos);
+    }
+    boardOp.clearLastMove();
+    boardOp.ForceupdateBoard(NOPLAYER, PatternManager::getPPos(lastMove % XBOARD, lastMove / XBOARD));
 }
 
 uint16_t Core::Referee::getNbrPlay() const

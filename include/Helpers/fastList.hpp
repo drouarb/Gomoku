@@ -53,7 +53,7 @@ public:
     void	    push_front(const T & value);
     void    	    pop_front();
     iterator	    erase(iterator element);
-    bool            empty();
+    bool            empty() const ;
     T &             front();
     int             size() const;
     void            clear();
@@ -246,7 +246,7 @@ typename fastList<T>::iterator fastList<T>::erase(iterator it)
 }
 
 template<typename T>
-bool fastList<T>::empty()
+bool fastList<T>::empty() const
 {
     return (first == NULL);
 }

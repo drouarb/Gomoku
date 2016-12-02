@@ -1,0 +1,41 @@
+{
+  "values": [
+    {
+      "taille": 2,
+      "extremites": [
+        10,
+        20,
+        30
+      ]
+    },
+    {
+      "taille": 3,
+      "extremites": [
+        30,
+        40,
+        50
+      ]
+    },
+    {
+      "taille": 4,
+      "extremites": [
+        50,
+        60,
+        70
+      ]
+    },
+    {
+      "taille": 5,
+      "extremites": [
+        70,
+        80,
+        90
+      ]
+    }
+  ],
+  "points_par_pierre_en_plus": 10,
+  "points_pour_2_pierres_mangées": 55,
+  "points_pour_4_pierres_mangées": 65,
+  "points_pour_6_pierres_mangées": 80,
+  "points_pour_8_pierres_mangées": 100
+}

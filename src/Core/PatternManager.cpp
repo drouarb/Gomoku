@@ -48,6 +48,25 @@ PatternManager & PatternManager::operator=(const PatternManager & other)
     return (*this);
 }
 
+bool PatternManager::operator==(const PatternManager & other)
+{
+    if (patterns.size() != other.patterns.size())
+        return (false);
+    for (auto it : patterns)
+    {
+        bool ok = false;
+        for (auto it_oth : other.patterns)
+            if (it == it_oth)
+            {
+                ok = true;
+                break;
+            }
+        if (!ok)
+            return (false);
+    }
+    return (true);
+}
+
 PLIST<PatternRef>& PatternManager::operator[](boardPos_t pos)
 {
   return (map[pos]);
@@ -343,7 +362,7 @@ void PatternManager::removeStone(boardPos_t position)
                         if (halfSize == 2)
                         {
                             //1 stone left + extremity
-                            if (nbPatternsAt(position + pattern.pattern->direction) == 0)
+                            if (onePatternAt(position + pattern.pattern->direction) == false)
                             {
                                 //if the 1 stone is not part of any other pattern, create new 1-stone pattern
 			      //std::cout << "2nd half: 1 stone" << std::endl;
@@ -517,7 +536,7 @@ void PatternManager::addOSFirstExtremity(Pattern *pattern)
 {
   //std::cout << "extr:first" << std::endl;
     if (pattern->line[0] > NOPLAYER &&
-        nbPatternsAt(pattern->posOfFirst) == 0)
+        onePatternAt(pattern->posOfFirst) == false)
     {
         addOneStone(pattern->line[0], pattern->posOfFirst);
     }
@@ -527,7 +546,7 @@ void PatternManager::addOSLastExtremity(Pattern *pattern)
 {
   //std::cout << "extr:last" << std::endl;
     if (pattern->line[pattern->lineLength - 1] > NOPLAYER &&
-        nbPatternsAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) == 0)
+        onePatternAt(pattern->posOfFirst + pattern->direction * (pattern->lineLength - (boardPos_t)1)) == false)
     {
         addOneStone(pattern->line[pattern->lineLength - 1], pattern->posOfFirst + (pattern->lineLength - (boardPos_t)1) * pattern->direction);
     }
@@ -537,6 +556,12 @@ int PatternManager::nbPatternsAt(boardPos_t pos)
 {
     auto patterns = patternsAt(pos);
     return (patterns ? patterns->size() : 0);
+}
+
+bool PatternManager::onePatternAt(boardPos_t pos) const
+{
+    auto patterns = patternsAt(pos);
+    return (patterns ? (patterns->begin() != patterns->end()) : false);
 }
 
 void PatternManager::addOneStone(Team team, boardPos_t position)
@@ -623,5 +648,6 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
         }
         out << std::endl;
     }
+
     return out;
 }

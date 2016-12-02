@@ -58,6 +58,8 @@ namespace Core
 
         IReferee *clone();
 
+        void undoLastMove();
+
         Team getPlayer() const;
 
       boardPos_t getLastMove() const;

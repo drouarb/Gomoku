@@ -35,23 +35,23 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
       ++i;
     }
   //std::cout << "getXPos friend" << std::endl;
-  ref->getBoOp()->getXPossible(2, ref->getPlayer(), &tab, 0);
-  ref->getBoOp()->getXPossible(3, ref->getPlayer(), &tab, 30);
-  ref->getBoOp()->getXPossible(4, ref->getPlayer(), &tab, 200);
-  ref->getBoOp()->getXPossible(5, ref->getPlayer(), &tab, 1000);
+  ref->getBoOp()->getXPossible(2, ref->getPlayer(), &tab, 5);
+  ref->getBoOp()->getXPossible(3, ref->getPlayer(), &tab, 25);
+  ref->getBoOp()->getXPossible(4, ref->getPlayer(), &tab, 150);
+  ref->getBoOp()->getXPossible(5, ref->getPlayer(), &tab, 950);
   //std::cout << "getXPos enemie" << std::endl;
-  ref->getBoOp()->getXPossible(2, !ref->getPlayer(), &tab, 5);
-  ref->getBoOp()->getXPossible(3, !ref->getPlayer(), &tab, 25);
-  ref->getBoOp()->getXPossible(4, !ref->getPlayer(), &tab, 150);
-  ref->getBoOp()->getXPossible(5, !ref->getPlayer(), &tab, 950);
+  ref->getBoOp()->getXPossible(2, !ref->getPlayer(), &tab, 10);
+  ref->getBoOp()->getXPossible(3, !ref->getPlayer(), &tab, 30);
+  ref->getBoOp()->getXPossible(4, !ref->getPlayer(), &tab, 200);
+  ref->getBoOp()->getXPossible(5, !ref->getPlayer(), &tab, 1000);
   //std::cout << "getPosfree amis" << std::endl;
-  ref->getBoOp()->getFreeXPossible(2, ref->getPlayer(), &tab, 20);
-  ref->getBoOp()->getFreeXPossible(3, ref->getPlayer(), &tab, 300);
-  ref->getBoOp()->getFreeXPossible(4, ref->getPlayer(), &tab, 600);
+  ref->getBoOp()->getFreeXPossible(2, ref->getPlayer(), &tab, 10);
+  ref->getBoOp()->getFreeXPossible(3, ref->getPlayer(), &tab, 350);
+  ref->getBoOp()->getFreeXPossible(4, ref->getPlayer(), &tab, 500);
   //std::cout << "getPosfree enemis" << std::endl;
-  ref->getBoOp()->getFreeXPossible(2, !ref->getPlayer(), &tab, 10);
-  ref->getBoOp()->getFreeXPossible(3, !ref->getPlayer(), &tab, 350);
-  ref->getBoOp()->getFreeXPossible(4, !ref->getPlayer(), &tab, 500);
+  ref->getBoOp()->getFreeXPossible(2, !ref->getPlayer(), &tab, 2000);
+  ref->getBoOp()->getFreeXPossible(3, !ref->getPlayer(), &tab, 300);
+  ref->getBoOp()->getFreeXPossible(4, !ref->getPlayer(), &tab, 600);
   //std::cout << "checkeat pos" << std::endl;
   ref->getBoOp()->getEatPos(ref->getPlayer(), &tab, 400);// savoir combien j'ai mangé
   ref->getBoOp()->getEatPos(!ref->getPlayer(), &tab, 300);// savoir combien j'ai mangé

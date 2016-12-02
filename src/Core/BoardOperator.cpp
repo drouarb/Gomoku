@@ -3,11 +3,27 @@
 Core::BoardOperator::BoardOperator() : patternM()
 { }
 
-Core::BoardOperator::BoardOperator(const BoardOperator & other) : patternM(other.patternM)
+Core::BoardOperator::BoardOperator(const BoardOperator & other) : patternM(other.patternM), lastTakenStones()
 { }
 
 Core::BoardOperator::~BoardOperator()
 { }
+
+Core::BoardOperator & Core::BoardOperator::operator=(const BoardOperator & other)
+{
+    patternM = other.patternM;
+    lastTakenStones = fastList<boardPos_t>();
+}
+
+void Core::BoardOperator::clearLastMove()
+{
+    lastTakenStones.clear();
+}
+
+const fastList<boardPos_t> & Core::BoardOperator::getLastTakenStones() const
+{
+    return (lastTakenStones);
+}
 
 Team Core::BoardOperator::boardAt(boardPos_t x, boardPos_t y)
 {
@@ -20,6 +36,7 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, board
     patternM.addStone(pos, player);
     int foundDoubleThrees = findDoubleThree(player, pos);
     patternM.removeStone(pos);
+    lastTakenStones.push_front(pos);
     return (foundDoubleThrees >= 2);
 }
 
@@ -349,8 +366,10 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
                 save = pat->posOfFirst + pat->direction * 2;
                 //(*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
                 patternM.removeStone(pat->posOfFirst + pat->direction);
+                lastTakenStones.push_front(pat->posOfFirst + pat->direction);
                 //(*board)[save] = Team::NOPLAYER;
                 patternM.removeStone(save);
+                lastTakenStones.push_front(save);
                 return (1 + pApplyEat(player, pos));
             }
         }
@@ -367,6 +386,14 @@ uint8_t			Core::BoardOperator::applyEat(Team player, boardPos_t x, boardPos_t y)
 void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos_t y)
 {
   patternM.addStone(patternM.getPPos(x, y), player);
+}
+
+void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t pos)
+{
+    if (player == NOPLAYER)
+        patternM.removeStone(pos);
+    else
+        patternM.addStone(pos, player);
 }
 
 void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
@@ -604,4 +631,9 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
       ++y;
       --range;
     }
+}
+
+const Core::PatternManager &Core::BoardOperator::getPatternManager() const
+{
+    return (patternM);
 }

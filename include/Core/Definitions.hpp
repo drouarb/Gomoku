@@ -11,6 +11,8 @@
 #define TEAMOF(i)(i == 0 ? WHITE : BLACK)
 #define TEAMNAME(team)(team == WHITE ? "White" : "Black")
 
+#define OPPTEAM(t)(t == BLACK ? WHITE : BLACK)
+
 #define MC_EXPLORATION 1
 
 enum GamePlayers : uint8_t
@@ -55,7 +57,7 @@ inline Team	operator!(Team team)
     return (Team::BLACK);
   else if (team == Team::BLACK)
     return (Team::WHITE);
-  return (Team::NOPLAYER);
+  return (team);
 }
 
 #endif

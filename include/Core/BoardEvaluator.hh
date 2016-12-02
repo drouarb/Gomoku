@@ -18,7 +18,6 @@ namespace Core {
     private:
 
         struct value_t {
-            int size;
             int extremity[3];
 
             value_t() {
@@ -26,17 +25,10 @@ namespace Core {
             }
         };
 
-        struct exceeded_values_t {
-            int points_par_pierre_en_plus;
-            int points_en_plus_en_fonction_des_extremites[3];
-        };
-
         struct conf_t {
-            value_t values[21];
-            exceeded_values_t exceeded_values;
-            int max_values;
+            value_t values[22];
 
-            int points_par_pierre_mangee;
+            int pierres_mangees[9];
 
             conf_t() {
                 memset(this, 0, sizeof(*this));
@@ -50,9 +42,13 @@ namespace Core {
         BoardEvaluator();
 
         void parseFrom(const std::string &path);
-        inline int32_t getValue(const PatternManager *patternManager, IReferee *referee, Team t) const;
+        int32_t getValue(Referee & referee, Team t) const;
+        std::vector<std::pair<boardPos_t, weight_t>> * getInterestingMoves(Referee &) const;
 
-        static inline BoardEvaluator *getInstance();
+        static BoardEvaluator *getInstance();
+
+    private:
+        bool notMiddleOfNowhere(Referee &, boardPos_t) const;
     };
 
 

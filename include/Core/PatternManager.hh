@@ -37,7 +37,7 @@ namespace Core
         ~PatternManager();
 
         PatternManager & operator=(const PatternManager &);
-
+        bool operator==(const PatternManager &);
         PLIST<PatternRef> & operator[](boardPos_t);
 
         static boardPos_t getPPos(boardPos_t x, boardPos_t y);
@@ -49,6 +49,7 @@ namespace Core
         void addStone(boardPos_t position, Team team);
         void removeStone(boardPos_t position);
         Team teamAt(boardPos_t position) const;
+        bool onePatternAt(boardPos_t) const;
 
     private:
         PLIST<Pattern> patterns;
