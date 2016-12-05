@@ -50,8 +50,8 @@ static const std::map<RuleID, std::string> RuleToString = {
 };
 
 typedef Team * GameBoard_t;
-typedef int boardPos_t;
-typedef int32_t weight_t;
+typedef int_fast32_t boardPos_t;
+typedef int_fast32_t weight_t;
 
 inline Team	operator!(Team team)
 {

@@ -112,10 +112,21 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     boardPos_t playPos;
     for (int i = 0; i < BOARDSIZE; ++i)
     {
+/*
         if (notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), PatternManager::getPPos(i % 19, i / 19)) && referee->tryPlay(i % 19, i / 19))
         {
             vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, referee->getPlayer())));
             referee->undoLastMove();
+        }
+*/
+        boardPos_t pos = PatternManager::getPPos(i % 19, i / 19);
+        if (referee->getBoOp()->getPatternManager().teamAt(pos) == NOPLAYER && notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), pos))
+        {
+            Referee newReferee(static_cast<Referee &>(*referee));
+            if (newReferee.tryPlay(i % 19, i / 19))
+            {
+                vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(&newReferee, newReferee.getPlayer())));
+            }
         }
     }
 

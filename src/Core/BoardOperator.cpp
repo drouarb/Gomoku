@@ -3,7 +3,7 @@
 Core::BoardOperator::BoardOperator() : patternM()
 { }
 
-Core::BoardOperator::BoardOperator(const BoardOperator & other) : patternM(other.patternM), lastTakenStones()
+Core::BoardOperator::BoardOperator(const BoardOperator & other) : patternM(other.patternM), lastTakenStones(other.lastTakenStones)
 { }
 
 Core::BoardOperator::~BoardOperator()
@@ -36,7 +36,6 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, board
     patternM.addStone(pos, player);
     int foundDoubleThrees = findDoubleThree(player, pos);
     patternM.removeStone(pos);
-    lastTakenStones.push_front(pos);
     return (foundDoubleThrees >= 2);
 }
 
@@ -333,16 +332,8 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
     Pattern			*pat;
     int				save;
 
-/*
-    try
-    {
-        patterns = &patternM.getMap().at(pos);
-    }
-    catch (std::out_of_range)
-    {
+    if (patternM[pos].empty())
         return (0);
-    }
-*/
     it = patternM.patternsAt(pos).begin();
     //std::cout << "applyEat" << std::endl;
     while (it != patternM.patternsAt(pos).end())
