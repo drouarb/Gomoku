@@ -88,6 +88,7 @@ void Graph::showError(const std::string &str)
 void Graph::refresh()
 {
     mainObs->actualMenu();
+    popupString();
     SDL_RenderPresent(this->pRenderer);
     SDL_RenderClear(this->pRenderer);
 }
@@ -192,7 +193,6 @@ void Graph::init(ICoreObserver *coreObserver)
     {
         if (std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - t).count() > 0.5)
         {
-            popupString();
             refresh();
             t = Clock::now();
         }
@@ -295,8 +295,6 @@ void Graph::popupString()
 void Graph::prompt()
 {
     auto t = Clock::now();
-    mainObs->actualMenu();
-    popupString();
     refresh();
     while (loop() != BOARD && mainObs->getStop() == false && getICoreObserver()->gameIsRunning())
     {

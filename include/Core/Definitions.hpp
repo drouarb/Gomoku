@@ -15,14 +15,14 @@
 
 #define MC_EXPLORATION 1
 
-enum GamePlayers : uint8_t
+enum GamePlayers : int_fast8_t
 {
     ONEPLAYER,
     TWOPLAYERS,
     TWOAIS
 };
 
-enum Team : int8_t
+enum Team : int_fast8_t
 {
     BORDER    = -0x01,
     NOPLAYER  =  0x00,
@@ -30,7 +30,7 @@ enum Team : int8_t
     BLACK     =  0x02
 };
 
-enum RuleID : uint8_t
+enum RuleID : int_fast8_t
 {
     DOUBLE_THREE = 0x00,
     BREAKABLE_FIVE = 0x01,
@@ -48,7 +48,7 @@ static const std::map<RuleID, std::string> RuleToString = {
 };
 
 typedef Team * GameBoard_t;
-typedef int16_t boardPos_t;
+typedef int boardPos_t;
 typedef int32_t weight_t;
 
 inline Team	operator!(Team team)
