@@ -7,34 +7,44 @@
 
 #include <vector>
 #include <Core/Referee.hpp>
+#include <mutex>
 
 namespace AI {
     class TreeNode {
     public:
         TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent = NULL);
-        TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent, std::list<std::pair<boardPos_t, weight_t>> *moves);
+        TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent, std::vector<std::pair<boardPos_t, weight_t>> *moves);
         ~TreeNode();
 
         TreeNode *getSimulationNode();
         TreeNode *getBestChild();
-        void backPropagate(int result);
-
         int getBestAction() const;
+
+        void backPropagate(int result, Team winner);
+
+        int getMove() const;
         double getPlays() const;
-        double getWins() const;
+        double getBlackWins() const;
+        double getWhiteWins() const;
+        void setParent(TreeNode *parent);
         TreeNode *getParent() const;
         Core::IReferee *getReferee() const;
-        int getMove() const;
+        std::vector<TreeNode *> &getChilds();
 
     private:
         Team aiTeam;
-        int plays;
-        int wins;
-        int move;
-        TreeNode *parent;
         Core::IReferee *referee;
+
+        unsigned int plays;
+        unsigned int blackWins;
+        unsigned int whiteWins;
+
+        TreeNode *parent;
+        std::mutex childLock;
         std::vector<TreeNode *> childs;
-        std::list<std::pair<boardPos_t, weight_t>> *moves;
+
+        int move;
+        std::vector<std::pair<boardPos_t, weight_t>> *moves;
     };
 }
 

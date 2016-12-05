@@ -5,41 +5,34 @@
 #include <math.h>
 #include <algorithm>
 #include <Core/BoardSeeker.hh>
+#include <Core/BoardEvaluator.hh>
 #include "AI/TreeNode.hh"
 
-AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) : plays(0), wins(0),
+AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) : plays(0), whiteWins(0), blackWins(0),
                                                                                  referee(gameState),
                                                                                  parent(parent), move(-1),
                                                                                  aiTeam(team) {
-    this->moves = Core::BoardSeeker::getPlayPos(referee);
+    this->moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(referee);
     childs.reserve(moves->size());
 }
 
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *parent,
-                       std::list<std::pair<boardPos_t, weight_t>> *moves) : plays(0), wins(0), referee(gameState),
+                       std::vector<std::pair<boardPos_t, weight_t>> *moves) : plays(0), whiteWins(0), blackWins(0),
+                                                                            referee(gameState),
                                                                             parent(parent), aiTeam(team) {
-    boardPos_t move;
-    bool play = false;
-
-    do {
-        move = moves->front().first;
-        moves->pop_front();
-    } while (!(play = referee->tryPlay(move)) && moves->size());
-    if (!play) {
-        delete(referee);
-        throw std::domain_error("No more moves");
-    }
-
-    this->move = move;
+    this->move = moves->back().first;
+    moves->pop_back();
     referee->tryPlay(move);
-    this->moves = Core::BoardSeeker::getPlayPos(referee);
+    this->moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(referee);
     childs.reserve(moves->size());
 }
 
 
 AI::TreeNode::~TreeNode() {
-    for (auto c : childs) {
-        delete (c);
+    for (auto &c : childs) {
+        if (c)
+            c->parent = NULL;
+            delete (c);
     }
     delete (moves);
     delete (referee);
@@ -65,12 +58,9 @@ AI::TreeNode *AI::TreeNode::getBestChild() {
     std::vector<double> values;
 
     values.reserve(childs.size());
-    for (auto c : childs) {
-        wins = c->getWins();
+    for (auto &c : childs) {
+        wins = (referee->getPlayer() == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
-
-        if (c->aiTeam != referee->getPlayer())
-            wins = plays - wins;
 
         values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent ? parent->getPlays() : 0) / plays));
     }
@@ -84,8 +74,8 @@ int AI::TreeNode::getBestAction() const {
     int most_plays = -1;
     std::vector<TreeNode *> bestActions;
 
-    for (auto c : childs) {
-        wins = c->getWins();
+    for (auto &c : childs) {
+        wins = (aiTeam == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
 
         if (plays > most_plays) {
@@ -107,20 +97,26 @@ int AI::TreeNode::getBestAction() const {
     return bestActions.front()->getMove();
 }
 
-void AI::TreeNode::backPropagate(int result) {
+void AI::TreeNode::backPropagate(int result, Team winner) {
     plays += 1;
-    if (result)
-        wins += 1;
+    if (winner == WHITE)
+        whiteWins += result;
+    if (winner == BLACK)
+        blackWins += result;
     if (parent)
-        parent->backPropagate(result);
+        parent->backPropagate(result, winner);
 }
 
 double AI::TreeNode::getPlays() const {
     return plays;
 }
 
-double AI::TreeNode::getWins() const {
-    return wins;
+double AI::TreeNode::getBlackWins() const {
+    return blackWins;
+}
+
+double AI::TreeNode::getWhiteWins() const {
+    return whiteWins;
 }
 
 AI::TreeNode *AI::TreeNode::getParent() const {
@@ -133,5 +129,13 @@ Core::IReferee *AI::TreeNode::getReferee() const {
 
 int AI::TreeNode::getMove() const {
     return move;
+}
+
+std::vector<AI::TreeNode *> &AI::TreeNode::getChilds() {
+    return childs;
+}
+
+void AI::TreeNode::setParent(AI::TreeNode *parent) {
+    TreeNode::parent = parent;
 }
 
