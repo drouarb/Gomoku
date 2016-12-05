@@ -227,8 +227,12 @@ void Graph::unregisterPlayer(Players::IPlayer *player)
         players[0] = NULL;
 }
 
-void Graph::feedBoard(const GameBoard_t &board)
+void Graph::feedBoard(GameBoard_t board)
 {
+    if (this->board)
+    {
+        delete [] this->board;
+    }
     this->board = board;
     refresh();
 }
@@ -257,6 +261,7 @@ void Graph::endGame(const std::string &winner_name)
     mainObs->actualMenu();
     popupString();
     refresh();
+    current = NULL;
 }
 
 

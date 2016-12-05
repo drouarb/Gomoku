@@ -9,13 +9,11 @@
 #include <iostream>
 
 #define PLIST fastList
-#define PMAP std::map
 #define OPPDIR(x) ((x) + 4)
 #define ACTDIR(x) ((x) <= 4 ? OPPDIR(x) : x)
 
 #define XPBOARD (XBOARD + 2)
 #define PBOARDSIZE (XPBOARD * XPBOARD)
-#define PBOARDDIFF 20
 
 namespace Core
 {
@@ -33,8 +31,10 @@ namespace Core
     {
     public:
         PatternManager();
-        PatternManager(const PatternManager &); //copy constructor
+        PatternManager(const PatternManager &);
         ~PatternManager();
+        
+        typedef PLIST<PatternRef> PMap[PBOARDSIZE];
 
         PatternManager & operator=(const PatternManager &);
         bool operator==(const PatternManager &);
@@ -44,8 +44,8 @@ namespace Core
 
         PLIST<Pattern> & getPatterns();
         const PLIST<Pattern> & getPatterns() const;
-        const PMAP<boardPos_t, PLIST<PatternRef> > & getMap() const;
-        const PLIST<PatternRef> * patternsAt(boardPos_t pos) const;
+        const PMap & getMap() const;
+        const PLIST<PatternRef> & patternsAt(boardPos_t pos) const;
         void addStone(boardPos_t position, Team team);
         void removeStone(boardPos_t position);
         Team teamAt(boardPos_t position) const;
@@ -53,7 +53,7 @@ namespace Core
 
     private:
         PLIST<Pattern> patterns;
-        PMAP<boardPos_t, PLIST<PatternRef> > map;
+        PMap map;
         GameBoard_t board;
 
 
@@ -69,7 +69,6 @@ namespace Core
         void addOSExtremities(Pattern * pattern);
         void addOSFirstExtremity(Pattern * pattern);
         void addOSLastExtremity(Pattern * pattern);
-        int nbPatternsAt(boardPos_t);
         void addOneStone(Team team, boardPos_t position);
         void removeOSExtremities(Pattern *pattern);
         void removeOneStone(boardPos_t position);

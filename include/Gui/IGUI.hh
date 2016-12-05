@@ -33,7 +33,7 @@ namespace GUI
 
         virtual void unregisterPlayer(Players::IPlayer *) = 0;
 
-        virtual void feedBoard(const GameBoard_t &) = 0;
+        virtual void feedBoard(GameBoard_t) = 0;
 
         virtual void feedRules(std::list<std::pair<std::string, bool>> rules) = 0;
 

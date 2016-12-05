@@ -35,7 +35,7 @@ namespace GUI {
 
         void unregisterPlayer(Players::IPlayer *);
 
-        void feedBoard(const GameBoard_t &);
+        void feedBoard(GameBoard_t);
 
         void feedRules(std::list<std::pair<std::string, bool>> rules);
 

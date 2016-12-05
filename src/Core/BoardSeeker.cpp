@@ -73,8 +73,8 @@ std::list<std::pair<boardPos_t, weight_t>>	*BoardSeeker::getPlayPos(IReferee *re
 	  if (tab[i] > 0)
 	    {
 	      list->push_back(std::pair<boardPos_t, weight_t>(i - XPBOARD - 2 * (i / XPBOARD) + 3, tab[i]));
-	      if (tab[i] > 20)
-		std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) + 3 << " = " << tab[i] << std::endl;
+	      //if (tab[i] > 20)
+		// std::cout << "WEIGHT pos: " << (i - XPBOARD - 2 * (i / XPBOARD)) + 3 << " = " << tab[i] << std::endl;
 	    }
 	}
       ++i;

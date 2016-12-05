@@ -46,7 +46,7 @@ void GUI::testGUI::unregisterPlayer(Players::IPlayer *player) {
         players[0] = NULL;
 }
 
-void GUI::testGUI::feedBoard(const GameBoard_t &board) {
+void GUI::testGUI::feedBoard(GameBoard_t board) {
     this->board = board;
 }
 

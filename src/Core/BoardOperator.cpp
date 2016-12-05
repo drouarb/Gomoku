@@ -12,7 +12,7 @@ Core::BoardOperator::~BoardOperator()
 Core::BoardOperator & Core::BoardOperator::operator=(const BoardOperator & other)
 {
     patternM = other.patternM;
-    lastTakenStones = fastList<boardPos_t>();
+    lastTakenStones = other.lastTakenStones;
 }
 
 void Core::BoardOperator::clearLastMove()
@@ -43,11 +43,13 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, board
 int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
 {
     int nbFreeThree = 0;
+/*
     const auto & map = patternM.getMap();
     const PLIST<PatternRef> * list = patternM.patternsAt(pos);
     if (list == NULL)
         return (0);
-    for (auto patref : *list)
+*/
+    for (auto patref : patternM.patternsAt(pos))
     {
         if (patref.pattern->lineLength == 5)
         {
@@ -90,42 +92,38 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
         boardPos_t dir = PatternManager::checkMap[i];
         if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
         {
-            const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
-            if (list2)
+            /*const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
+            if (list2)*/
+            for (auto patref : patternM.patternsAt(pos + dir))
             {
-                for (auto patref : *list2)
+                if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
+                    patref.pattern->direction == dir &&
+                    patref.pattern->line[patref.pattern->lineLength - 1] == NOPLAYER)
                 {
-                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
-                        patref.pattern->direction == dir &&
-                        patref.pattern->line[patref.pattern->lineLength - 1] == NOPLAYER)
-                    {
-                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
-                                                           (boardPos_t) 1 * patref.pattern->direction,
-                                                   patref.pattern->posOfFirst +
-                                                   (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
-                            return (2);
-                        nbFreeThree++;
-                        break;
-                    }
+                    if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
+                                                       (boardPos_t) 1 * patref.pattern->direction,
+                                               patref.pattern->posOfFirst +
+                                               (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
+                        return (2);
+                    nbFreeThree++;
+                    break;
                 }
             }
-            list2 = patternM.patternsAt(pos - dir);
-            if (list2)
+            /*list2 = patternM.patternsAt(pos - dir);
+            if (list2)*/
+            for (auto patref : patternM.patternsAt(pos - dir))
             {
-                for (auto patref : *list2)
+                if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
+                    patref.pattern->direction == dir &&
+                    patref.pattern->line[0] == NOPLAYER)
                 {
-                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
-                        patref.pattern->direction == dir &&
-                        patref.pattern->line[0] == NOPLAYER)
-                    {
-                        if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
-                                                           (boardPos_t) 1 * patref.pattern->direction,
-                                                   patref.pattern->posOfFirst +
-                                                   (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
-                            return (2);
-                        nbFreeThree++;
-                        break;
-                    }
+                    if (findAnotherDoubleThree(player, patref.pattern->posOfFirst +
+                                                       (boardPos_t) 1 * patref.pattern->direction,
+                                               patref.pattern->posOfFirst +
+                                               (boardPos_t) 2 * patref.pattern->direction, pos, pos, dir))
+                        return (2);
+                    nbFreeThree++;
+                    break;
                 }
             }
         }
@@ -148,10 +146,12 @@ bool Core::BoardOperator::findAnotherDoubleThree(Team player, boardPos_t pos1, b
 
 bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir)
 {
+/*
     const PLIST<PatternRef> * list = patternM.patternsAt(pos);
     if (list == NULL)
         return (false);
-    for (auto patref : *list)
+*/
+    for (auto patref : patternM.patternsAt(pos))
     {
         if (patref.pattern->lineLength == 5)
         {
@@ -190,30 +190,26 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
         {
             if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
             {
-                const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
-                if (list2)
+                /*const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
+                if (list2)*/
+                for (auto patref : patternM.patternsAt(pos + dir))
                 {
-                    for (auto patref : *list2)
+                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
+                        patref.pattern->direction == dir &&
+                        patref.pattern->line[patref.pattern->lineLength - 1] == NOPLAYER)
                     {
-                        if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
-                            patref.pattern->direction == dir &&
-                            patref.pattern->line[patref.pattern->lineLength - 1] == NOPLAYER)
-                        {
-                            return (true);
-                        }
+                        return (true);
                     }
                 }
-                list2 = patternM.patternsAt(pos - dir);
-                if (list2)
+                /*list2 = patternM.patternsAt(pos - dir);
+                if (list2)*/
+                for (auto patref : patternM.patternsAt(pos - dir))
                 {
-                    for (auto patref : *list2)
+                    if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
+                        patref.pattern->direction == dir &&
+                        patref.pattern->line[0] == NOPLAYER)
                     {
-                        if (patref.pattern->lineLength == 4 && patref.pattern->getTeam() == player &&
-                            patref.pattern->direction == dir &&
-                            patref.pattern->line[0] == NOPLAYER)
-                        {
-                            return (true);
-                        }
+                        return (true);
                     }
                 }
             }
@@ -232,11 +228,11 @@ bool Core::BoardOperator::isFreeAndMine(Pattern *pat, Team me)
 
 bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x, boardPos_t y)
 {
-  const PLIST<PatternRef>	* patterns;
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
     boardPos_t pos = patternM.getPPos(x, y);
+/*
     try
     {
         patterns = &patternM.getMap().at(pos);
@@ -245,8 +241,9 @@ bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x,
     {
         return (false);
     }
-  it = patterns->begin();
-  while (it != patterns->end())
+*/
+  it = patternM.patternsAt(pos).begin();
+  while (it != patternM.patternsAt(pos).end())
     {
       pat = it->pattern;
       if (((pat->lineLength) == 2 + 2 && pat->line[1] != player)
@@ -279,28 +276,26 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
           nbrNoBreak = 0;
           while (i < it->lineLength - 1)
           {
-              try
+              /*try
               {
                   patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
               }
               catch (std::out_of_range)
               {
                   patSecond = NULL;
-              }
-              if (patSecond)
+              }*/
+              //if (patSecond)
+              itS = patternM.patternsAt(it->posOfFirst + i * it->direction).begin();
+              while (itS != patternM.patternsAt(it->posOfFirst + i * it->direction).end())
               {
-                  itS = patSecond->begin();
-                  while (itS != patSecond->end())
-                  {
-                      pat = itS->pattern;
-                      if (pat->lineLength == 2 + 2 && pat->line[1] == player
-                          && ((pat->line[0] != player && pat->line[0] != NOPLAYER
-                               && pat->line[pat->lineLength - 1] == NOPLAYER)
-                              || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
-                                  && pat->line[pat->lineLength - 1] != NOPLAYER)))
-                          nbrNoBreak = -1;
-                      ++itS;
-                  }
+                  pat = itS->pattern;
+                  if (pat->lineLength == 2 + 2 && pat->line[1] == player
+                      && ((pat->line[0] != player && pat->line[0] != NOPLAYER
+                           && pat->line[pat->lineLength - 1] == NOPLAYER)
+                          || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
+                              && pat->line[pat->lineLength - 1] != NOPLAYER)))
+                      nbrNoBreak = -1;
+                  ++itS;
               }
               nbrNoBreak++;
               if (nbrNoBreak == 5)
@@ -334,11 +329,11 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 
 uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
-    const PLIST<PatternRef> * patterns;
     PLIST<PatternRef>::iterator it;
     Pattern			*pat;
     int				save;
 
+/*
     try
     {
         patterns = &patternM.getMap().at(pos);
@@ -347,9 +342,10 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
     {
         return (0);
     }
-    it = patterns->begin();
+*/
+    it = patternM.patternsAt(pos).begin();
     //std::cout << "applyEat" << std::endl;
-    while (it != patterns->end())
+    while (it != patternM.patternsAt(pos).end())
     {
         pat = it->pattern;
         if (pat->lineLength == 2 + 2 && pat->line[1] != player)
@@ -569,10 +565,10 @@ void Core::BoardOperator::getFiveBreakable(Team player, std::vector<boardPos_t> 
 	  i = 1;
 	  while (i < it->lineLength - 1)
 	    {
-	      patSecond = &patternM.getMap().at(it->posOfFirst + i * it->direction);
+	      //patSecond = patternM.patternsAt(it->posOfFirst + i * it->direction);
 	      //patSecond = patternM.getMap()[it->posOfFirst + i * it->direction];
-	      itS = patSecond->begin();
-	      while (itS != patSecond->end())
+	      itS = patternM.patternsAt(it->posOfFirst + i * it->direction).begin();
+	      while (itS != patternM.patternsAt(it->posOfFirst + i * it->direction).end())
 		{
 		  pat = itS->pattern;
 		  if (pat->lineLength - 2 == 2 && pat->line[1] == player

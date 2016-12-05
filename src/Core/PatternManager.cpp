@@ -1,4 +1,5 @@
 #include "PatternManager.hh"
+#include <string.h>
 
 using namespace Core;
 
@@ -11,12 +12,20 @@ PatternRef::~PatternRef()
 PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(pos)
 { }
 
-PatternManager::PatternManager() : map(), patterns()
+
+
+PatternManager::PatternManager() : patterns()
 {
     board = reinterpret_cast<GameBoard_t>(boardRl.take());
     //board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
+    //memset(map, 0, PBOARDSIZE * sizeof(PLIST<PatternRef>));
+
+/*
+    std::cout << "CONSTRUCTION" << std::endl;
+    std::cout << *this << std::endl;
+*/
 }
 
 PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns())
@@ -25,12 +34,20 @@ PatternManager::PatternManager(const PatternManager & other) : patterns(other.ge
     //board = new char[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
+    //memset(map, 0, PBOARDSIZE * sizeof(PLIST<PatternRef>));
     for (Pattern & pattern : patterns)
         addToMap(&pattern);
+/*
+    std::cout << "COPY" << std::endl;
+    std::cout << *this << std::endl;
+*/
 }
 
 PatternManager::~PatternManager()
 {
+    //std::cout << "DESTRUCTION" << std::endl;
+    for (int i = 0; i < PBOARDSIZE; ++i)
+        map[i].clear();
     boardRl.giveBack(reinterpret_cast<line_s*>(board));
     //delete board;
 }
@@ -42,9 +59,16 @@ PatternManager & PatternManager::operator=(const PatternManager & other)
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
     patterns = other.patterns;
-    map.clear();
+    //map.clear();
+    for (int i = 0; i < PBOARDSIZE; ++i)
+        map[i].clear();
     for (Pattern & pattern : patterns)
         addToMap(&pattern);
+
+/*
+    std::cout << "ASSIGNMENT" << std::endl;
+    std::cout << *this << std::endl;
+*/
     return (*this);
 }
 
@@ -82,26 +106,19 @@ const PLIST<Pattern>& PatternManager::getPatterns() const
     return (patterns);
 }
 
-const PMAP<boardPos_t, PLIST<PatternRef> > & PatternManager::getMap() const
+const PatternManager::PMap & PatternManager::getMap() const
 {
     return (map);
 }
 
-const PLIST<PatternRef> * PatternManager::patternsAt(boardPos_t pos) const
+const PLIST<PatternRef> & PatternManager::patternsAt(boardPos_t pos) const
 {
-    try
-    {
-        return (&map.at(pos));
-    }
-    catch (std::out_of_range)
-    {
-        return (NULL);
-    }
+    return (map[pos]);
 }
 
 boardPos_t PatternManager::getPPos(boardPos_t x, boardPos_t y)
 {
-    return (y * (boardPos_t)XPBOARD + x + (boardPos_t)PBOARDDIFF);
+    return ((y + 1) * (boardPos_t)XPBOARD + x + 1);
 }
 
 void PatternManager::addStone(boardPos_t position, Team team)
@@ -115,7 +132,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
     int newpatterns = 0;
     for (int i = 1; i <= 8; i++)
     {
-        if (!done[i] && map.find(position + checkMap[i]) != map.end())
+        if (!done[i] && map[position + checkMap[i]].empty() == false)
         {
             bool aligned = false;
             PatternRef * pattern = NULL;
@@ -223,13 +240,12 @@ void PatternManager::addStone(boardPos_t position, Team team)
         addToMap(&*it);
         ++it;
     }
-
     //std::cout << *this << std::endl;
 }
 
 bool PatternManager::addMiddle(boardPos_t position, Team team)
 {
-    if (map.find(position) != map.end()) //TODO: optimize
+    if (map[position].empty() == false)
     {
         for (auto pref : map[position])
         {
@@ -254,6 +270,10 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     //try to find an aligned one before taking a non-aligned one
     for (auto &oppPattern : map[position + checkMap[i]])
     {
+        if (position + checkMap[i] >= PBOARDSIZE)
+            std::cout << "e pos=" << std::to_string(position + checkMap[i]) << std::endl;
+        if (oppPattern.pattern == NULL)
+            std::cout << "+++++++++++++++++++++++++++++++++++++++" << std::endl;
         if (oppPattern.pattern->line[oppPattern.posOnPattern] == team)
         {
             if (oppPattern.pattern->lineLength == 1)
@@ -281,24 +301,21 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
         done[i] = true;
         if (foundOppPattern->pattern->lineLength == 1)
         {
-	  //std::cout << "found opp 1 i=" << std::to_string(i) << " pos="
-	  //<< std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
             //single stone
             newlen += 1;
             removePattern(foundOppPattern->pattern);
         }
         else if (aligned)
         {
-	  //std::cout << "found opp aligned i=" << std::to_string(i) << " pos="
-	  //          << std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
             //aligned oppPattern
             newlen += foundOppPattern->pattern->lineLength - 2;
             removePattern(foundOppPattern->pattern);
         }
         else
         {
-	  //std::cout << "found opp non-aligned i=" << std::to_string(i) << " pos="
-	  //          << std::to_string(position + checkMap[i]) << std::endl;
+	  //std::cout << "found opp non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
             //found stone is part of a pattern, but not an entire pattern
             newlen += 1;
         }
@@ -322,7 +339,7 @@ void PatternManager::removeStone(boardPos_t position)
 
     board[position] = NOPLAYER;
 
-    if (map.find(position) != map.end())
+    if (map[position].empty() == false)
     {
         Team team;
 
@@ -374,7 +391,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //new multiple-stone pattern (starting at position, since pattern dir is always positive)
-			  //        std::cout << "2nd half: multiple stones" << std::endl;
+			  //        //std::cout << "2nd half: multiple stones" << std::endl;
                             patterns.push_front(Pattern(team, halfSize + (uint8_t) 1, NOPLAYER,
                                                         pattern.pattern->line[pattern.pattern->lineLength -
                                                                               (uint8_t) 1],
@@ -408,7 +425,7 @@ void PatternManager::removeStone(boardPos_t position)
                             else
                             {
                                 //change pattern
-			        //            std::cout << "1st half: change pattern" << std::endl;
+			        //            //std::cout << "1st half: change pattern" << std::endl;
                                 pattern.pattern->breatAt(pattern.posOnPattern);
                                 addToMap(pattern.pattern);
                             }
@@ -416,7 +433,7 @@ void PatternManager::removeStone(boardPos_t position)
                         else
                         {
                             //change pattern
-			  //      std::cout << "1st half: change pattern" << std::endl;
+			  //      //std::cout << "1st half: change pattern" << std::endl;
                             pattern.pattern->breatAt(pattern.posOnPattern);
                             addToMap(pattern.pattern);
                         }
@@ -424,7 +441,7 @@ void PatternManager::removeStone(boardPos_t position)
                     else
                     {
                         //destroy pattern
-		      //    std::cout << "1st half: erased, add OS" << std::endl;
+		      //    //std::cout << "1st half: erased, add OS" << std::endl;
                         addOSFirstExtremity(pattern.pattern); //TODO: make 1-stone pattern only if no other pattern on this cell
                         removeFromList(pattern.pattern);
                     }
@@ -486,8 +503,6 @@ void PatternManager::removeFromMap(Pattern *pattern, PLIST<PatternRef>::iterator
                 break;
             }
         }
-        if (map[pos].empty())
-            map.erase(pos);
     }
 }
 
@@ -504,8 +519,6 @@ void PatternManager::removeFromMap(Pattern *pattern)
                 break;
             }
         }
-        if (map[pos].empty())
-            map.erase(pos);
     }
 }
 
@@ -552,16 +565,9 @@ void PatternManager::addOSLastExtremity(Pattern *pattern)
     }
 }
 
-int PatternManager::nbPatternsAt(boardPos_t pos)
-{
-    auto patterns = patternsAt(pos);
-    return (patterns ? patterns->size() : 0);
-}
-
 bool PatternManager::onePatternAt(boardPos_t pos) const
 {
-    auto patterns = patternsAt(pos);
-    return (patterns ? (patterns->begin() != patterns->end()) : false);
+    return (map[pos].empty() == false);
 }
 
 void PatternManager::addOneStone(Team team, boardPos_t position)
@@ -625,7 +631,6 @@ const boardPos_t PatternManager::checkMap[] = {
 std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
 {
     out << "-- PATTERNS" << std::endl;
-    //for (auto& pattern : pm.getPatterns())
     for (auto it = pm.getPatterns().begin(); it != pm.getPatterns().end(); ++it)
     {
         auto& pattern = *it;
@@ -639,14 +644,17 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
         out << std::endl;
     }
     out << "-- MAP" << std::endl;
-    for (auto& entry : pm.getMap())
+    for (int i = 0; i < PBOARDSIZE; ++i)
     {
-        out << entry.first;
-        for (auto pattern : entry.second)
+        if (pm.getMap()[i].empty() == false)
         {
-            out << " " << (void*)pattern.pattern << "-" << std::to_string(pattern.posOnPattern);
+            out << i;
+            for (auto pattern : pm.getMap()[i])
+            {
+                  out << " " << (void *) pattern.pattern << "-" << std::to_string(pattern.posOnPattern);
+            }
+            out << std::endl;
         }
-        out << std::endl;
     }
 
     return out;

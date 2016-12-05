@@ -49,7 +49,7 @@ namespace GUI
         ~Graph()
         {};
 
-        Graph()
+        Graph() : board(NULL)
         {};
 
         void init(ICoreObserver *);
@@ -60,7 +60,7 @@ namespace GUI
 
         void registerPlayer(Players::IPlayer *); //create observer
         void unregisterPlayer(Players::IPlayer *); //destroy observer
-        void feedBoard(const GameBoard_t &);
+        void feedBoard(GameBoard_t);
 
         void feedRules(std::list<std::pair<std::string, bool>> rules);
 
