@@ -3,6 +3,8 @@ project(Gomoku)
 
 enable_testing()
 
+find_package(Boost REQUIRED COMPONENTS system thread)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Ofast ${DBG}")
 FILE(
         GLOB_RECURSE
@@ -25,6 +27,7 @@ FILE(
         testIntepretor/include/*.hh
         )
 
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(include)
 include_directories(include/Core)
 include_directories(tests/include)
@@ -38,9 +41,9 @@ add_library(Gomoku_core ${GOMOKU})
 add_executable(Gomoku src/main.cpp ${GOMOKU})
 add_executable(Gomoku_tests ${GOMOKU} tests/main.cpp)
 add_executable(intepretor.out ${TEST_INTEPRETOR})
-target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread )
-target_link_libraries(Gomoku_core -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread)
-target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread Gomoku_core)
+target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread ${Boost_LIBRARIES})
+target_link_libraries(Gomoku_core -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread ${Boost_LIBRARIES})
+target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread Gomoku_core ${Boost_LIBRARIES})
 
 FILE(
         GLOB_RECURSE
@@ -56,5 +59,5 @@ foreach (test ${GOMOKU_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test})
     add_test(${test_name} ${test_name})
-    target_link_libraries(${test_name} Gomoku_core)
+    target_link_libraries(${test_name} Gomoku_core ${Boost_LIBRARIES})
 endforeach (test)

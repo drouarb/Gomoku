@@ -36,6 +36,9 @@ namespace Core
 
         virtual void undoLastMove() = 0;
 
+        virtual uint16_t getNbrPlay() const = 0;
+
+        virtual boardPos_t getLastMove() const = 0;
     };
 }
 

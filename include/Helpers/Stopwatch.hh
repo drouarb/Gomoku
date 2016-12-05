@@ -15,6 +15,7 @@ public:
 
     void set();
     long elapsedMs();
+    long elapsedUs();
 
 private:
     struct timeval startTime;

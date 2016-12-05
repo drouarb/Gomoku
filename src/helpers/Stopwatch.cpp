@@ -31,3 +31,11 @@ Stopwatch::elapsedMs()
     return ((checkTime.tv_sec - startTime.tv_sec) * 1000 +
             (checkTime.tv_usec - startTime.tv_usec) / 1000);
 }
+
+long Stopwatch::elapsedUs() {
+    struct timeval checkTime;
+
+    gettimeofday(&checkTime, NULL);
+    return ((checkTime.tv_sec - startTime.tv_sec) * 1000000 +
+            (checkTime.tv_usec - startTime.tv_usec));
+}
