@@ -17,9 +17,9 @@ static BoardEvaluator *instance = NULL;
 #define WIN_VALUE(team, winner) (winner == team ? MAX_VALUE : -MAX_VALUE)
 
 
-static bool cmpWeightVect(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
+static bool cmpWeight(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
 {
-    return (pos1.second < pos2.second);
+    return (pos1.second > pos2.second);
 }
 
 BoardEvaluator *BoardEvaluator:: getInstance() {
@@ -46,6 +46,7 @@ int32_t BoardEvaluator::getValue(IReferee * referee, Team t) const {
                                   conf->values[pattern.lineLength].extremity[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
                                   pattern);
     }
+
     return totalValue;
 }
 
@@ -130,13 +131,15 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     }
     vect->reserve(64);
 
-    boardPos_t playPos;
-    for (int i = 0; i < BOARDSIZE; ++i)
+    Team player = OPPTEAM(referee->getPlayer());
+    //TODO: for some reason, I can't seem to sort the vector in the right order. So for now, weights of the opposite team are calculated.
+    for (int i = 0; i < PBOARDSIZE; ++i)
     {
-        Referee newReferee(static_cast<Referee &>(*referee));
-        if (notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), PatternManager::getPPos(i % 19, i / 19)) && referee->tryPlay(i % 19, i / 19))
+        if (referee->getBoOp()->getPatternManager().teamAt(i) == NOPLAYER &&
+                notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), i) &&
+                referee->tryPlay(i))
         {
-            vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, referee->getPlayer())));
+            vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, player)));
             referee->undoLastMove();
         }
 /*
@@ -172,7 +175,7 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
 */
     }
 
-    std::sort(vect->begin(), vect->end(), cmpWeightVect);
+    std::sort(vect->begin(), vect->end(), &cmpWeight);
 
     return (vect);
 }

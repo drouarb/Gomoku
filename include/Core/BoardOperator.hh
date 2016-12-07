@@ -37,20 +37,18 @@ namespace Core
 
         const PatternManager & getPatternManager() const;
 
-      Team		boardAt(boardPos_t x, boardPos_t y);
+      Team		boardAt(boardPos_t pos);
 
-      bool		checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y);
+      bool		checkFreeDoubleThree(Team player, boardPos_t pos);
 
-      bool		checkEatPlayer(Team player, boardPos_t x, boardPos_t y);
+      bool		checkEatPlayer(Team player, boardPos_t pos);
 
       bool		checkfiveWinBreak(Team player);
 
       bool		checkfiveWinNoBreak(Team player);
       
-      uint8_t		applyEat(Team player, boardPos_t x, boardPos_t y);
+      uint8_t		applyEat(Team player, boardPos_t pos);
       
-      void		ForceupdateBoard(Team player, boardPos_t x, boardPos_t y);
-
       void		ForceupdateBoard(Team player, boardPos_t pos);
 
       void		getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w);

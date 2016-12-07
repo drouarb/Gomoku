@@ -25,14 +25,13 @@ const fastList<boardPos_t> & Core::BoardOperator::getLastTakenStones() const
     return (lastTakenStones);
 }
 
-Team Core::BoardOperator::boardAt(boardPos_t x, boardPos_t y)
+Team Core::BoardOperator::boardAt(boardPos_t pos)
 {
-  return (patternM.teamAt(patternM.getPPos(x, y)));
+  return (patternM.teamAt(pos));
 }
 
-bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, boardPos_t y)
+bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t pos)
 {
-    boardPos_t pos = patternM.getPPos(x, y);
     patternM.addStone(pos, player);
     int foundDoubleThrees = findDoubleThree(player, pos);
     patternM.removeStone(pos);
@@ -42,12 +41,6 @@ bool		Core::BoardOperator::checkFreeDoubleThree(Team player, boardPos_t x, board
 int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
 {
     int nbFreeThree = 0;
-/*
-    const auto & map = patternM.getMap();
-    const PLIST<PatternRef> * list = patternM.patternsAt(pos);
-    if (list == NULL)
-        return (0);
-*/
     for (auto patref : patternM.patternsAt(pos))
     {
         if (patref.pattern->lineLength == 5)
@@ -225,22 +218,11 @@ bool Core::BoardOperator::isFreeAndMine(Pattern *pat, Team me)
             (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == NOPLAYER));
 }
 
-bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t x, boardPos_t y)
+bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t pos)
 {
   PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
-    boardPos_t pos = patternM.getPPos(x, y);
-/*
-    try
-    {
-        patterns = &patternM.getMap().at(pos);
-    }
-    catch (std::out_of_range)
-    {
-        return (false);
-    }
-*/
   it = patternM.patternsAt(pos).begin();
   while (it != patternM.patternsAt(pos).end())
     {
@@ -365,14 +347,9 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
     return (0);
 }
 
-uint8_t			Core::BoardOperator::applyEat(Team player, boardPos_t x, boardPos_t y)
+uint8_t			Core::BoardOperator::applyEat(Team player, boardPos_t pos)
 {
-    return (pApplyEat(player, patternM.getPPos(x, y)));
-}
-
-void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t x, boardPos_t y)
-{
-  patternM.addStone(patternM.getPPos(x, y), player);
+    return (pApplyEat(player, pos));
 }
 
 void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t pos)

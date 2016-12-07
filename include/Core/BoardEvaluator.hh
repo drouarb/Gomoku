@@ -35,7 +35,6 @@ namespace Core {
             }
         };
 
-
         conf_t *conf;
 
     public:
@@ -50,8 +49,6 @@ namespace Core {
     private:
         bool notMiddleOfNowhere(const PatternManager &, boardPos_t) const;
     };
-
-
 }
 
 

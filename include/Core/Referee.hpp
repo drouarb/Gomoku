@@ -46,7 +46,9 @@ namespace Core
 
         void setPlayer(Team player);
 
-        bool tryPlay(uint8_t x, uint8_t y);
+        //bool tryPlay(uint8_t x, uint8_t y);
+
+        bool tryPlay(boardPos_t x, boardPos_t y);
 
         bool tryPlay(boardPos_t pos);
 

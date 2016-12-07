@@ -20,7 +20,9 @@ namespace Core
       
         virtual void setPlayer(Team player) = 0;
       
-        virtual bool tryPlay(uint8_t x, uint8_t y) = 0;
+        //virtual bool tryPlay(uint8_t x, uint8_t y) = 0;
+
+        virtual bool tryPlay(boardPos_t x, boardPos_t y) = 0;
 
         virtual bool tryPlay(boardPos_t) = 0;
 

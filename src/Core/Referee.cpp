@@ -1,4 +1,5 @@
 #include "Referee.hpp"
+#include "PatternManager.hh"
 #include <string.h>
 #include <Core/BoardEvaluator.hh>
 
@@ -39,7 +40,7 @@ GameBoard_t	Core::Referee::getBoardCopy()
     {
         for (int x = 0; x < XBOARD; x++)
         {
-            newBoard[y * XBOARD + x] = boardOp.boardAt(x, y);
+            newBoard[y * XBOARD + x] = boardOp.boardAt(PatternManager::getPPos(x, y));
         }
     }
   return (newBoard);
@@ -50,6 +51,7 @@ void		Core::Referee::setPlayer(Team nplayer)
     player = nplayer;
 }
 
+/*
 bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
 {
     boardOp.clearLastMove();
@@ -78,24 +80,25 @@ bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
   ++nbrPlay;
   return (true);
 }
+*/
+
+bool        Core::Referee::tryPlay(boardPos_t x, boardPos_t y)
+{
+    return (tryPlay(PatternManager::getPPos(x, y)));
+}
 
 bool		Core::Referee::tryPlay(boardPos_t pos)
 {
-  uint8_t	x;
-  uint8_t	y;
-
     boardOp.clearLastMove();
-    x = pos % XBOARD;
-  y = pos / XBOARD;
   if (winner != NOPLAYER)
     return (false);
-  if (boardOp.boardAt(x, y) != NOPLAYER)
+  if (boardOp.boardAt(pos) != NOPLAYER)
     return (false);
   if ((*rRules)[DOUBLE_THREE].on == true)
-    if (boardOp.checkFreeDoubleThree(player, x, y) == true)
+    if (boardOp.checkFreeDoubleThree(player, pos) == true)
       return (false);
-  stats[player].eaten += boardOp.applyEat(player, x, y);
-  boardOp.ForceupdateBoard(player, x, y);
+  stats[player].eaten += boardOp.applyEat(player, pos);
+  boardOp.ForceupdateBoard(player, pos);
   if (stats[player].eaten >= EATWIN)
     winner = player;
   if ((*rRules)[BREAKABLE_FIVE].on == true)
@@ -150,6 +153,7 @@ Core::IReferee *Core::Referee::clone() {
 
 void Core::Referee::undoLastMove()
 {
+    player = (player == Team::WHITE) ? Team::BLACK : Team::WHITE;
     winner = NOPLAYER;
     stats[player].eaten -= boardOp.getLastTakenStones().size() / 2;
     for (auto pos : boardOp.getLastTakenStones())
@@ -157,7 +161,7 @@ void Core::Referee::undoLastMove()
         boardOp.ForceupdateBoard(OPPTEAM(getPlayer()), pos);
     }
     boardOp.clearLastMove();
-    boardOp.ForceupdateBoard(NOPLAYER, PatternManager::getPPos(lastMove % XBOARD, lastMove / XBOARD));
+    boardOp.ForceupdateBoard(NOPLAYER, lastMove);
 }
 
 uint16_t Core::Referee::getNbrPlay() const
