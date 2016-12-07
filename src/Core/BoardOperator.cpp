@@ -352,8 +352,8 @@ uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
             {
                 save = pat->posOfFirst + pat->direction * 2;
                 //(*board)[pat->posOfFirst + pat->direction] = Team::NOPLAYER;
-                patternM.removeStone(pat->posOfFirst + pat->direction);
                 lastTakenStones.push_front(pat->posOfFirst + pat->direction);
+                patternM.removeStone(pat->posOfFirst + pat->direction);
                 //(*board)[save] = Team::NOPLAYER;
                 patternM.removeStone(save);
                 lastTakenStones.push_front(save);

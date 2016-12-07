@@ -17,10 +17,17 @@ PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(
 PatternManager::PatternManager() : patterns()
 {
     board = reinterpret_cast<GameBoard_t>(boardRl.take());
-    //board = new char[XPBOARD * XPBOARD];
+    //board = new Team[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
-    //memset(map, 0, PBOARDSIZE * sizeof(PLIST<PatternRef>));
+    /*for (int i = 0; i < XPBOARD; ++i)
+        board[i] = BORDER;
+    for (int i = PBOARDSIZE - XPBOARD; i < PBOARDSIZE; ++i)
+        board[i] = BORDER;
+    for (int i = 0; i < PBOARDSIZE; i = i + XPBOARD)
+        board[i] = BORDER;
+    for (int i = XPBOARD - 1; i < PBOARDSIZE; i = i + XPBOARD)
+        board[i] = BORDER;*/
 
 /*
     std::cout << "CONSTRUCTION" << std::endl;
@@ -31,7 +38,7 @@ PatternManager::PatternManager() : patterns()
 PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns())
 {
     board = reinterpret_cast<GameBoard_t>(boardRl.take());
-    //board = new char[XPBOARD * XPBOARD];
+    //board = new Team[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
     //memset(map, 0, PBOARDSIZE * sizeof(PLIST<PatternRef>));
@@ -49,13 +56,13 @@ PatternManager::~PatternManager()
     for (int i = 0; i < PBOARDSIZE; ++i)
         map[i].clear();
     boardRl.giveBack(reinterpret_cast<line_s*>(board));
-    //delete board;
+    //delete [] board;
 }
 
 PatternManager & PatternManager::operator=(const PatternManager & other)
 {
-    boardRl.giveBack(reinterpret_cast<line_s*>(board));
-    board = reinterpret_cast<GameBoard_t>(boardRl.take());
+    //boardRl.giveBack(reinterpret_cast<line_s*>(board));
+    //board = reinterpret_cast<GameBoard_t>(boardRl.take());
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = other.board[i];
     patterns = other.patterns;
@@ -123,7 +130,7 @@ boardPos_t PatternManager::getPPos(boardPos_t x, boardPos_t y)
 
 void PatternManager::addStone(boardPos_t position, Team team)
 {
-  //std::cout << "addStone " << std::to_string(position) <<  " " << std::to_string(team) << std::endl;
+    //std::cout << "addStone " << std::to_string(position) <<  " " << std::to_string(team) << std::endl;
 
     board[position] = team;
 
@@ -169,21 +176,21 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 boardPos_t newlen;
                 if (pattern->pattern->lineLength == 1)
                 {
-		  //std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+                    //std::cout << "found 1 i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //single stone
                     newlen = 4;
                     removeFromMap(pattern->pattern);
                 }
                 else if (aligned)
                 {
-		  //std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+                    //std::cout << "found aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //aligned pattern
                     newlen = pattern->pattern->lineLength + (boardPos_t) 1;
                     removeFromMap(pattern->pattern);
                 }
                 else
                 {
-		  //std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
+                    //std::cout << "found non-aligned i=" << std::to_string(i) << " pos=" << std::to_string(position + checkMap[i]) << std::endl;
                     //new pattern
                     newpatterns++;
                     patterns.push_front(Pattern(team, 4, teamAt(position + checkMap[i] * (boardPos_t) 2),
@@ -215,7 +222,8 @@ void PatternManager::addStone(boardPos_t position, Team team)
                 firstTeam = teamAt(firstPos);
 
                 target->set(newlen, firstTeam, teamAt(firstPos + (newlen - (boardPos_t)1) * dir), firstPos, dir);
-                removeOSExtremities(target);
+                if (newlen != 1)
+                    removeOSExtremities(target);
 
                 //new patterns are added to the map afterwards
                 if (!newpattern)
@@ -458,7 +466,7 @@ void PatternManager::removeStone(boardPos_t position)
 
 Team PatternManager::teamAt(boardPos_t pos) const
 {
-    return ((Team)board[pos]);
+    return (board[pos]);
 }
 
 void PatternManager::removePattern(Pattern * pattern)
@@ -594,10 +602,9 @@ void PatternManager::removeOneStone(boardPos_t position)
 {
     for (auto it = map[position].begin(); it != map[position].end(); ++it)
     {
-        auto pat = &(*it);
-        if (pat->pattern->lineLength == 1)
+        if (it->pattern->lineLength == 1)
         {
-            removeFromList(pat->pattern);
+            removeFromList(it->pattern);
             map[position].erase(it);
             break;
         }
@@ -655,6 +662,23 @@ std::ostream &operator<<(std::ostream & out, const Core::PatternManager & pm)
             }
             out << std::endl;
         }
+    }
+    out << "-- BOARD" << std::endl;
+    for (int y = 0; y < XPBOARD; ++y)
+    {
+        for (int x = 0; x < XPBOARD; ++x)
+        {
+            Team t = pm.teamAt(y * XPBOARD + x);
+            if (t == BORDER)
+                out << "#";
+            if (t == NOPLAYER)
+                out << " ";
+            if (t == BLACK)
+                out << "@";
+            if (t == WHITE)
+                out << "O";
+        }
+        out << std::endl;
     }
 
     return out;
