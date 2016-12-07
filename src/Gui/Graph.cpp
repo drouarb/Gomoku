@@ -103,7 +103,8 @@ void Graph::addTextToScreen(const std::string & text, int x, int y)
         backgrounColor.b = 0;
         backgrounColor.r = 0;
         backgrounColor.g = 0;
-        SDL_Surface *pSprite = TTF_RenderText_Shaded(police, text.c_str(), colorTexte, backgrounColor);
+        std::string text_cpy(text);
+        SDL_Surface *pSprite = TTF_RenderText_Shaded(police, text_cpy.c_str(), colorTexte, backgrounColor);
         SDL_Texture *pTexture;
         SDL_Rect dest;
         if (pSprite)
