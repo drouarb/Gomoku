@@ -25,6 +25,7 @@ Obs *Graph::getObs()
 void Graph::quit()
 {
     SDL_DestroyWindow(fenetre);
+    fenetre = nullptr;
     SDL_Quit();
 }
 
@@ -96,7 +97,7 @@ void Graph::refresh()
 
 void Graph::addTextToScreen(const std::string & text, int x, int y)
 {
-    if (police != NULL)
+    if (fenetre != NULL && police != NULL)
     {
         SDL_Color backgrounColor;
         backgrounColor.a = 0;
