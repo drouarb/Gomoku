@@ -20,14 +20,14 @@ PatternManager::PatternManager() : patterns()
     //board = new Team[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
-    /*for (int i = 0; i < XPBOARD; ++i)
+    for (int i = 0; i < XPBOARD; ++i)
         board[i] = BORDER;
     for (int i = PBOARDSIZE - XPBOARD; i < PBOARDSIZE; ++i)
         board[i] = BORDER;
     for (int i = 0; i < PBOARDSIZE; i = i + XPBOARD)
         board[i] = BORDER;
     for (int i = XPBOARD - 1; i < PBOARDSIZE; i = i + XPBOARD)
-        board[i] = BORDER;*/
+        board[i] = BORDER;
 
 /*
     std::cout << "CONSTRUCTION" << std::endl;
@@ -278,10 +278,6 @@ void PatternManager::doOppPattern(boardPos_t position, int i, Team team, Pattern
     //try to find an aligned one before taking a non-aligned one
     for (auto &oppPattern : map[position + checkMap[i]])
     {
-        if (position + checkMap[i] >= PBOARDSIZE)
-            std::cout << "e pos=" << std::to_string(position + checkMap[i]) << std::endl;
-        if (oppPattern.pattern == NULL)
-            std::cout << "+++++++++++++++++++++++++++++++++++++++" << std::endl;
         if (oppPattern.pattern->line[oppPattern.posOnPattern] == team)
         {
             if (oppPattern.pattern->lineLength == 1)
