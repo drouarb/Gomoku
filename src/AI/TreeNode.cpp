@@ -30,9 +30,10 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *paren
 
 AI::TreeNode::~TreeNode() {
     for (auto &c : childs) {
-        if (c)
+        if (c) {
             c->parent = NULL;
             delete (c);
+        }
     }
     delete (moves);
     delete (referee);

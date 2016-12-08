@@ -19,12 +19,14 @@ const std::string &AIPlayer::getName() const {
 
 bool AIPlayer::init(Core::IReferee *referee) {
     this->referee = referee;
+    this->nodeCache = AI::NodeCache::getInstance(referee);
+    std::cout << "AI init done" << std::endl;
     return true;
 }
 
 bool AIPlayer::play() {
-    AI::MonteCarlo mc(this->referee, this->referee->getPlayer());
-    mc.run();
+    std::cout << "AIPLAY" << std::endl;
+    nodeCache->getMove(referee, 200);
     return false;
 }
 

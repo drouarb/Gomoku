@@ -18,17 +18,21 @@ AI::NodeCache::~NodeCache() {
     delete (root);
 }
 
-void AI::NodeCache::threadTask() {
+void AI::NodeCache::threadTask(int threadId) {
+    threadLocks[threadId].lock();
     TreeNode *c = root->getSimulationNode();
     simulate(c);
+    threadLocks[threadId].unlock();
     if (running)
-        ioService.post(boost::bind(&AI::NodeCache::threadTask, this));
+        ioService.post(boost::bind(&AI::NodeCache::threadTask, this, threadId));
 }
 
 void AI::NodeCache::run() {
+    if (running)
+        return;
     running = true;
     for (int i = 0; i < THREADS_POOL; i++) {
-        ioService.post(boost::bind(&AI::NodeCache::threadTask, this));
+        ioService.post(boost::bind(&AI::NodeCache::threadTask, this, i));
     }
 }
 
@@ -43,37 +47,58 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     TreeNode *oldRoot = NULL;
 
     sw.set();
-    if (referee->getNbrPlay() != rootRound) {
-        for (auto &c : root->getChilds()) {
-            if (c->getMove() == referee->getLastMove()) {
-                oldRoot = root;
-                c->setParent(NULL);
-                root = c;
-                c = NULL;
-                delete(oldRoot);
-                ++rootRound;
-                std::cout << "Found parent in tree" << std::endl;
-                break;
-            }
-        }
+    for (int i = 0; i < THREADS_POOL; i++) {
+        std::cout << "Locking........................" << std::endl;
+        threadLocks[i].lock();
+        std::cout << "Locked" << std::endl;
     }
-    if (oldRoot == NULL) {
-        oldRoot = root;
-        root = new TreeNode(referee->clone(), referee->getPlayer());
-        std::cout << "No Parent regenerate" << std::endl;
-        delete(oldRoot);
+    std::cout << "Check player" << std::endl;
+    if (referee->getPlayer() != root->getReferee()->getPlayer()) {
+        std::cout << "Need step forward" << std::endl;
+        std::cout << setNewRoot(referee, referee->getLastMove());
+        std::cout << "Done" << std::endl;
     }
+
+    //Maybe work ??
     //Take a break :)
-    usleep((ms * 1000) - sw.elapsedUs());
+    //usleep(ms - sw.elapsedMs());
     action = root->getBestAction();
-    if (action)
+    std::cout << "No actions ?" << action << std::endl;
+    if (action != -1) {
         referee->tryPlay(action);
+        setNewRoot(referee, action);
+    } else {
+        std::cout << "Catastrophe, go Random" << std::endl;
+        while (!referee->tryPlay(rand() % (XBOARD * XBOARD)));
+    }
+    for (auto &l : threadLocks)
+        l.unlock();
     return action;
 }
 
+bool AI::NodeCache::setNewRoot(Core::IReferee *referee, int action) {
+    bool found = false;
+    TreeNode *oldRoot = root;
+
+    for (auto &c : root->getChilds()) {
+        if (c->getMove() == action) {
+            c->setParent(NULL);
+            root = c;
+            c = NULL;
+            found = true;
+            break;
+        }
+    }
+    if (root == oldRoot)
+        root = new TreeNode(referee->clone(), referee->getPlayer());
+    delete (oldRoot);
+    return found;
+}
+
 void AI::NodeCache::simulate(AI::TreeNode *node) {
-    int count = 0;
     Core::IReferee *sim = node->getReferee()->clone();
+
+    int count = 0;
     std::vector<std::pair<boardPos_t, weight_t>> *moves;
 
     while (sim->getWinner() == NOPLAYER && count < 361) {
@@ -83,10 +108,25 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
             return;
         }
         sim->tryPlay(moves->back().first);
-        delete(moves);
+        delete (moves);
         ++count;
     }
     node->backPropagate(1, sim->getWinner());
-    delete(sim);
+    delete (sim);
 
+}
+
+AI::NodeCache *AI::NodeCache::getInstance(Core::IReferee *referee) {
+    static NodeCache *cache = NULL;
+    static Core::IReferee *save = NULL;
+
+    if (referee && referee != save) {
+        std::cout << "New nodecache" << (void*)referee << std::endl;
+        if (cache)
+            delete (cache);
+        cache = new NodeCache(referee);
+        cache->run();
+        save = referee;
+    }
+    return cache;
 }

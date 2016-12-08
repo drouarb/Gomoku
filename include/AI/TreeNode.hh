@@ -40,7 +40,6 @@ namespace AI {
         unsigned int whiteWins;
 
         TreeNode *parent;
-        std::mutex childLock;
         std::vector<TreeNode *> childs;
 
         int move;

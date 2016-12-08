@@ -1,6 +1,7 @@
 #ifndef GOMOKU_AI_HH
 #define GOMOKU_AI_HH
 
+#include <AI/NodeCache.hh>
 #include "IAI.hh"
 
 namespace Players
@@ -29,6 +30,7 @@ namespace Players
         Core::BoardOperator *boardOperator;
         Core::IReferee *referee;
         Team team;
+        AI::NodeCache *nodeCache;
     };
 }
 #endif

@@ -20,16 +20,21 @@ namespace AI {
         void run();
         void stop();
 
-        void threadTask();
+        void threadTask(int threadId);
         int getMove(Core::IReferee *referee, unsigned int ms = 0);
+
+        static NodeCache *getInstance(Core::IReferee *referee);
 
     private:
         void simulate(TreeNode *node);
+
+        bool setNewRoot(Core::IReferee *referee, int action);
 
     private:
         bool running;
         TreeNode *root;
         unsigned int rootRound;
+        std::mutex threadLocks[THREADS_POOL];
 
         boost::thread_group threadpool;
         boost::asio::io_service ioService;

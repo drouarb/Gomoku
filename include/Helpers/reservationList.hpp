@@ -73,6 +73,7 @@ reservList<T>::~reservList()
 template<typename T>
 T * reservList<T>::take()
 {
+    return new T;
     if (first == NULL)
         expand();
     element * elem = first;
@@ -84,6 +85,8 @@ T * reservList<T>::take()
 template<typename T>
 void reservList<T>::giveBack(T * value)
 {
+    delete(value);
+    return;
     element * elem = reinterpret_cast<element*>(value);
     elem->value.~T();
     elem->next = first;
