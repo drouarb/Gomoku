@@ -2,12 +2,12 @@
 #define RESERV_LIST_HPP_
 
 #include <stdlib.h>
+#include <mutex>
 
 /**
  * T is the type that the reservation list will contain.
  * reservSize is the number of elements to reserve each time there are no more elements left. Must be greater than 1.
  * All elements are freed when and only when the reservation list is destroyed.
- * No mutex. Multithreading will break.
  */
 template <typename T>
 class reservList
@@ -23,7 +23,10 @@ class reservList
 
 public:
     reservList(int reservationSize);
+    reservList(const reservList<T> &);
     ~reservList();
+
+    reservList<T> &operator=(const reservList<T> &);
 
     /**
      * Gives you a new unused, uninitialized, pre-alloc'd T. Replaces the "new" keyword.
@@ -41,6 +44,7 @@ private:
         blockHeader* next;
     };
 
+    std::mutex      mutex;
     element *       first;
     int             reservSize;
     blockHeader *   blockHeaderList;
@@ -58,10 +62,30 @@ private:
 template<typename T>
 reservList<T>::reservList(int reservationSize)
 {
+    mutex.lock();
     reservSize = reservationSize;
     first = NULL;
     blockHeaderList = NULL;
     expand();
+    mutex.unlock();
+}
+
+template<typename T>
+reservList<T>::reservList(const reservList<T> & other)
+{
+    mutex.lock();
+    reservSize = other.reservSize;
+    first = NULL;
+    blockHeaderList = NULL;
+    expand();
+    mutex.unlock();
+}
+
+template<typename T>
+reservList<T> & reservList<T>::operator=(const reservList<T> & other)
+{
+    reservSize = other.reservSize;
+    return *this;
 }
 
 template<typename T>
@@ -73,24 +97,28 @@ reservList<T>::~reservList()
 template<typename T>
 T * reservList<T>::take()
 {
-    return new T;
+    //return new T;
+    mutex.lock();
     if (first == NULL)
         expand();
     element * elem = first;
     new (&elem->value) T ();
     first = first->next;
+    mutex.unlock();
     return (reinterpret_cast<T*>(elem));
 }
 
 template<typename T>
 void reservList<T>::giveBack(T * value)
 {
-    delete(value);
-    return;
+    //delete(value);
+    //return;
+    mutex.lock();
     element * elem = reinterpret_cast<element*>(value);
     elem->value.~T();
     elem->next = first;
     first = elem;
+    mutex.unlock();
 }
 
 template<typename T>
