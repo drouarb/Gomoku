@@ -4,8 +4,9 @@
 
 using namespace Players;
 
-AIPlayer::AIPlayer(std::string &name) {
+AIPlayer::AIPlayer(std::string &name, Team team) {
     this->name = name;
+    this->team = team;
 }
 
 AIPlayer::~AIPlayer() {

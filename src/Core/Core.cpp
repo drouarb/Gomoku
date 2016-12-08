@@ -146,7 +146,7 @@ void Core::Core::createPlayerAI(int index)
     destroyPlayer(index);
     std::string name = TEAMNAME(TEAMOF(index));
     name += " A.I.";
-    players[index] = new Players::AIPlayer(name);
+    players[index] = new Players::AIPlayer(name, TEAMOF(index));
     players[index]->init(referee);
     gui->registerPlayer(players[index]);
 }

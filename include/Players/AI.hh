@@ -10,7 +10,7 @@ namespace Players
     private:
         int score = 0;
     public:
-        AIPlayer(std::string &name);
+        AIPlayer(std::string &name, Team);
 
         ~AIPlayer();
 
@@ -28,6 +28,7 @@ namespace Players
         std::string name;
         Core::BoardOperator *boardOperator;
         Core::IReferee *referee;
+        Team team;
     };
 }
 #endif
