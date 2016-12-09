@@ -35,6 +35,7 @@ namespace Core
         ~PatternManager();
         
         typedef PLIST<PatternRef> PMap[PBOARDSIZE];
+        typedef Team PGameBoard_t[PBOARDSIZE];
 
         PatternManager & operator=(const PatternManager &);
         bool operator==(const PatternManager &);
@@ -54,7 +55,7 @@ namespace Core
     private:
         PLIST<Pattern> patterns;
         PMap map;
-        GameBoard_t board;
+        PGameBoard_t board;
 
 
         bool addMiddle(boardPos_t position, Team team);

@@ -73,6 +73,7 @@ reservList<T>::reservList(int reservationSize)
 template<typename T>
 reservList<T>::reservList(const reservList<T> & other)
 {
+    //should I copy first and blockHeaderList?
     mutex.lock();
     reservSize = other.reservSize;
     first = NULL;
@@ -84,6 +85,7 @@ reservList<T>::reservList(const reservList<T> & other)
 template<typename T>
 reservList<T> & reservList<T>::operator=(const reservList<T> & other)
 {
+    //should I copy first and blockHeaderList?
     reservSize = other.reservSize;
     return *this;
 }

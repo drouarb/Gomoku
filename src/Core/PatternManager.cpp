@@ -16,8 +16,6 @@ PatternRef::PatternRef(Pattern * pat, uint8_t pos) : pattern(pat), posOnPattern(
 
 PatternManager::PatternManager() : patterns()
 {
-    board = reinterpret_cast<GameBoard_t>(boardRl.take());
-    //board = new Team[XPBOARD * XPBOARD];
     for (int i = 0; i < XPBOARD * XPBOARD; ++i)
         board[i] = NOPLAYER;
     for (int i = 0; i < XPBOARD; ++i)
@@ -37,11 +35,8 @@ PatternManager::PatternManager() : patterns()
 
 PatternManager::PatternManager(const PatternManager & other) : patterns(other.getPatterns())
 {
-    board = reinterpret_cast<GameBoard_t>(boardRl.take());
-    //board = new Team[XPBOARD * XPBOARD];
-    for (int i = 0; i < XPBOARD * XPBOARD; ++i)
+    for (int i = 0; i < PBOARDSIZE; ++i)
         board[i] = other.board[i];
-    //memset(map, 0, PBOARDSIZE * sizeof(PLIST<PatternRef>));
     for (Pattern & pattern : patterns)
         addToMap(&pattern);
 /*
@@ -55,15 +50,11 @@ PatternManager::~PatternManager()
     //std::cout << "DESTRUCTION" << std::endl;
     for (int i = 0; i < PBOARDSIZE; ++i)
         map[i].clear();
-    boardRl.giveBack(reinterpret_cast<line_s*>(board));
-    //delete [] board;
 }
 
 PatternManager & PatternManager::operator=(const PatternManager & other)
 {
-    //boardRl.giveBack(reinterpret_cast<line_s*>(board));
-    //board = reinterpret_cast<GameBoard_t>(boardRl.take());
-    for (int i = 0; i < XPBOARD * XPBOARD; ++i)
+    for (int i = 0; i < PBOARDSIZE; ++i)
         board[i] = other.board[i];
     patterns = other.patterns;
     //map.clear();
