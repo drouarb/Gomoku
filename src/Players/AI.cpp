@@ -26,7 +26,7 @@ bool AIPlayer::init(Core::IReferee *referee) {
 
 bool AIPlayer::play() {
     std::cout << "AIPLAY" << std::endl;
-    nodeCache->getMove(referee, 5000);
+    nodeCache->getMove(referee, 1000);
     return false;
 }
 

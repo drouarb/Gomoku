@@ -56,6 +56,7 @@ AI::TreeNode *AI::TreeNode::getSimulationNode() {
         mutex.unlock();
         return child->getSimulationNode();
     }
+    mutex.unlock();
     return NULL;
 }
 

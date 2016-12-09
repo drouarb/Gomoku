@@ -19,8 +19,9 @@ AI::NodeCache::~NodeCache() {
 }
 
 void AI::NodeCache::threadTask(int threadId) {
-    TreeNode *c = root->getSimulationNode();
-    simulate(c);
+    TreeNode *c;
+    if ((c = root->getSimulationNode()))
+        simulate(c);
     if (running)
         ioService.post(boost::bind(&AI::NodeCache::threadTask, this, threadId));
     else
@@ -59,6 +60,7 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     std::cout << "Check player" << std::endl;
     if (referee->getPlayer() != root->getReferee()->getPlayer()) {
         pause();
+        std::cout << referee->getPlayer() << " | " << root->getReferee()->getPlayer() << " " << std::endl;
         std::cout << "Need step forward" << std::endl;
         std::cout << setNewRoot(referee, referee->getLastMove());
         std::cout << "Done" << std::endl;
@@ -66,7 +68,7 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     }
 
     //Take a break :)
-    usleep(ms - sw.elapsedMs());
+    usleep((ms - sw.elapsedMs()) * 1000);
     pause();
 
     action = root->getBestAction();
