@@ -604,8 +604,6 @@ void PatternManager::removeOneStone(boardPos_t position)
 
 
 
-reservList<PatternManager::line_s> PatternManager::boardRl = reservList<PatternManager::line_s>(128);
-
 const boardPos_t PatternManager::checkMap[] = {
         0,
         -1,
