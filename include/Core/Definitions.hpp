@@ -15,7 +15,7 @@
 
 #define MC_EXPLORATION 1
 
-#define THREADS_POOL 1
+#define THREADS_POOL 4
 
 enum GamePlayers : int_fast8_t
 {

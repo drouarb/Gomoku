@@ -19,6 +19,7 @@ namespace AI {
 
         void run();
         void stop();
+        void pause();
 
         void threadTask(int threadId);
         int getMove(Core::IReferee *referee, unsigned int ms = 0);

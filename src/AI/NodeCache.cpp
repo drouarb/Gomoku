@@ -19,12 +19,12 @@ AI::NodeCache::~NodeCache() {
 }
 
 void AI::NodeCache::threadTask(int threadId) {
-    threadLocks[threadId].lock();
     TreeNode *c = root->getSimulationNode();
     simulate(c);
-    threadLocks[threadId].unlock();
     if (running)
         ioService.post(boost::bind(&AI::NodeCache::threadTask, this, threadId));
+    else
+        threadLocks[threadId].unlock();
 }
 
 void AI::NodeCache::run() {
@@ -32,7 +32,16 @@ void AI::NodeCache::run() {
         return;
     running = true;
     for (int i = 0; i < THREADS_POOL; i++) {
+        threadLocks[i].lock();
         ioService.post(boost::bind(&AI::NodeCache::threadTask, this, i));
+    }
+}
+
+void AI::NodeCache::pause() {
+    running = false;
+    for (int i = 0; i < THREADS_POOL; i++) {
+        threadLocks[i].lock();
+        threadLocks[i].unlock();
     }
 }
 
@@ -47,21 +56,19 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     TreeNode *oldRoot = NULL;
 
     sw.set();
-    for (int i = 0; i < THREADS_POOL; i++) {
-        std::cout << "Locking........................" << std::endl;
-        threadLocks[i].lock();
-        std::cout << "Locked" << std::endl;
-    }
     std::cout << "Check player" << std::endl;
     if (referee->getPlayer() != root->getReferee()->getPlayer()) {
+        pause();
         std::cout << "Need step forward" << std::endl;
         std::cout << setNewRoot(referee, referee->getLastMove());
         std::cout << "Done" << std::endl;
+        run();
     }
 
-    //Maybe work ??
     //Take a break :)
-    //usleep(ms - sw.elapsedMs());
+    usleep(ms - sw.elapsedMs());
+    pause();
+
     action = root->getBestAction();
     std::cout << "No actions ?" << action << std::endl;
     if (action != -1) {
@@ -71,8 +78,7 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
         std::cout << "Catastrophe, go Random" << std::endl;
         while (!referee->tryPlay(rand() % (XBOARD * XBOARD)));
     }
-    for (auto &l : threadLocks)
-        l.unlock();
+    run();
     return action;
 }
 

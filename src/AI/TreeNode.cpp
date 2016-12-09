@@ -40,16 +40,22 @@ AI::TreeNode::~TreeNode() {
 }
 
 AI::TreeNode *AI::TreeNode::getSimulationNode() {
+    TreeNode *child;
+
+    mutex.lock();
     if (moves->size()) {
         try {
             childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves));
-            return childs.back();
-        } catch (std::exception) {
-            if (childs.size())
-                return this->getBestChild()->getSimulationNode();
-        }
-    } else if (childs.size())
-        return this->getBestChild()->getSimulationNode();
+            child = childs.back();
+            mutex.unlock();
+            return child;
+        } catch (std::exception) { }
+    }
+    if (childs.size()) {
+        child = getBestChild();
+        mutex.unlock();
+        return child->getSimulationNode();
+    }
     return NULL;
 }
 

@@ -44,6 +44,8 @@ namespace AI {
 
         int move;
         std::vector<std::pair<boardPos_t, weight_t>> *moves;
+
+        std::mutex mutex;
     };
 }
 
