@@ -27,6 +27,8 @@ FILE(
         testIntepretor/include/*.hh
         )
 
+link_directories(${CMAKE_SOURCE_DIR}/external_libs)
+
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(include)
 include_directories(include/Core)
@@ -35,15 +37,14 @@ include_directories(include/Players)
 include_directories(include/Gui)
 include_directories(testIntepretor/include)
 
-
 add_library(Gomoku_core ${GOMOKU})
 
 add_executable(Gomoku src/main.cpp ${GOMOKU})
 add_executable(Gomoku_tests ${GOMOKU} tests/main.cpp)
 add_executable(intepretor.out ${TEST_INTEPRETOR})
-target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread ${Boost_LIBRARIES})
-target_link_libraries(Gomoku_core -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread ${Boost_LIBRARIES})
-target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread Gomoku_core ${Boost_LIBRARIES})
+target_link_libraries(Gomoku -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread -ltcmalloc_minimal ${Boost_LIBRARIES})
+target_link_libraries(Gomoku_core -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread -ltcmalloc_minimal ${Boost_LIBRARIES})
+target_link_libraries(Gomoku_tests -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread Gomoku_core -ltcmalloc_minimal ${Boost_LIBRARIES})
 
 FILE(
         GLOB_RECURSE
@@ -59,5 +60,5 @@ foreach (test ${GOMOKU_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
     add_executable(${test_name} ${test})
     add_test(${test_name} ${test_name})
-    target_link_libraries(${test_name} Gomoku_core ${Boost_LIBRARIES})
+    target_link_libraries(${test_name} Gomoku_core -ltcmalloc_minimal ${Boost_LIBRARIES})
 endforeach (test)
