@@ -20,7 +20,7 @@ void Core::BoardOperator::clearLastMove()
     lastTakenStones.clear();
 }
 
-const rotatingArray<boardPos_t, 16> & Core::BoardOperator::getLastTakenStones() const
+const fastList<boardPos_t> & Core::BoardOperator::getLastTakenStones() const
 {
     return (lastTakenStones);
 }
@@ -84,7 +84,7 @@ int Core::BoardOperator::findDoubleThree(Team player, boardPos_t pos)
         boardPos_t dir = PatternManager::checkMap[i];
         if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
         {
-            /*const MAP_ENTRY * list2 = patternM.patternsAt(pos + dir);
+            /*const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
             if (list2)*/
             for (auto patref : patternM.patternsAt(pos + dir))
             {
@@ -139,7 +139,7 @@ bool Core::BoardOperator::findAnotherDoubleThree(Team player, boardPos_t pos1, b
 bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, boardPos_t ommittedDir)
 {
 /*
-    const MAP_ENTRY * list = patternM.patternsAt(pos);
+    const PLIST<PatternRef> * list = patternM.patternsAt(pos);
     if (list == NULL)
         return (false);
 */
@@ -182,7 +182,7 @@ bool Core::BoardOperator::checkPosForDoubleThree(Team player, boardPos_t pos, bo
         {
             if (patternM.teamAt(pos + dir) == NOPLAYER && patternM.teamAt(pos - dir) == NOPLAYER)
             {
-                /*const MAP_ENTRY * list2 = patternM.patternsAt(pos + dir);
+                /*const PLIST<PatternRef> * list2 = patternM.patternsAt(pos + dir);
                 if (list2)*/
                 for (auto patref : patternM.patternsAt(pos + dir))
                 {
@@ -220,7 +220,7 @@ bool Core::BoardOperator::isFreeAndMine(Pattern *pat, Team me)
 
 bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t pos)
 {
-  MAP_ENTRY::const_iterator it;
+  PLIST<PatternRef>::iterator it;
   Pattern			*pat;
 
   it = patternM.patternsAt(pos).begin();
@@ -240,14 +240,14 @@ bool              Core::BoardOperator::checkEatPlayer(Team player, boardPos_t po
 
 bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 {
-  PLIST::iterator	it;
-  const MAP_ENTRY	* patSecond;
-  MAP_ENTRY::const_iterator itS;
+  PLIST<Pattern>::iterator	it;
+  const PLIST<PatternRef>	* patSecond;
+  PLIST<PatternRef>::iterator itS;
   Pattern			*pat;
   int				nbrNoBreak;
   int				i;
 
-  PLIST & patterns = patternM.getPatterns();
+  PLIST<Pattern> & patterns = patternM.getPatterns();
   it = patterns.begin();
   while (it != patterns.end())
   {
@@ -292,8 +292,8 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
 
 bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 {
-  PLIST	patterns;
-  PLIST::iterator	it;
+  PLIST<Pattern>	patterns;
+  PLIST<Pattern>::iterator	it;
 
   patterns = patternM.getPatterns();
   it = patterns.begin();
@@ -310,7 +310,7 @@ bool              Core::BoardOperator::checkfiveWinNoBreak(Team player)
 
 uint8_t         Core::BoardOperator::pApplyEat(Team player, boardPos_t pos)
 {
-    MAP_ENTRY::const_iterator it;
+    PLIST<PatternRef>::iterator it;
     Pattern			*pat;
     int				save;
 
@@ -362,8 +362,8 @@ void			Core::BoardOperator::ForceupdateBoard(Team player, boardPos_t pos)
 
 void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  PLIST		patterns;
-  PLIST::iterator	it;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
   boardPos_t			i;
 
   patterns = patternM.getPatterns();
@@ -420,8 +420,8 @@ void Core::BoardOperator::getXPossible(uint8_t numberPiece, Team player, std::ve
 
 void Core::BoardOperator::getFreeXPossible(uint8_t numberPiece, Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  PLIST		patterns;
-  PLIST::iterator	it;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
   boardPos_t			i;
 
   patterns = patternM.getPatterns();
@@ -493,8 +493,8 @@ void Core::BoardOperator::getFreeX(uint8_t numberPiece, Team player, std::vector
 
 void Core::BoardOperator::getEatPos(Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  PLIST		patterns;
-  PLIST::iterator	it;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
 
   patterns = patternM.getPatterns();
   it = patterns.begin();
@@ -517,10 +517,10 @@ void Core::BoardOperator::getFreeDoubleThreePos(Team player, std::vector<boardPo
 
 void Core::BoardOperator::getFiveBreakable(Team player, std::vector<boardPos_t> *tab, weight_t w)
 {
-  PLIST		patterns;
-  PLIST::iterator	it;
-  const MAP_ENTRY	*patSecond;
-  MAP_ENTRY::const_iterator itS;
+  PLIST<Pattern>		patterns;
+  PLIST<Pattern>::iterator	it;
+  const PLIST<PatternRef>	*patSecond;
+  PLIST<PatternRef>::iterator itS;
   Pattern			*pat;
   boardPos_t			i;
 
@@ -598,11 +598,6 @@ void Core::BoardOperator::getPercentDensityOnPos(boardPos_t x, boardPos_t y, std
 }
 
 const Core::PatternManager &Core::BoardOperator::getPatternManager() const
-{
-    return (patternM);
-}
-
-Core::PatternManager & Core::BoardOperator::getPatternManager()
 {
     return (patternM);
 }

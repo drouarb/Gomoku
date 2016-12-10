@@ -48,12 +48,11 @@ namespace Core
         Team getTeam();
 
         //char * line; + 1 malloc + 1 void* = too slow + too much mem space
-        Team line[21];
+        Team *line;
         uint8_t lineLength;
         boardPos_t posOfFirst;
         boardPos_t direction; //number to add to get to the next stone in the line
 
-/*
     private:
         template<int size>
         struct line_s
@@ -61,7 +60,7 @@ namespace Core
             ~line_s() { }
             Team arr[size];
         };
-
+        
         void freeLine();
         void allocLine();
         
@@ -94,7 +93,6 @@ namespace Core
 
         typedef void (Pattern::*delLineFun)();
         static const delLineFun delLineFunArr[];
-*/
     };
 }
 

@@ -58,7 +58,7 @@ FILE(
 
 foreach (test ${GOMOKU_TESTS_SOURCES})
     get_filename_component(test_name ${test} NAME_WE)
-    add_executable(${test_name} ${test} include/Helpers/rotatingArray.hpp)
+    add_executable(${test_name} ${test})
     add_test(${test_name} ${test_name})
     target_link_libraries(${test_name} Gomoku_core -ltcmalloc_minimal ${Boost_LIBRARIES})
 endforeach (test)

@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "PatternManager.hh"
-#include "Helpers/rotatingArray.hpp"
 
 #define DENSITYRANGE 2
 
@@ -13,7 +12,7 @@ namespace Core
     {
   private:
       PatternManager	patternM;
-      rotatingArray<boardPos_t, 16> lastTakenStones;
+      fastList<boardPos_t> lastTakenStones;
     private:
       int       findDoubleThree(Team player, boardPos_t pos);
       bool      findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t mypos, boardPos_t ommittedDir);
@@ -34,10 +33,9 @@ namespace Core
 
         void clearLastMove();
 
-      const rotatingArray<boardPos_t, 16> & getLastTakenStones() const;
+      const fastList<boardPos_t> & getLastTakenStones() const;
 
         const PatternManager & getPatternManager() const;
-      PatternManager & getPatternManager();
 
       Team		boardAt(boardPos_t pos);
 
