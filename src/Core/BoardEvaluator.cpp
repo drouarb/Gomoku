@@ -6,7 +6,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 #include "BoardEvaluator.hh"
-#include "Helpers/Stopwatch.hh"
 
 using namespace Core;
 using namespace boost::property_tree;
@@ -18,9 +17,9 @@ static BoardEvaluator *instance = NULL;
 #define WIN_VALUE(team, winner) (winner == team ? MAX_VALUE : -MAX_VALUE)
 
 
-static int cmpWeight(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
+static bool cmpWeight(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
 {
-    return (pos1.second < pos2.second);
+    return (pos1.second > pos2.second);
 }
 
 BoardEvaluator *BoardEvaluator:: getInstance() {
@@ -43,9 +42,15 @@ int32_t BoardEvaluator::getValue(IReferee * referee, Team t) const {
                 - conf->pierres_mangees[referee->getTeamEat(OPPTEAM(t))];
 
     for (auto & pattern : referee->getBoOp()->getPatternManager().getPatterns()) {
-        totalValue += ADD_BY_TEAM(t,
-                                  conf->values[pattern.lineLength].extremity[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
-                                  pattern);
+        if (t == pattern.getTeam()) {
+            totalValue += ADD_BY_TEAM(t,
+                                      conf->values[pattern.lineLength].extremity_me[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
+                                      pattern);
+        } else {
+            totalValue += ADD_BY_TEAM(t,
+                                      conf->values[pattern.lineLength].extremity_enemy[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
+                                      pattern);
+        }
     }
 
     return totalValue;
@@ -72,9 +77,12 @@ void BoardEvaluator::parseFrom(const std::string &path) {
 
                     uint8_t c = 0;
 
+                    val->coef_me = child.second.get<int>("coef_me");
+                    val->coef_enemy = child.second.get<int>("coef_enemy");
                     BOOST_FOREACH(const ptree::value_type &child2,
                                   child.second.get_child("extremites")) {
-                                    val->extremity[c] = child2.second.get_value<int>();
+                                    val->extremity_me[c] = child2.second.get_value<int>() * val->coef_me;
+                                    val->extremity_enemy[c] = child2.second.get_value<int>() * val->coef_enemy;
                                     c++;
                                 }
                 }
@@ -85,7 +93,7 @@ void BoardEvaluator::parseFrom(const std::string &path) {
     {
         for (int e = 0; e < 3; ++e)
         {
-            conf->values[i].extremity[e] = conf->values[i - 1].extremity[e] + extra_stone_points;
+            conf->values[i].extremity_me[e] = conf->values[i - 1].extremity_me[e] + extra_stone_points;
         }
     }
 
@@ -143,6 +151,37 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
             vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, player)));
             referee->undoLastMove();
         }
+/*
+        if (!checkPatterns(referee, &newReferee))
+        {
+            std::cout << "===================== before playing x=" << std::to_string(i % 19) << " y=" << std::to_string(i / 19) << std::endl;
+            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
+            newReferee.tryPlay(i % 19, i / 19);
+            std::cout << "===================== after playing" << std::endl;
+            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
+            std::cout << "===================== undo info" << std::endl;
+            for (auto taken : newReferee.getBoOp()->lastTakenStones)
+                std::cout << std::to_string(taken) << std::endl;
+            std::cout << "===================== after undoing" << std::endl;
+            std::cout << referee->getBoOp()->getPatternManager() << std::endl;
+            std::cout << "===================== after undoing other referee" << std::endl;
+            newReferee.undoLastMove();
+            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
+            exit(1);
+        }
+*/
+
+/*
+        boardPos_t pos = PatternManager::getPPos(i % 19, i / 19);
+        if (referee->getBoOp()->getPatternManager().teamAt(pos) == NOPLAYER && notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), pos))
+        {
+            Referee newReferee(static_cast<Referee &>(*referee));
+            if (newReferee.tryPlay(i % 19, i / 19))
+            {
+                vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(&newReferee, newReferee.getPlayer())));
+            }
+        }
+*/
     }
 
     std::sort(vect->begin(), vect->end(), &cmpWeight);

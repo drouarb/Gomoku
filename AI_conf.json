@@ -3,39 +3,47 @@
     {
       "taille": 2,
       "extremites": [
-        5,
-        -50,
-        20
-      ]
+        10,
+        -60,
+        50
+      ],
+      "coef_me": 2,
+      "coef_enemy": 1
     },
     {
       "taille": 3,
       "extremites": [
-        10,
-        35,
-        60
-      ]
+        50,
+        150,
+        500
+      ],
+      "coef_me": 2,
+      "coef_enemy": 1
     },
     {
       "taille": 4,
       "extremites": [
-        20,
-        80,
-        120
-      ]
+        100,
+        500,
+        1000
+      ],
+      "coef_me": 2,
+      "coef_enemy": 1
     },
     {
       "taille": 5,
       "extremites": [
-        150,
-        200,
-        250
-      ]
+        500,
+        1000,
+        2000
+      ],
+      "coef_me": 2,
+      "coef_enemy": 1
     }
   ],
-  "points_par_pierre_en_plus": 40,
-  "points_pour_2_pierres_mangées": 100,
-  "points_pour_4_pierres_mangées": 160,
-  "points_pour_6_pierres_mangées": 220,
-  "points_pour_8_pierres_mangées": 300
+  "points_par_pierre_en_plus": 1000,
+  "points_pour_2_pierres_mangées": 200,
+  "points_pour_4_pierres_mangées": 400,
+  "points_pour_6_pierres_mangées": 800,
+  "points_pour_8_pierres_mangées": 1000
 }

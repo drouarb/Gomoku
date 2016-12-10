@@ -18,7 +18,11 @@ namespace Core {
     private:
 
         struct value_t {
-            int extremity[3];
+            uint_fast32_t extremity_me[3];
+            uint_fast32_t extremity_enemy[3];
+
+            int coef_me;
+            int coef_enemy;
 
             value_t() {
                 memset(this, 0, sizeof(*this));
