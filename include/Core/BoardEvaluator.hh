@@ -18,8 +18,8 @@ namespace Core {
     private:
 
         struct value_t {
-            uint_fast32_t extremity_me[3];
-            uint_fast32_t extremity_enemy[3];
+            int extremity_me[3];
+            int extremity_enemy[3];
 
             int coef_me;
             int coef_enemy;

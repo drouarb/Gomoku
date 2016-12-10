@@ -42,17 +42,14 @@ int32_t BoardEvaluator::getValue(IReferee * referee, Team t) const {
                 - conf->pierres_mangees[referee->getTeamEat(OPPTEAM(t))];
 
     for (auto & pattern : referee->getBoOp()->getPatternManager().getPatterns()) {
-        if (t == pattern.getTeam()) {
-            totalValue += ADD_BY_TEAM(t,
-                                      conf->values[pattern.lineLength].extremity_me[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
-                                      pattern);
+        if (referee->getPlayer() == pattern.getTeam()) {
+            totalValue += ADD_BY_TEAM(t, conf->values[pattern.lineLength].extremity_enemy[(pattern.line[0] == NOPLAYER) +
+                                                                        (pattern.line[pattern.lineLength - 1] ==
+                                                                         NOPLAYER)], pattern);
         } else {
-            totalValue += ADD_BY_TEAM(t,
-                                      conf->values[pattern.lineLength].extremity_enemy[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)],
-                                      pattern);
+            totalValue += ADD_BY_TEAM(t, conf->values[pattern.lineLength].extremity_me[(pattern.line[0] == NOPLAYER) + (pattern.line[pattern.lineLength - 1] == NOPLAYER)], pattern);
         }
     }
-
     return totalValue;
 }
 
