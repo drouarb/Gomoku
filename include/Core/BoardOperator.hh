@@ -10,9 +10,11 @@ namespace Core
 {
   class BoardOperator
     {
+  public:
+      typedef fastList<boardPos_t> stoneList;
   private:
       PatternManager	patternM;
-      fastList<boardPos_t> lastTakenStones;
+      stoneList lastTakenStones;
     private:
       int       findDoubleThree(Team player, boardPos_t pos);
       bool      findAnotherDoubleThree(Team player, boardPos_t pos1, boardPos_t pos2, boardPos_t pos3, boardPos_t mypos, boardPos_t ommittedDir);
@@ -33,9 +35,10 @@ namespace Core
 
         void clearLastMove();
 
-      const fastList<boardPos_t> & getLastTakenStones() const;
+      const stoneList & getLastTakenStones() const;
 
         const PatternManager & getPatternManager() const;
+      PatternManager & getPatternManager();
 
       Team		boardAt(boardPos_t pos);
 

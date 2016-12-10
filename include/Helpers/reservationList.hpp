@@ -66,7 +66,7 @@ reservList<T>::reservList(int reservationSize)
     reservSize = reservationSize;
     first = NULL;
     blockHeaderList = NULL;
-    expand();
+    //expand();
     mutex.unlock();
 }
 
@@ -99,7 +99,8 @@ reservList<T>::~reservList()
 template<typename T>
 T * reservList<T>::take()
 {
-    //return new T;
+    return new T;
+
     mutex.lock();
     if (first == NULL)
         expand();
@@ -113,8 +114,9 @@ T * reservList<T>::take()
 template<typename T>
 void reservList<T>::giveBack(T * value)
 {
-    //delete(value);
-    //return;
+    delete(value);
+    return;
+
     mutex.lock();
     element * elem = reinterpret_cast<element*>(value);
     elem->value.~T();

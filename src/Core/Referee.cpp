@@ -51,37 +51,6 @@ void		Core::Referee::setPlayer(Team nplayer)
     player = nplayer;
 }
 
-/*
-bool		Core::Referee::tryPlay(uint8_t x, uint8_t y)
-{
-    boardOp.clearLastMove();
-  if (winner != NOPLAYER)
-    return (false);
-  if (boardOp.boardAt(x, y) != NOPLAYER)
-    return (false);
-  if ((*rRules)[DOUBLE_THREE].on == true)
-    if (boardOp.checkFreeDoubleThree(player, x, y) == true)
-      return (false);
-  stats[player].eaten += boardOp.applyEat(player, x, y);
-  boardOp.ForceupdateBoard(player, x, y);
-  if (stats[player].eaten >= EATWIN)
-    winner = player;
-  if ((*rRules)[BREAKABLE_FIVE].on == true)
-    {
-      if (boardOp.checkfiveWinBreak(player) == true)
-	winner = player;
-    }
-  else
-    {
-      if (boardOp.checkfiveWinNoBreak(player) == true)
-	winner = player;
-    }
-  lastMove = x + y * XBOARD;
-  ++nbrPlay;
-  return (true);
-}
-*/
-
 bool        Core::Referee::tryPlay(boardPos_t x, boardPos_t y)
 {
     return (tryPlay(PatternManager::getPPos(x, y)));

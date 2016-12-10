@@ -11,6 +11,7 @@ class fastList
 public:
 
     struct iterator;
+    typedef iterator const_iterator;
 
     struct element
     {

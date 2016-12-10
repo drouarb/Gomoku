@@ -89,17 +89,17 @@ bool PatternManager::operator==(const PatternManager & other)
     return (true);
 }
 
-PLIST<PatternRef>& PatternManager::operator[](boardPos_t pos)
+MAP_ENTRY& PatternManager::operator[](boardPos_t pos)
 {
   return (map[pos]);
 }
 
-PLIST<Pattern>& PatternManager::getPatterns()
+PLIST& PatternManager::getPatterns()
 {
     return (patterns);
 }
 
-const PLIST<Pattern>& PatternManager::getPatterns() const
+const PLIST& PatternManager::getPatterns() const
 {
     return (patterns);
 }
@@ -109,7 +109,7 @@ const PatternManager::PMap & PatternManager::getMap() const
     return (map);
 }
 
-const PLIST<PatternRef> & PatternManager::patternsAt(boardPos_t pos) const
+const MAP_ENTRY & PatternManager::patternsAt(boardPos_t pos) const
 {
     return (map[pos]);
 }
@@ -341,8 +341,8 @@ void PatternManager::removeStone(boardPos_t position)
         auto list = map[position];
         //size remembrance and prev_it are needed because the iterator can be erased
         //uint8_t size;
-        //PLIST<PatternRef>::iterator prev_it = list.end();
-        PLIST<PatternRef>::iterator it = list.begin();
+        //MAP_ENTRY::iterator prev_it = list.end();
+        MAP_ENTRY::iterator it = list.begin();
         while (it != list.end())
         {
             bool it_set = false;
@@ -410,7 +410,7 @@ void PatternManager::removeStone(boardPos_t position)
                         {
                             //1 stone: whatever happens, extremity is lost
                             addOSFirstExtremity(pattern.pattern);
-                            PLIST<PatternRef> & singleStoneList = map[position - pattern.pattern->direction];
+                            MAP_ENTRY & singleStoneList = map[position - pattern.pattern->direction];
                             if (singleStoneList.begin() != singleStoneList.end())
                             {
                                 //only one stone, and it is part of another pattern
@@ -469,7 +469,7 @@ void PatternManager::removePattern(Pattern * pattern)
 
 void PatternManager::removeFromList(Pattern * pattern)
 {
-    for (PLIST<Pattern>::iterator it = patterns.begin(); it != patterns.end(); ++it)
+    for (PLIST::iterator it = patterns.begin(); it != patterns.end(); ++it)
         if (&*it == pattern)
         {
             patterns.erase(it);
@@ -477,12 +477,12 @@ void PatternManager::removeFromList(Pattern * pattern)
         }
 }
 
-void PatternManager::removeFromMap(Pattern *pattern, PLIST<PatternRef>::iterator * used_it, bool * it_set)
+void PatternManager::removeFromMap(Pattern *pattern, MAP_ENTRY::iterator * used_it, bool * it_set)
 {
     boardPos_t max = pattern->posOfFirst + pattern->lineLength * pattern->direction;
     for (boardPos_t pos = pattern->posOfFirst; pos < max; pos += pattern->direction)
     {
-        for (PLIST<PatternRef>::iterator it = map[pos].begin(); it != map[pos].end(); ++it)
+        for (MAP_ENTRY::iterator it = map[pos].begin(); it != map[pos].end(); ++it)
         {
             if ((*it).pattern == pattern)
             {
@@ -506,7 +506,7 @@ void PatternManager::removeFromMap(Pattern *pattern)
     boardPos_t max = pattern->posOfFirst + pattern->lineLength * pattern->direction;
     for (boardPos_t pos = pattern->posOfFirst; pos < max; pos += pattern->direction)
     {
-        for (PLIST<PatternRef>::iterator it = map[pos].begin(); it != map[pos].end(); ++it)
+        for (MAP_ENTRY::iterator it = map[pos].begin(); it != map[pos].end(); ++it)
         {
             if ((*it).pattern == pattern)
             {
