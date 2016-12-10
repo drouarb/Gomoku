@@ -5,7 +5,7 @@ using namespace Core;
 Pattern::Pattern(Team team, uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction) :
         lineLength(length), posOfFirst(posOfFirst), direction(direction)
 {
-    allocLine();
+    //allocLine();
     line[0] = first;
     for (int i = 1; i < length - 1; ++i)
         line[i] = team;
@@ -14,25 +14,27 @@ Pattern::Pattern(Team team, uint8_t length, Team first, Team last, boardPos_t po
 
 Pattern::Pattern(Team team, boardPos_t pos) : lineLength(1), posOfFirst(pos)
 {
-    allocLine();
+    //allocLine();
     line[0] = team;
     direction = 1;
 }
 
 Pattern::Pattern(const Pattern & other) : lineLength(other.lineLength), posOfFirst(other.posOfFirst), direction(other.direction)
 {
-    allocLine();
+    //allocLine();
     for (int i = 0; i < lineLength; ++i)
         line[i] = other.line[i];
 }
 
-Pattern::Pattern() : line(NULL)
+Pattern::Pattern()// : line(NULL)
 { }
 
 Pattern::~Pattern()
 {
+/*
     if (line)
         freeLine();
+*/
 }
 
 bool Pattern::operator==(const Pattern & other)
@@ -49,12 +51,14 @@ bool Pattern::operator==(const Pattern & other)
 
 Pattern & Pattern::operator=(const Pattern &other)
 {
+/*
     if (line)
         freeLine();
+*/
     lineLength = other.lineLength;
     posOfFirst = other.posOfFirst;
     direction = other.direction;
-    allocLine();
+    //allocLine();
     for (int i = 0; i < lineLength; ++i)
         line[i] = other.line[i];
     return (*this);
@@ -63,9 +67,9 @@ Pattern & Pattern::operator=(const Pattern &other)
 void Pattern::set(uint8_t length, Team first, Team last, boardPos_t posOfFirst, boardPos_t direction)
 {
     Team team = getTeam();
-    freeLine();
+    //freeLine();
     lineLength = length;
-    allocLine();
+    //allocLine();
     this->posOfFirst = posOfFirst;
     this->direction = direction;
     line[0] = first;
@@ -89,6 +93,13 @@ void Pattern::breatAt(uint8_t posOnPattern)
     }
 }
 
+Team Pattern::getTeam()
+{
+    return (line[lineLength > 1]);
+}
+
+/*
+
 void Pattern::freeLine()
 {
     //free(line);
@@ -101,14 +112,11 @@ void Pattern::allocLine()
     (this->*createLineFunArr[lineLength])();
 }
 
-Team Pattern::getTeam()
-{
-    return (line[lineLength > 1]);
-}
-
+*/
 /*
  * Line reservation lists.
- */
+ *//*
+
 
 reservList<Pattern::line_s<1>> Pattern::line1Stock = reservList<Pattern::line_s<1>>(1024);
 reservList<Pattern::line_s<4>> Pattern::line2Stock = reservList<Pattern::line_s<4>>(1024);
@@ -118,9 +126,11 @@ reservList<Pattern::line_s<7>> Pattern::line5Stock = reservList<Pattern::line_s<
 reservList<Pattern::line_s<12>> Pattern::line10Stock = reservList<Pattern::line_s<12>>(256);
 reservList<Pattern::line_s<21>> Pattern::line19Stock = reservList<Pattern::line_s<21>>(128);
 
+*/
 /*
  * Line creation.
- */
+ *//*
+
 
 void Pattern::createLine1()
 {
@@ -182,9 +192,11 @@ const Pattern::createLineFun Pattern::createLineFunArr[22] = {
         &Pattern::createLine11to19
 };
 
+*/
 /*
  * Line destruction.
- */
+ *//*
+
 
 void Pattern::delLine1()
 {
@@ -245,3 +257,4 @@ const Pattern::delLineFun Pattern::delLineFunArr[22] = {
         &Pattern::delLine11to19,
         &Pattern::delLine11to19
 };
+*/

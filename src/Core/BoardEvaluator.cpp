@@ -6,6 +6,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
 #include "BoardEvaluator.hh"
+#include "Helpers/Stopwatch.hh"
 
 using namespace Core;
 using namespace boost::property_tree;
@@ -17,9 +18,9 @@ static BoardEvaluator *instance = NULL;
 #define WIN_VALUE(team, winner) (winner == team ? MAX_VALUE : -MAX_VALUE)
 
 
-static bool cmpWeight(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
+static int cmpWeight(const std::pair<boardPos_t, weight_t>& pos1, const std::pair<boardPos_t, weight_t>& pos2)
 {
-    return (pos1.second > pos2.second);
+    return (pos1.second < pos2.second);
 }
 
 BoardEvaluator *BoardEvaluator:: getInstance() {
@@ -142,37 +143,6 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
             vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, player)));
             referee->undoLastMove();
         }
-/*
-        if (!checkPatterns(referee, &newReferee))
-        {
-            std::cout << "===================== before playing x=" << std::to_string(i % 19) << " y=" << std::to_string(i / 19) << std::endl;
-            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
-            newReferee.tryPlay(i % 19, i / 19);
-            std::cout << "===================== after playing" << std::endl;
-            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
-            std::cout << "===================== undo info" << std::endl;
-            for (auto taken : newReferee.getBoOp()->lastTakenStones)
-                std::cout << std::to_string(taken) << std::endl;
-            std::cout << "===================== after undoing" << std::endl;
-            std::cout << referee->getBoOp()->getPatternManager() << std::endl;
-            std::cout << "===================== after undoing other referee" << std::endl;
-            newReferee.undoLastMove();
-            std::cout << newReferee.getBoOp()->getPatternManager() << std::endl;
-            exit(1);
-        }
-*/
-
-/*
-        boardPos_t pos = PatternManager::getPPos(i % 19, i / 19);
-        if (referee->getBoOp()->getPatternManager().teamAt(pos) == NOPLAYER && notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), pos))
-        {
-            Referee newReferee(static_cast<Referee &>(*referee));
-            if (newReferee.tryPlay(i % 19, i / 19))
-            {
-                vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(&newReferee, newReferee.getPlayer())));
-            }
-        }
-*/
     }
 
     std::sort(vect->begin(), vect->end(), &cmpWeight);

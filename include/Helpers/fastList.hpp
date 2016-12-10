@@ -5,12 +5,13 @@
 #include <string>
 #include <iostream>
 
-template <typename T>
+template <typename T, size_t reservSize>
 class fastList
 {
 public:
 
     struct iterator;
+    typedef iterator const_iterator;
 
     struct element
     {
@@ -40,7 +41,7 @@ public:
 
 public:
     fastList();
-    fastList(const fastList<T> &);
+    fastList(const fastList<T, reservSize> &);
     ~fastList();
 
     fastList &      operator=(const fastList &);
@@ -61,7 +62,7 @@ public:
 
 private:
     element *       first;
-    static reservList<element> elemReservList;
+    reservList<element> elemReservList;
 
     void            rec_copy(element * elem);
     void            del_elem(element * elem);
@@ -71,23 +72,18 @@ public:
     void            dump() const;
 };
 
-template <typename T>
-reservList<typename fastList<T>::element> fastList<T>::elemReservList = reservList<fastList<T>::element>(1024);
-
-
-
 
 
 /*
  * Element
  */
 
-template<typename T>
-fastList<T>::element::element()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::element::element()
 { }
 
-template<typename T>
-fastList<T>::element::~element()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::element::~element()
 { }
 
 
@@ -96,52 +92,52 @@ fastList<T>::element::~element()
  * Iterator
  */
 
-template<typename T>
-fastList<T>::iterator::iterator()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::iterator::iterator()
 { }
 
-template<typename T>
-fastList<T>::iterator::iterator(element * elem)
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::iterator::iterator(element * elem)
 {
     this->elem = elem;
 }
 
-template<typename T>
-fastList<T>::iterator::~iterator()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::iterator::~iterator()
 { }
 
-template<typename T>
-void fastList<T>::iterator::operator++()
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::iterator::operator++()
 {
     elem = elem->next.elem;
 }
 
-template<typename T>
-void fastList<T>::iterator::operator--()
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::iterator::operator--()
 {
     elem = elem->prev.elem;
 }
 
-template<typename T>
-bool fastList<T>::iterator::operator==(iterator other) const
+template<typename T, size_t reservSize>
+bool fastList<T, reservSize>::iterator::operator==(iterator other) const
 {
     return (elem == other.elem);
 }
 
-template<typename T>
-bool fastList<T>::iterator::operator!=(iterator other) const
+template<typename T, size_t reservSize>
+bool fastList<T, reservSize>::iterator::operator!=(iterator other) const
 {
     return (elem != other.elem);
 }
 
-template <typename T>
-T & fastList<T>::iterator::operator*()
+template <typename T, size_t reservSize>
+T & fastList<T, reservSize>::iterator::operator*()
 {
     return (this->elem->value);
 }
 
-template <typename T>
-T * fastList<T>::iterator::operator->()
+template <typename T, size_t reservSize>
+T * fastList<T, reservSize>::iterator::operator->()
 {
     return (&this->elem->value);
 }
@@ -149,55 +145,55 @@ T * fastList<T>::iterator::operator->()
 
 
 /*
- * fastList<T>
+ * fastList<T, reservSize>
  */
 
-template<typename T>
-fastList<T>::fastList()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::fastList() : elemReservList(reservSize)
 {
     first = NULL;
 }
 
-template<typename T>
-fastList<T>::fastList(const fastList<T> & other)
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::fastList(const fastList<T, reservSize> & other) : elemReservList(reservSize)
 {
     first = NULL;
     rec_copy(other.first);
 }
 
-template<typename T>
-fastList<T>::~fastList()
+template<typename T, size_t reservSize>
+fastList<T, reservSize>::~fastList()
 {
     clear();
 }
 
-template<typename T>
-fastList<T> & fastList<T>::operator=(const fastList & other)
+template<typename T, size_t reservSize>
+fastList<T, reservSize> & fastList<T, reservSize>::operator=(const fastList & other)
 {
     clear();
     rec_copy(other.first);
 }
 
-template<typename T>
-const typename fastList<T>::iterator fastList<T>::begin() const
+template<typename T, size_t reservSize>
+const typename fastList<T, reservSize>::iterator fastList<T, reservSize>::begin() const
 {
     return (iterator(first));
 }
 
-template<typename T>
-typename fastList<T>::iterator fastList<T>::begin()
+template<typename T, size_t reservSize>
+typename fastList<T, reservSize>::iterator fastList<T, reservSize>::begin()
 {
     return (iterator(first));
 }
 
-template<typename T>
-const typename fastList<T>::iterator fastList<T>::end() const
+template<typename T, size_t reservSize>
+const typename fastList<T, reservSize>::iterator fastList<T, reservSize>::end() const
 {
     return (iterator((element*)NULL));
 }
 
-template<typename T>
-void fastList<T>::create_elem()
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::create_elem()
 {
     element * newelem = new_elem();
     if (first)
@@ -207,15 +203,15 @@ void fastList<T>::create_elem()
     first = newelem;
 }
 
-template<typename T>
-void fastList<T>::push_front(const T &value)
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::push_front(const T &value)
 {
     create_elem();
     first->value = value;
 }
 
-template<typename T>
-void fastList<T>::pop_front()
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::pop_front()
 {
     element * front = first;
     first = first->next.elem;
@@ -226,8 +222,8 @@ void fastList<T>::pop_front()
     del_elem(front);
 }
 
-template<typename T>
-typename fastList<T>::iterator fastList<T>::erase(iterator it)
+template<typename T, size_t reservSize>
+typename fastList<T, reservSize>::iterator fastList<T, reservSize>::erase(iterator it)
 {
     if (it.elem == first)
     {
@@ -245,22 +241,22 @@ typename fastList<T>::iterator fastList<T>::erase(iterator it)
     }
 }
 
-template<typename T>
-bool fastList<T>::empty() const
+template<typename T, size_t reservSize>
+bool fastList<T, reservSize>::empty() const
 {
     return (first == NULL);
 }
 
-template<typename T>
-T & fastList<T>::front()
+template<typename T, size_t reservSize>
+T & fastList<T, reservSize>::front()
 {
     if (first == NULL)
         throw std::out_of_range("Empty fastList");
     return (first->value);
 }
 
-template<typename T>
-int fastList<T>::size() const
+template<typename T, size_t reservSize>
+int fastList<T, reservSize>::size() const
 {
     int i = 0;
     auto it = begin();
@@ -272,8 +268,8 @@ int fastList<T>::size() const
     return (i);
 }
 
-template<typename T>
-void fastList<T>::clear()
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::clear()
 {
     if (first)
     {
@@ -291,8 +287,8 @@ void fastList<T>::clear()
     }
 }
 
-template<typename T>
-void fastList<T>::rec_copy(element *elem)
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::rec_copy(element *elem)
 {
     if (elem)
     {
@@ -301,21 +297,21 @@ void fastList<T>::rec_copy(element *elem)
     }
 }
 
-template<typename T>
-void fastList<T>::del_elem(element * element)
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::del_elem(element * element)
 {
     elemReservList.giveBack(element);
 }
 
-template<typename T>
-typename fastList<T>::element * fastList<T>::new_elem()
+template<typename T, size_t reservSize>
+typename fastList<T, reservSize>::element * fastList<T, reservSize>::new_elem()
 {
     return (elemReservList.take());
 }
 
 
-template<typename T>
-void fastList<T>::dump() const
+template<typename T, size_t reservSize>
+void fastList<T, reservSize>::dump() const
 {
     std::cout << "# LIST DUMP" << std::endl;
     for (auto it = begin(); it != end(); ++it)
@@ -329,8 +325,8 @@ void fastList<T>::dump() const
     }
 }
 
-template<typename T>
-bool fastList<T>::isEmpty()
+template<typename T, size_t reservSize>
+bool fastList<T, reservSize>::isEmpty()
 {
     return (first == NULL);
 }
