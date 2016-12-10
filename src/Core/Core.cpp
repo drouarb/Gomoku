@@ -124,8 +124,7 @@ void Core::Core::destroyPlayer(int index)
 {
     if (players[index] != NULL)
     {
-        if (dynamic_cast<Players::IHumain *>(players[index]) != NULL)
-            gui->unregisterPlayer(players[index]);
+        gui->unregisterPlayer(players[index]);
         delete (players[index]);
         players[index] = NULL;
     }

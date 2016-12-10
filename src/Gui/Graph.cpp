@@ -58,7 +58,7 @@ typeButton Graph::loop()
 {
     SDL_Delay(1);
     typeButton re;
-    if (SDL_PollEvent(&this->event))
+    while (SDL_PollEvent(&this->event))
     {
         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
         {
@@ -237,6 +237,7 @@ void Graph::feedBoard(GameBoard_t board)
     }
     this->board = board;
     refresh();
+    loop();
 }
 
 void Graph::feedRules(std::list<std::pair<std::string, bool>> rules)
