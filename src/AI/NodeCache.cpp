@@ -118,17 +118,17 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
     std::vector<std::pair<boardPos_t, weight_t>> *moves;
 
     while (sim->getWinner() == NOPLAYER && count < 361) {
-        /*moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
+        moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
         if (moves->size() == 0) {
             node->backPropagate(0, NOPLAYER);
             return;
         }
         sim->tryPlay(moves->back().first);
-        delete (moves);*/
-        rc = 0;
+        delete (moves);
+        /*rc = 0;
         while (sim->tryPlay(rand(rng)) == false && (++rc < XPBOARD * XPBOARD));
         if (rc == XPBOARD * XPBOARD)
-            break;
+            break;*/
         ++count;
     }
     node->backPropagate(1, sim->getWinner());
