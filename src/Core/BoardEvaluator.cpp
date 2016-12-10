@@ -135,7 +135,11 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
 
     if (referee->getBoOp()->getPatternManager().getPatterns().empty())
     {
-        vect->push_back(std::pair<boardPos_t, weight_t>(9 * XBOARD + 9, 1));
+        int middle = XBOARD * 9 + 9;
+        for (int i = 0; i < PBOARDSIZE; ++i)
+            if (referee->getBoOp()->boardAt(i) == NOPLAYER && i != middle)
+                vect->push_back(std::pair<boardPos_t, weight_t>(i, 0));
+        vect->push_back(std::pair<boardPos_t, weight_t>(middle, 0));
         return (vect);
     }
     vect->reserve(64);
@@ -154,6 +158,24 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     }
 
     std::sort(vect->begin(), vect->end(), &cmpWeight);
+
+    return (vect);
+}
+
+std::vector<boardPos_t> *BoardEvaluator::getAvailableMoves(IReferee * referee) const
+{
+    auto * vect = new std::vector<boardPos_t>();
+
+    vect->reserve(64);
+
+    for (int i = 0; i < PBOARDSIZE; ++i)
+    {
+        if (referee->getBoOp()->getPatternManager().teamAt(i) == NOPLAYER &&
+            notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), i))
+        {
+            vect->push_back(i);
+        }
+    }
 
     return (vect);
 }

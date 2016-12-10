@@ -8,6 +8,7 @@
  * T is the type that the reservation list will contain.
  * reservSize is the number of elements to reserve each time there are no more elements left. Must be greater than 1.
  * All elements are freed when and only when the reservation list is destroyed.
+ * No mutex. Multithreading will break.
  */
 template <typename T>
 class reservList
@@ -44,7 +45,6 @@ private:
         blockHeader* next;
     };
 
-    std::mutex      mutex;
     element *       first;
     int             reservSize;
     blockHeader *   blockHeaderList;
@@ -62,24 +62,18 @@ private:
 template<typename T>
 reservList<T>::reservList(int reservationSize)
 {
-    mutex.lock();
     reservSize = reservationSize;
     first = NULL;
     blockHeaderList = NULL;
-    //expand();
-    mutex.unlock();
 }
 
 template<typename T>
 reservList<T>::reservList(const reservList<T> & other)
 {
     //should I copy first and blockHeaderList?
-    mutex.lock();
     reservSize = other.reservSize;
     first = NULL;
     blockHeaderList = NULL;
-    expand();
-    mutex.unlock();
 }
 
 template<typename T>
@@ -101,13 +95,11 @@ T * reservList<T>::take()
 {
     return new T;
 
-    mutex.lock();
     if (first == NULL)
         expand();
     element * elem = first;
     new (&elem->value) T ();
     first = first->next;
-    mutex.unlock();
     return (reinterpret_cast<T*>(elem));
 }
 
@@ -117,12 +109,10 @@ void reservList<T>::giveBack(T * value)
     delete(value);
     return;
 
-    mutex.lock();
     element * elem = reinterpret_cast<element*>(value);
     elem->value.~T();
     elem->next = first;
     first = elem;
-    mutex.unlock();
 }
 
 template<typename T>

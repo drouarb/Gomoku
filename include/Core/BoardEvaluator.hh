@@ -47,6 +47,7 @@ namespace Core {
         void parseFrom(const std::string &path);
         int32_t getValue(IReferee * referee, Team t) const;
         std::vector<std::pair<boardPos_t, weight_t>> * getInterestingMoves(IReferee *) const;
+        std::vector<boardPos_t> * getAvailableMoves(IReferee *) const;
 
         static BoardEvaluator *getInstance();
 
