@@ -5,6 +5,9 @@
 #ifndef GOMOKU_NODECACHE_HH
 #define GOMOKU_NODECACHE_HH
 
+#include <boost/random/taus88.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+
 #include <boost/asio/io_service.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
@@ -32,10 +35,14 @@ namespace AI {
         bool setNewRoot(Core::IReferee *referee, int action);
 
     private:
+        int sim;
         bool running;
         TreeNode *root;
         unsigned int rootRound;
         std::mutex threadLocks[THREADS_POOL];
+
+        boost::random::taus88 rng;
+        boost::random::uniform_int_distribution<> rand;
 
         boost::thread_group threadpool;
         boost::asio::io_service ioService;

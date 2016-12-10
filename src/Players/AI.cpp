@@ -1,5 +1,6 @@
 
 #include <AI/MonteCarlo.hh>
+#include <Helpers/History.hh>
 #include "AI.hh"
 
 using namespace Players;
@@ -26,7 +27,8 @@ bool AIPlayer::init(Core::IReferee *referee) {
 
 bool AIPlayer::play() {
     std::cout << "AIPLAY" << std::endl;
-    nodeCache->getMove(referee, 1000);
+    int action = nodeCache->getMove(referee, 1000);
+    Core::History::getInstance()->write(action / XBOARD, action % XBOARD, name);
     return false;
 }
 

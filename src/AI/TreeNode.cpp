@@ -45,7 +45,7 @@ AI::TreeNode *AI::TreeNode::getSimulationNode() {
     mutex.lock();
     if (moves->size()) {
         try {
-            childs.push_back(new TreeNode(referee->clone(), aiTeam, this, moves));
+            childs.push_back(new TreeNode(referee->clone(), !aiTeam, this, moves));
             child = childs.back();
             mutex.unlock();
             return child;
@@ -70,7 +70,7 @@ AI::TreeNode *AI::TreeNode::getBestChild() {
         wins = (referee->getPlayer() == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
 
-        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(parent ? parent->getPlays() : 0) / plays));
+        values.push_back((wins / plays) + MC_EXPLORATION * sqrt(log(this->plays) / plays));
     }
     return childs[(std::max_element(values.begin(), values.end()) - values.begin())];
 }
@@ -86,6 +86,11 @@ int AI::TreeNode::getBestAction() const {
         wins = (aiTeam == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
 
+        std::cout << c->getMove() % XBOARD << " " << c->getMove() / XBOARD << " -> " << wins << "/" << plays << std::endl;
+
+        if (c->getReferee()->getWinner() ==  aiTeam)
+            return c->getMove();
+
         if (plays > most_plays) {
             most_wins = wins;
             most_plays = plays;
@@ -99,9 +104,11 @@ int AI::TreeNode::getBestAction() const {
             bestActions.push_back(c);
         }
     }
+
     if (bestActions.size() == 0)
         return -1;
     //TODO Random choose ???
+    std::cout << "Best " << aiTeam << " " << most_wins << "/" << most_plays << " -> " << bestActions.front()->getMove() << std::endl;
     return bestActions.front()->getMove();
 }
 

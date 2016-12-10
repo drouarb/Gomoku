@@ -8,9 +8,13 @@
 
 AI::NodeCache::NodeCache(Core::IReferee *referee) : work(ioService), running(false), rootRound(0),
                                                     root(new TreeNode(referee->clone(), WHITE)) {
+    root->getReferee()->setPlayer(WHITE);
     for (int i = 0; i < THREADS_POOL; i++) {
         threadpool.create_thread(boost::bind(&boost::asio::io_service::run, &ioService));
     }
+    rng = boost::random::taus88(time(NULL));
+    rand = boost::random::uniform_int_distribution<>(0, XPBOARD * XPBOARD - 1);
+    sim = 0;
 }
 
 AI::NodeCache::~NodeCache() {
@@ -20,8 +24,10 @@ AI::NodeCache::~NodeCache() {
 
 void AI::NodeCache::threadTask(int threadId) {
     TreeNode *c;
-    if ((c = root->getSimulationNode()))
+    if ((c = root->getSimulationNode())) {
         simulate(c);
+        sim++;
+    }
     if (running)
         ioService.post(boost::bind(&AI::NodeCache::threadTask, this, threadId));
     else
@@ -47,6 +53,7 @@ void AI::NodeCache::pause() {
 }
 
 void AI::NodeCache::stop() {
+    running = false;
     ioService.stop();
     threadpool.join_all();
 }
@@ -70,15 +77,15 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     //Take a break :)
     usleep((ms - sw.elapsedMs()) * 1000);
     pause();
+    std::cout << "SIM" << sim << std::endl;
 
     action = root->getBestAction();
-    std::cout << "No actions ?" << action << std::endl;
     if (action != -1) {
         referee->tryPlay(action);
         setNewRoot(referee, action);
     } else {
         std::cout << "Catastrophe, go Random" << std::endl;
-        while (!referee->tryPlay(rand() % (XBOARD * XBOARD)));
+        while (!referee->tryPlay(::rand() % (XBOARD * XBOARD)));
     }
     run();
     return action;
@@ -106,17 +113,22 @@ bool AI::NodeCache::setNewRoot(Core::IReferee *referee, int action) {
 void AI::NodeCache::simulate(AI::TreeNode *node) {
     Core::IReferee *sim = node->getReferee()->clone();
 
+    int rc;
     int count = 0;
     std::vector<std::pair<boardPos_t, weight_t>> *moves;
 
     while (sim->getWinner() == NOPLAYER && count < 361) {
-        moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
+        /*moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
         if (moves->size() == 0) {
             node->backPropagate(0, NOPLAYER);
             return;
         }
         sim->tryPlay(moves->back().first);
-        delete (moves);
+        delete (moves);*/
+        rc = 0;
+        while (sim->tryPlay(rand(rng)) == false && (++rc < XPBOARD * XPBOARD));
+        if (rc == XPBOARD * XPBOARD)
+            break;
         ++count;
     }
     node->backPropagate(1, sim->getWinner());
