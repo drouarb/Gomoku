@@ -39,6 +39,7 @@ namespace Core
         void createPlayerAI(int index);
         void letPlayerPlay(int index);
         void feedRules();
+        void setAITime();
     };
 }
 

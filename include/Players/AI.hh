@@ -24,6 +24,7 @@ namespace Players
         void setIBoardOperator(Core::BoardOperator *);
         void setScore(int);
         int getScore();
+        void setTime(int);
 
     private:
         std::string name;
@@ -31,6 +32,7 @@ namespace Players
         Core::IReferee *referee;
         Team team;
         AI::NodeCache *nodeCache;
+        int time;
     };
 }
 #endif

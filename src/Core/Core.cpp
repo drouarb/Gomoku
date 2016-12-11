@@ -20,11 +20,17 @@ Core::Core::Core()
     uniqueRules.back().push_back(TIME_10MS);
     uniqueRules.back().push_back(TIME_20MS);
     uniqueRules.back().push_back(TIME_50MS);
-    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule("Double three", false)));
-    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule("Breakable five", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule("Timed AI: 10 ms", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule("Timed AI: 20 ms", false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule("Timed AI: 50 ms", false)));
+    uniqueRules.back().push_back(TIME_200MS);
+    uniqueRules.back().push_back(TIME_1S);
+    uniqueRules.back().push_back(TIME_3S);
+    rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule(RuleToString.at(DOUBLE_THREE), false)));
+    rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule(RuleToString.at(BREAKABLE_FIVE), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule(RuleToString.at(TIME_10MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule(RuleToString.at(TIME_20MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule(RuleToString.at(TIME_50MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_200MS, Rule(RuleToString.at(TIME_200MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_1S, Rule(RuleToString.at(TIME_1S), true)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_3S, Rule(RuleToString.at(TIME_3S), false)));
 
     // referee
     referee = new Referee();
@@ -148,6 +154,7 @@ void Core::Core::createPlayerAI(int index)
     players[index] = new Players::AIPlayer(name, TEAMOF(index));
     players[index]->init(referee);
     gui->registerPlayer(players[index]);
+    setAITime();
 }
 
 void Core::Core::letPlayerPlay(int index)
@@ -169,6 +176,7 @@ void Core::Core::feedRules()
     }
     gui->feedRules(list);
     referee->feedRules(rules);
+    setAITime();
 }
 
 Core::Core::Core(const std::string &path) {
@@ -194,4 +202,25 @@ Core::Core::Core(const std::string &path) {
     gui = new GUI::testGUI(path);
     feedRules();
     gui->init(new GUI::CoreObserver(*this)); //thread now goes to gui
+}
+
+void Core::Core::setAITime()
+{
+    int time = 1000;
+    if (rules[TIME_10MS].on)
+        time = 10;
+    if (rules[TIME_20MS].on)
+        time = 20;
+    if (rules[TIME_50MS].on)
+        time = 50;
+    if (rules[TIME_200MS].on)
+        time = 200;
+    if (rules[TIME_1S].on)
+        time = 1000;
+    if (rules[TIME_3S].on)
+        time = 3000;
+    if (players[0] && dynamic_cast<Players::AIPlayer *>(players[0]))
+        dynamic_cast<Players::AIPlayer*>(players[0])->setTime(time);
+    if (players[1] && dynamic_cast<Players::AIPlayer *>(players[1]))
+        dynamic_cast<Players::AIPlayer*>(players[1])->setTime(time);
 }
