@@ -64,8 +64,11 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     sw.set();
     std::cout << "Check player" << std::endl;
     if (referee->getPlayer() != root->getReferee()->getPlayer()) {
+        std::cout << "Need jump !" << std::endl;
         pause();
+        std::cout << referee->getLastMove() << std::endl;
         std::cout << setNewRoot(referee, referee->getLastMove());
+        std::cout << " new root " << root->getMove() << std::endl;
         run();
     }
 
@@ -84,6 +87,7 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     } else {
         std::cout << "Catastrophe, PANIC BUTTON" << std::endl;
         while (!referee->tryPlay((rand(19) + 1) * XPBOARD + rand(19) + 1));
+        setNewRoot(referee, referee->getLastMove());
     }
     run();
     return action;
