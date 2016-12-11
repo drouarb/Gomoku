@@ -271,10 +271,8 @@ bool              Core::BoardOperator::checkfiveWinBreak(Team player)
               {
                   pat = itS->pattern;
                   if (pat->lineLength == 2 + 2 && pat->line[1] == player
-                      && ((pat->line[0] != player && pat->line[0] != NOPLAYER
-                           && pat->line[pat->lineLength - 1] == NOPLAYER)
-                          || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] != player
-                              && pat->line[pat->lineLength - 1] != NOPLAYER)))
+                      && ((pat->line[0] == OPPTEAM(player) && pat->line[pat->lineLength - 1] == NOPLAYER)
+                          || (pat->line[0] == NOPLAYER && pat->line[pat->lineLength - 1] == OPPTEAM(player))))
                       nbrNoBreak = -1;
                   ++itS;
               }
