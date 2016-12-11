@@ -245,11 +245,13 @@ void MenuGame::loadLayer()
 
 void MenuGame::sendRule(void *button)
 {
-    IButton *but = static_cast<IButton *>(button);
-    if (but->getStats() == CHECKED)
-        this->gui->getICoreObserver()->setRule(but->getName(), false);
-    else
-        this->gui->getICoreObserver()->setRule(but->getName(), true);
+    if (this->ingame == false) {
+        IButton *but = static_cast<IButton *>(button);
+        if (but->getStats() == CHECKED)
+            this->gui->getICoreObserver()->setRule(but->getName(), false);
+        else
+            this->gui->getICoreObserver()->setRule(but->getName(), true);
+    }
 }
 
 void MenuGame::playGameOnePlayers()
