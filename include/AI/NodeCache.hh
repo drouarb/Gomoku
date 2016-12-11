@@ -27,11 +27,12 @@ namespace AI {
         void threadTask(int threadId);
         int getMove(Core::IReferee *referee, unsigned int ms = 0);
 
+        int rand(int max);
+
         static NodeCache *getInstance(Core::IReferee *referee);
 
     private:
         void simulate(TreeNode *node);
-
         bool setNewRoot(Core::IReferee *referee, int action);
 
     private:
@@ -42,8 +43,7 @@ namespace AI {
         std::mutex threadLocks[THREADS_POOL];
 
         boost::random::taus88 rng;
-
-        static const std::vector<boost::random::uniform_int_distribution<>> randers;
+        static const std::array<boost::random::uniform_int_distribution<>, 361> randers;
 
         boost::thread_group threadpool;
         boost::asio::io_service ioService;

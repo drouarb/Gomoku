@@ -132,7 +132,10 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
     }
     node->backPropagate(1, sim->getWinner());
     delete (sim);
+}
 
+int AI::NodeCache::rand(int max) {
+    return randers[max](rng);
 }
 
 AI::NodeCache *AI::NodeCache::getInstance(Core::IReferee *referee) {
@@ -150,7 +153,7 @@ AI::NodeCache *AI::NodeCache::getInstance(Core::IReferee *referee) {
     return cache;
 }
 
-const std::vector<boost::random::uniform_int_distribution<>> AI::NodeCache::randers = {
+const std::array<boost::random::uniform_int_distribution<>, 361> AI::NodeCache::randers = {
         boost::random::uniform_int_distribution<>(0, 0),
         boost::random::uniform_int_distribution<>(0, 1),
         boost::random::uniform_int_distribution<>(0, 2),

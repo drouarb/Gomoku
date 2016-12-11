@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <Core/BoardSeeker.hh>
 #include <Core/BoardEvaluator.hh>
+#include <AI/NodeCache.hh>
 #include "AI/TreeNode.hh"
 
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) : plays(0), whiteWins(0), blackWins(0),
@@ -20,8 +21,12 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *paren
                        std::vector<std::pair<boardPos_t, weight_t>> *moves) : plays(0), whiteWins(0), blackWins(0),
                                                                             referee(gameState),
                                                                             parent(parent), aiTeam(team) {
-    this->move = moves->back().first;
+    //this->move =  moves->back().first;
+    int id = NodeCache::getInstance(NULL)->rand(moves->size() - 1);
+    this->move = moves->at(id).first;
+    moves->at(id).first = moves->back().first;
     moves->pop_back();
+
     referee->tryPlay(move);
     this->moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(referee);
     childs.reserve(moves->size());
