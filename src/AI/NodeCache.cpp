@@ -82,7 +82,7 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
         referee->tryPlay(action);
         setNewRoot(referee, action);
     } else {
-        std::cout << "Catastrophe, go Random" << std::endl;
+        std::cout << "Catastrophe, PANIC BUTTON" << std::endl;
         while (!referee->tryPlay((rand(19) + 1) * XPBOARD + rand(19) + 1));
     }
     run();

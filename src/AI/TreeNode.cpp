@@ -113,8 +113,12 @@ int AI::TreeNode::getBestAction() const {
         }
     }
 
-    if (bestActions.size() == 0)
-        return -1;
+    if (bestActions.size() == 0) {
+        if (childs.size() != 0)
+            return childs.front()->move;
+        else
+            return -1;
+    }
     //TODO Random choose ???
     std::cout << "TOTAL===========" << this->plays << std::endl;
     std::cout << "Best " << aiTeam << " " << most_wins << "/" << most_plays << " -> " << bestActions.front()->getMove() << std::endl;
