@@ -36,6 +36,18 @@ GameBoard_t	Core::Referee::getBoardCopy()
 {
   GameBoard_t	newBoard;
 
+
+/*
+    std::cout << "--------------- " << std::to_string(player) << std::endl;
+    auto vect = BoardEvaluator::getInstance()->getInterestingMoves(this);
+    for (auto it : *vect)
+    {
+        std::cout << "y=" << std::to_string(it.first / XPBOARD) << " x=" << std::to_string(it.first % XPBOARD) << " i=" << std::to_string(it.first) << " weight=" << std::to_string(-it.second) << std::endl;
+    }
+    std::cout << boardOp.getPatternManager() << std::endl;
+*/
+
+
     newBoard = new Team[BOARDSIZE];
     for (int y = 0; y < XBOARD; y++)
     {

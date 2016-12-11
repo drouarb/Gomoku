@@ -142,15 +142,37 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     vect->reserve(64);
 
     Team player = OPPTEAM(referee->getPlayer());
+    Team oppPlayer = OPPTEAM(player);
     //TODO: for some reason, I can't seem to sort the vector in the right order. So for now, weights of the opposite team are calculated.
+
+
+    referee->setPlayer(OPPTEAM(referee->getPlayer()));
+    weight_t initial_val = getValue(referee, player);
+    referee->setPlayer(OPPTEAM(referee->getPlayer()));
+
     for (int i = 0; i < PBOARDSIZE; ++i)
     {
         if (referee->getBoOp()->getPatternManager().teamAt(i) == NOPLAYER &&
-                notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), i) &&
-                referee->tryPlay(i))
+                notMiddleOfNowhere(referee->getBoOp()->getPatternManager(), i))
         {
-            vect->push_back(std::pair<boardPos_t, weight_t>(i, getValue(referee, player)));
-            referee->undoLastMove();
+            if (referee->tryPlay(i))
+            {
+                weight_t val = getValue(referee, player);
+                referee->undoLastMove();
+
+                //see the influence of preventing the opposite player from playing this move
+                referee->setPlayer(OPPTEAM(referee->getPlayer()));
+                if (referee->tryPlay(i))
+                {
+                    referee->setPlayer(OPPTEAM(referee->getPlayer()));
+                    val += getValue(referee, oppPlayer) + initial_val;
+                    referee->undoLastMove();
+                }
+                else
+                    referee->setPlayer(OPPTEAM(referee->getPlayer()));
+
+                vect->push_back(std::pair<boardPos_t, weight_t>(i, val));
+            }
         }
     }
 
