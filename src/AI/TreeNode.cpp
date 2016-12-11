@@ -12,7 +12,7 @@
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) : plays(0), whiteWins(0), blackWins(0),
                                                                                  referee(gameState),
                                                                                  parent(parent), move(-1),
-                                                                                 aiTeam(team), pass(0) {
+                                                                                 aiTeam(team) {
     this->moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(referee);
     childs.reserve(moves->size());
 }
@@ -20,11 +20,8 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, TreeNode *parent) :
 AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *parent,
                        std::vector<std::pair<boardPos_t, weight_t>> *moves) : plays(0), whiteWins(0), blackWins(0),
                                                                             referee(gameState),
-                                                                            parent(parent), aiTeam(team), pass(0) {
+                                                                            parent(parent), aiTeam(team) {
     this->move =  moves->back().first;
-    //int id = NodeCache::getInstance(NULL)->rand(moves->size() - 1);
-    //this->move = moves->at(id).first;
-    //moves->at(id).first = moves->back().first;
     moves->pop_back();
 
     referee->tryPlay(move);
@@ -91,9 +88,6 @@ int AI::TreeNode::getBestAction() const {
     for (auto &c : childs) {
         wins = (aiTeam == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
-        //plays = pass;
-
-        std::cout << c->getMove() % XPBOARD << " " << c->getMove() / XPBOARD << " -> " << wins << "/" << plays  << "(" << (aiTeam == BLACK ? c->getWhiteWins() : c->getBlackWins()) << ")" << std::endl;
 
         if (c->getReferee()->getWinner() ==  aiTeam)
             return c->getMove();
@@ -108,18 +102,6 @@ int AI::TreeNode::getBestAction() const {
         }
         if (wins / plays == ratio)
             bestActions.push_back(c);
-        /*if (plays > most_plays) {
-            most_wins = wins;
-            most_plays = plays;
-            bestActions.clear();
-            bestActions.push_back(c);
-        } else if (plays == most_plays) {
-            if (wins > most_wins) {
-                most_wins = wins;
-                bestActions.clear();
-            }
-            bestActions.push_back(c);
-        }*/
     }
 
     if (bestActions.size() == 0) {
@@ -137,7 +119,6 @@ int AI::TreeNode::getBestAction() const {
 }
 
 void AI::TreeNode::backPropagate(int result, Team winner) {
-    pass += 1;
     plays += result;
     if (winner == WHITE)
         whiteWins += result;

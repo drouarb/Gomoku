@@ -36,7 +36,6 @@ namespace AI {
         Team aiTeam;
         Core::IReferee *referee;
 
-        unsigned int pass;
         unsigned int plays;
         unsigned int blackWins;
         unsigned int whiteWins;

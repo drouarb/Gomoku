@@ -125,27 +125,13 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
     }
     Core::IReferee *sim = node->getReferee()->clone();
 
-    int rc;
     int count = 0;
-    std::vector<boardPos_t> *movesRand;
     std::vector<std::pair<boardPos_t, weight_t>> *moves;
 
     while (sim->getWinner() == NOPLAYER && count < SIMULATION_MAX_DEPTH) {
-        /*if (count % SIM_RAND == 0) {
-            rc = 0;
-            movesRand = Core::BoardEvaluator::getInstance()->getAvailableMoves(sim);
-            while (!sim->tryPlay((*movesRand)[randers[movesRand->size() - 1](rng)]) && ++rc < 361);
-            if (rc == 360) {
-                std::cout << "STOOOOP" << std::endl;
-                node->backPropagate(0, NOPLAYER);
-                return;
-            }
-            delete(movesRand);
-        } else {*/
-            moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
-            sim->tryPlay(moves->back().first);
-            delete(moves);
-        //}
+        moves = Core::BoardEvaluator::getInstance()->getInterestingMoves(sim);
+        sim->tryPlay(moves->back().first);
+        delete(moves);
         ++count;
     }
     if (count < 2)
