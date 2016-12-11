@@ -164,8 +164,8 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
                 referee->setPlayer(OPPTEAM(referee->getPlayer()));
                 if (referee->tryPlay(i))
                 {
-                    referee->setPlayer(OPPTEAM(referee->getPlayer()));
                     val += getValue(referee, oppPlayer) + initial_val;
+                    referee->setPlayer(OPPTEAM(referee->getPlayer()));
                     referee->undoLastMove();
                 }
                 else
