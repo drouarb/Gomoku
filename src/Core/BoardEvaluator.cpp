@@ -159,11 +159,14 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
             {
                 weight_t val = getValue(referee, player);
                 referee->undoLastMove();
+                //std::cout << "i=" << std::to_string(i) << std::endl;
+                //std::cout << "val " << std::to_string(val) << std::endl;
 
                 //see the influence of preventing the opposite player from playing this move
                 referee->setPlayer(OPPTEAM(referee->getPlayer()));
                 if (referee->tryPlay(i))
                 {
+                    //std::cout << "diff " << std::to_string(getValue(referee, oppPlayer) + initial_val) << std::endl;
                     val += getValue(referee, oppPlayer) + initial_val;
                     referee->setPlayer(OPPTEAM(referee->getPlayer()));
                     referee->undoLastMove();
