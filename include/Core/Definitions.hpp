@@ -13,7 +13,7 @@
 
 #define OPPTEAM(t)(t == BLACK ? WHITE : BLACK)
 
-#define MC_EXPLORATION 3
+#define MC_EXPLORATION 2
 #define SIM_RAND 3
 
 #define THREADS_POOL 4

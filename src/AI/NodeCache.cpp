@@ -75,8 +75,12 @@ int AI::NodeCache::getMove(Core::IReferee *referee, unsigned int ms) {
     }
 
     //Take a break :)
-    usleep((ms - sw.elapsedMs()) * 1000);
+    auto swsec = sw.elapsedMs();
+    if (swsec < ms)
+        usleep((ms - swsec) * 1000);
     pause();
+
+    std::cout << "Play" << std::endl;
 
     if (referee->getNbrPlay() == 0)
         action = 10 * XPBOARD + 10;
