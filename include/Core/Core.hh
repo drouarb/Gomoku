@@ -40,6 +40,7 @@ namespace Core
         void letPlayerPlay(int index);
         void feedRules();
         void setAITime();
+        void stopNodeCache();
     };
 }
 

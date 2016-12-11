@@ -6,6 +6,8 @@
 #include <Helpers/Stopwatch.hh>
 #include "AI/NodeCache.hh"
 
+#define SIMULATION_MAX_DEPTH 361
+
 AI::NodeCache::NodeCache(Core::IReferee *referee) : work(ioService), running(false), rootRound(0),
                                                     root(new TreeNode(referee->clone(), WHITE)) {
     root->getReferee()->setPlayer(WHITE);
@@ -120,7 +122,7 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
     std::vector<boardPos_t> *movesRand;
     std::vector<std::pair<boardPos_t, weight_t>> *moves;
 
-    while (sim->getWinner() == NOPLAYER && count < 361) {
+    while (sim->getWinner() == NOPLAYER && count < SIMULATION_MAX_DEPTH) {
         /*if (count % SIM_RAND == 0) {
             rc = 0;
             movesRand = Core::BoardEvaluator::getInstance()->getAvailableMoves(sim);

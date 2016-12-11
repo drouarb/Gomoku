@@ -73,7 +73,7 @@ void Core::Core::playGame(GamePlayers player_config)
         letPlayerPlay(player_index);
         player_index = !player_index;
     }
-    AI::NodeCache::getInstance(NULL)->stop();
+    stopNodeCache();
     if (gui->getICoreObserver()->gameIsRunning())
     {
         History::getInstance()->writeWinner(TEAMNAME(referee->getWinner()));
@@ -227,4 +227,10 @@ void Core::Core::setAITime()
         dynamic_cast<Players::AIPlayer*>(players[0])->setTime(time);
     if (players[1] && dynamic_cast<Players::AIPlayer *>(players[1]))
         dynamic_cast<Players::AIPlayer*>(players[1])->setTime(time);
+}
+
+void Core::Core::stopNodeCache()
+{
+    if (players[0] && players[1] && (dynamic_cast<Players::AIPlayer*>(players[0]) || dynamic_cast<Players::AIPlayer*>(players[1])))
+        AI::NodeCache::getInstance(NULL)->stop();
 }
