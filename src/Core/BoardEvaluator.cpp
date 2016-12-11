@@ -145,6 +145,7 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
     Team oppPlayer = OPPTEAM(player);
     //TODO: for some reason, I can't seem to sort the vector in the right order. So for now, weights of the opposite team are calculated.
 
+    boardPos_t lastMove = referee->getLastMove();
 
     referee->setPlayer(OPPTEAM(referee->getPlayer()));
     weight_t initial_val = getValue(referee, player);
@@ -158,7 +159,7 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
             if (referee->tryPlay(i))
             {
                 weight_t val = getValue(referee, player);
-                referee->undoLastMove();
+                referee->undoLastMove(lastMove);
                 //std::cout << "i=" << std::to_string(i) << std::endl;
                 //std::cout << "val " << std::to_string(val) << std::endl;
 
@@ -168,7 +169,7 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
                 {
                     //std::cout << "diff " << std::to_string(getValue(referee, oppPlayer) + initial_val) << std::endl;
                     val += getValue(referee, oppPlayer) + initial_val;
-                    referee->undoLastMove();
+                    referee->undoLastMove(lastMove);
                     referee->setPlayer(OPPTEAM(referee->getPlayer()));
                 }
                 else

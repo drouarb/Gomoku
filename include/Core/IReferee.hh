@@ -36,7 +36,7 @@ namespace Core
 
         virtual IReferee	*clone() = 0;
 
-        virtual void undoLastMove() = 0;
+        virtual void undoLastMove(boardPos_t) = 0;
 
         virtual uint16_t getNbrPlay() const = 0;
 

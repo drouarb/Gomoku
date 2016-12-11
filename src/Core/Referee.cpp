@@ -132,7 +132,7 @@ Core::IReferee *Core::Referee::clone() {
   return new Referee(*this);
 }
 
-void Core::Referee::undoLastMove()
+void Core::Referee::undoLastMove(boardPos_t newLastMove)
 {
     player = (player == Team::WHITE) ? Team::BLACK : Team::WHITE;
     winner = NOPLAYER;
@@ -143,6 +143,7 @@ void Core::Referee::undoLastMove()
     }
     boardOp.clearLastMove();
     boardOp.ForceupdateBoard(NOPLAYER, lastMove);
+    lastMove = newLastMove;
 }
 
 uint16_t Core::Referee::getNbrPlay() const
