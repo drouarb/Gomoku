@@ -45,7 +45,7 @@ AI::TreeNode *AI::TreeNode::getSimulationNode() {
     mutex.lock();
     if (moves->size()) {
         try {
-            childs.push_back(new TreeNode(referee->clone(), !aiTeam, this, moves));
+            childs.push_back(new TreeNode(referee->clone(), OPPTEAM(aiTeam), this, moves));
             child = childs.back();
             mutex.unlock();
             return child;
@@ -86,10 +86,13 @@ int AI::TreeNode::getBestAction() const {
         wins = (aiTeam == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
 
-        std::cout << c->getMove() % XBOARD << " " << c->getMove() / XBOARD << " -> " << wins << "/" << plays << std::endl;
+        //std::cout << c->getMove() % XBOARD << " " << c->getMove() / XBOARD << " -> " << wins << "/" << plays << std::endl;
 
         if (c->getReferee()->getWinner() ==  aiTeam)
             return c->getMove();
+
+        if (c->hasWinningChild())
+            continue;
 
         if (plays > most_plays) {
             most_wins = wins;
@@ -110,6 +113,7 @@ int AI::TreeNode::getBestAction() const {
     //TODO Random choose ???
     std::cout << "TOTAL===========" << this->plays << std::endl;
     std::cout << "Best " << aiTeam << " " << most_wins << "/" << most_plays << " -> " << bestActions.front()->getMove() << std::endl;
+    std::cout << "Winning child ? " << bestActions.front()->hasWinningChild() << " " << bestActions.front()->moves->size() << std::endl;
     return bestActions.front()->getMove();
 }
 
@@ -153,5 +157,13 @@ std::vector<AI::TreeNode *> &AI::TreeNode::getChilds() {
 
 void AI::TreeNode::setParent(AI::TreeNode *parent) {
     TreeNode::parent = parent;
+}
+
+bool AI::TreeNode::hasWinningChild() const {
+    for (auto &c : childs) {
+        if (c->getReferee()->getWinner() == aiTeam)
+            return true;
+    }
+    return false;
 }
 

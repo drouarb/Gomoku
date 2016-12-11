@@ -11,7 +11,6 @@ AIPlayer::AIPlayer(std::string &name, Team team) {
 }
 
 AIPlayer::~AIPlayer() {
-
 }
 
 const std::string &AIPlayer::getName() const {

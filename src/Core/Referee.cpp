@@ -3,7 +3,7 @@
 #include <string.h>
 #include <Core/BoardEvaluator.hh>
 
-Core::Referee::Referee()
+Core::Referee::Referee() : gameId(0)
 {
   initialize();
 }
@@ -12,7 +12,7 @@ Core::Referee::Referee()
 Core::Referee::Referee(const Referee & other) :
         boardOp(other.boardOp), stats(other.stats),
         player(other.player), winner(other.winner), rRules(other.rRules),
-	lastMove(other.lastMove), nbrPlay(other.nbrPlay)
+	lastMove(other.lastMove), nbrPlay(other.nbrPlay), gameId(other.gameId)
 {
 }
 
@@ -29,6 +29,7 @@ void		Core::Referee::initialize()
   stats.insert(std::pair<Team, statPlayer>(Team::WHITE, statPlayer()));
   stats.insert(std::pair<Team, statPlayer>(Team::BLACK, statPlayer()));
   boardOp = BoardOperator();
+    gameId++;
 }
 
 GameBoard_t	Core::Referee::getBoardCopy()
@@ -136,4 +137,8 @@ void Core::Referee::undoLastMove()
 uint16_t Core::Referee::getNbrPlay() const
 {
   return (nbrPlay);
+}
+
+char Core::Referee::getGameId() const {
+    return gameId;
 }

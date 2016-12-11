@@ -32,6 +32,7 @@ namespace Core
       std::map<RuleID, Rule> *			rRules;
       boardPos_t				lastMove;
       uint16_t					nbrPlay;
+        char gameId;
       
     public:
         Referee();
@@ -67,6 +68,8 @@ namespace Core
       boardPos_t getLastMove() const;
 
       uint16_t getNbrPlay() const;
+
+        char getGameId() const;
     };
 }
 

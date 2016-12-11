@@ -19,6 +19,7 @@ namespace AI {
         TreeNode *getSimulationNode();
         TreeNode *getBestChild();
         int getBestAction() const;
+        bool hasWinningChild() const;
 
         void backPropagate(int result, Team winner);
 

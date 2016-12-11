@@ -42,7 +42,8 @@ namespace AI {
         std::mutex threadLocks[THREADS_POOL];
 
         boost::random::taus88 rng;
-        boost::random::uniform_int_distribution<> rand;
+
+        static const std::vector<boost::random::uniform_int_distribution<>> randers;
 
         boost::thread_group threadpool;
         boost::asio::io_service ioService;

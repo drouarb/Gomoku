@@ -41,6 +41,8 @@ namespace Core
         virtual uint16_t getNbrPlay() const = 0;
 
         virtual boardPos_t getLastMove() const = 0;
+
+        virtual char getGameId() const = 0;
     };
 }
 
