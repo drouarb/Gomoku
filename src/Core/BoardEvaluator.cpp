@@ -132,7 +132,7 @@ std::vector<std::pair<boardPos_t, weight_t>> *BoardEvaluator::getInterestingMove
 
     if (referee->getBoOp()->getPatternManager().getPatterns().empty())
     {
-        int middle = XBOARD * 9 + 9;
+        int middle = XPBOARD * 10 + 10;
         for (int i = 0; i < PBOARDSIZE; ++i)
             if (referee->getBoOp()->boardAt(i) == NOPLAYER && i != middle)
                 vect->push_back(std::pair<boardPos_t, weight_t>(i, 0));
