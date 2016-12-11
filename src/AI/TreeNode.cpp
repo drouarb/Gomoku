@@ -85,11 +85,13 @@ int AI::TreeNode::getBestAction() const {
     int plays;
     int most_wins = -1;
     int most_plays = -1;
+    double ratio = -1;
     std::vector<TreeNode *> bestActions;
 
     for (auto &c : childs) {
         wins = (aiTeam == WHITE ? c->getWhiteWins() : c->getBlackWins());
         plays = c->getPlays();
+        //plays = pass;
 
         std::cout << c->getMove() % XPBOARD << " " << c->getMove() / XPBOARD << " -> " << wins << "/" << plays  << "(" << (aiTeam == BLACK ? c->getWhiteWins() : c->getBlackWins()) << ")" << std::endl;
 
@@ -99,18 +101,25 @@ int AI::TreeNode::getBestAction() const {
         if (c->hasWinningChild())
             continue;
 
-        if (pass > most_plays) {
-            most_wins = wins;
-            most_plays = pass;
+        if (wins / plays > ratio) {
+            ratio = wins / plays;
             bestActions.clear();
             bestActions.push_back(c);
-        } else if (pass == most_plays) {
+        }
+        if (wins / plays == ratio)
+            bestActions.push_back(c);
+        /*if (plays > most_plays) {
+            most_wins = wins;
+            most_plays = plays;
+            bestActions.clear();
+            bestActions.push_back(c);
+        } else if (plays == most_plays) {
             if (wins > most_wins) {
                 most_wins = wins;
                 bestActions.clear();
             }
             bestActions.push_back(c);
-        }
+        }*/
     }
 
     if (bestActions.size() == 0) {
