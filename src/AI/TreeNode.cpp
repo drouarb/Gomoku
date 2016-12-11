@@ -21,10 +21,10 @@ AI::TreeNode::TreeNode(Core::IReferee *gameState, Team team, AI::TreeNode *paren
                        std::vector<std::pair<boardPos_t, weight_t>> *moves) : plays(0), whiteWins(0), blackWins(0),
                                                                             referee(gameState),
                                                                             parent(parent), aiTeam(team) {
-    //this->move =  moves->back().first;
-    int id = NodeCache::getInstance(NULL)->rand(moves->size() - 1);
-    this->move = moves->at(id).first;
-    moves->at(id).first = moves->back().first;
+    this->move =  moves->back().first;
+    //int id = NodeCache::getInstance(NULL)->rand(moves->size() - 1);
+    //this->move = moves->at(id).first;
+    //moves->at(id).first = moves->back().first;
     moves->pop_back();
 
     referee->tryPlay(move);

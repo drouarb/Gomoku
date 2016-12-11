@@ -36,7 +36,6 @@ namespace AI {
         bool setNewRoot(Core::IReferee *referee, int action);
 
     private:
-        int sim;
         bool running;
         TreeNode *root;
         unsigned int rootRound;
