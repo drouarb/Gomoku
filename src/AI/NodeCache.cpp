@@ -119,6 +119,10 @@ bool AI::NodeCache::setNewRoot(Core::IReferee *referee, int action) {
 }
 
 void AI::NodeCache::simulate(AI::TreeNode *node) {
+    if (node->getReferee()->getWinner() != NOPLAYER) {
+        node->backPropagate(5, node->getReferee()->getWinner());
+        return;
+    }
     Core::IReferee *sim = node->getReferee()->clone();
 
     int rc;
@@ -144,7 +148,14 @@ void AI::NodeCache::simulate(AI::TreeNode *node) {
         //}
         ++count;
     }
-    node->backPropagate(1, sim->getWinner());
+    if (count < 2)
+        node->backPropagate(4, sim->getWinner());
+    else if (count < 4)
+        node->backPropagate(3, sim->getWinner());
+    else if (count < 6)
+        node->backPropagate(2, sim->getWinner());
+    else
+        node->backPropagate(1, sim->getWinner());
     delete (sim);
 }
 
@@ -165,6 +176,10 @@ AI::NodeCache *AI::NodeCache::getInstance(Core::IReferee *referee) {
         refereeId = referee->getGameId();
     }
     return cache;
+}
+
+AI::TreeNode *AI::NodeCache::getRoot() const {
+    return root;
 }
 
 const std::array<boost::random::uniform_int_distribution<>, 361> AI::NodeCache::randers = {

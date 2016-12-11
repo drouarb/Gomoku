@@ -28,7 +28,7 @@ namespace AI {
         int getMove(Core::IReferee *referee, unsigned int ms = 0);
 
         int rand(int max);
-
+        TreeNode *getRoot() const;
         static NodeCache *getInstance(Core::IReferee *referee);
 
     private:
