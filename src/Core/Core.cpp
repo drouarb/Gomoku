@@ -22,15 +22,13 @@ Core::Core::Core()
     uniqueRules.back().push_back(TIME_50MS);
     uniqueRules.back().push_back(TIME_200MS);
     uniqueRules.back().push_back(TIME_1S);
-    uniqueRules.back().push_back(TIME_3S);
     rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule(RuleToString.at(DOUBLE_THREE), false)));
     rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule(RuleToString.at(BREAKABLE_FIVE), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule(RuleToString.at(TIME_10MS), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule(RuleToString.at(TIME_20MS), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule(RuleToString.at(TIME_50MS), false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_200MS, Rule(RuleToString.at(TIME_200MS), false)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_1S, Rule(RuleToString.at(TIME_1S), true)));
-    rules.insert(std::pair<RuleID, Rule>(TIME_3S, Rule(RuleToString.at(TIME_3S), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_200MS, Rule(RuleToString.at(TIME_200MS), true)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_1S, Rule(RuleToString.at(TIME_1S), false)));
 
     // referee
     referee = new Referee();
@@ -75,10 +73,14 @@ void Core::Core::playGame(GamePlayers player_config)
         letPlayerPlay(player_index);
         player_index = !player_index;
     }
-    if (gui->getICoreObserver()->gameIsRunning()) {
+    AI::NodeCache::getInstance(NULL)->stop();
+    if (gui->getICoreObserver()->gameIsRunning())
+    {
         History::getInstance()->writeWinner(TEAMNAME(referee->getWinner()));
         gui->endGame(TEAMNAME(referee->getWinner()));
-    } else {
+    }
+    else
+    {
         gui->endGame("NO ONE");
         History::getInstance()->writeWinner("NOONE");
     }
@@ -185,11 +187,15 @@ Core::Core::Core(const std::string &path) {
     uniqueRules.back().push_back(TIME_10MS);
     uniqueRules.back().push_back(TIME_20MS);
     uniqueRules.back().push_back(TIME_50MS);
+    uniqueRules.back().push_back(TIME_200MS);
+    uniqueRules.back().push_back(TIME_1S);
     rules.insert(std::pair<RuleID, Rule>(DOUBLE_THREE, Rule(RuleToString.at(DOUBLE_THREE), false)));
     rules.insert(std::pair<RuleID, Rule>(BREAKABLE_FIVE, Rule(RuleToString.at(BREAKABLE_FIVE), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_10MS, Rule(RuleToString.at(TIME_10MS), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_20MS, Rule(RuleToString.at(TIME_20MS), false)));
     rules.insert(std::pair<RuleID, Rule>(TIME_50MS, Rule(RuleToString.at(TIME_50MS), false)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_200MS, Rule(RuleToString.at(TIME_200MS), true)));
+    rules.insert(std::pair<RuleID, Rule>(TIME_1S, Rule(RuleToString.at(TIME_1S), false)));
 
     // referee
     referee = new Referee();
@@ -217,8 +223,6 @@ void Core::Core::setAITime()
         time = 200;
     if (rules[TIME_1S].on)
         time = 1000;
-    if (rules[TIME_3S].on)
-        time = 3000;
     if (players[0] && dynamic_cast<Players::AIPlayer *>(players[0]))
         dynamic_cast<Players::AIPlayer*>(players[0])->setTime(time);
     if (players[1] && dynamic_cast<Players::AIPlayer *>(players[1]))

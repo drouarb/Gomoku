@@ -41,8 +41,7 @@ enum RuleID : int_fast8_t
     TIME_20MS = 0x03,
     TIME_50MS = 0x04,
     TIME_200MS = 0x05,
-    TIME_1S = 0x06,
-    TIME_3S = 0x07
+    TIME_1S = 0x06
 };
 
 static const std::map<RuleID, std::string> RuleToString = {
@@ -52,8 +51,7 @@ static const std::map<RuleID, std::string> RuleToString = {
         {TIME_20MS, "Timed AI: 20 ms"},
         {TIME_50MS, "Timed AI: 50 ms"},
         {TIME_200MS, "Timed AI: 200 ms"},
-        {TIME_1S, "Timed AI: 1 sec"},
-        {TIME_3S, "Timed AI: 3 sec"}
+        {TIME_1S, "Timed AI: 1 sec"}
 };
 
 typedef Team * GameBoard_t;
