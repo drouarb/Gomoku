@@ -106,6 +106,11 @@ void Core::Core::setRule(const std::string &rulename, bool on)
         {
             if (rules[uniqueRule].name == rulename)
             {
+                if (on == false)
+                {
+                    rules[uniqueRule].on = true;
+                    return;
+                }
                 uniqueListChanged = true;
                 break;
             }
