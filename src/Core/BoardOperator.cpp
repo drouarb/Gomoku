@@ -13,6 +13,7 @@ Core::BoardOperator & Core::BoardOperator::operator=(const BoardOperator & other
 {
     patternM = other.patternM;
     lastTakenStones = other.lastTakenStones;
+    return (*this);
 }
 
 void Core::BoardOperator::clearLastMove()

@@ -239,7 +239,7 @@ void PatternManager::addStone(boardPos_t position, Team team)
         addToMap(&*it);
         ++it;
     }
-    std::cout << *this << std::endl;
+    //std::cout << *this << std::endl;
 }
 
 bool PatternManager::addMiddle(boardPos_t position, Team team)
@@ -448,7 +448,7 @@ void PatternManager::removeStone(boardPos_t position)
             //incFlexibleIterator(list, size, prev_it, it);
         }
     }
-    std::cout << *this << std::endl;
+    //std::cout << *this << std::endl;
 }
 
 Team PatternManager::teamAt(boardPos_t pos) const

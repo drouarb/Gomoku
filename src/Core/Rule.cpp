@@ -18,4 +18,5 @@ Rule & Rule::operator=(const Rule & other)
 {
     name = other.name;
     on = other.on;
+    return (*this);
 }

@@ -16,7 +16,7 @@
 #define MC_EXPLORATION 2
 #define SIM_RAND 3
 
-#define THREADS_POOL 4
+#define THREADS_POOL 8
 
 enum GamePlayers : int_fast8_t
 {

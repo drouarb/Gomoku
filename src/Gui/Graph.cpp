@@ -276,7 +276,7 @@ void Graph::show(const std::string &str)
 
 void Graph::popupString()
 {
-    std::map<const std::string, TimePoint>::iterator it = listMessage.begin();
+    auto it = listMessage.begin();
     int y = 0;
      while ((it) != listMessage.end())
     {

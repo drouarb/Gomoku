@@ -177,6 +177,7 @@ fastList<T> & fastList<T>::operator=(const fastList & other)
 {
     clear();
     rec_copy(other.first);
+    return (*this);
 }
 
 template<typename T>
